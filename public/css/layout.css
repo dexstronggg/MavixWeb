@@ -82,7 +82,21 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+}
+
+.header-user {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--muted-strong);
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .header-user { display: none; }
 }
 
 .menu-toggle {

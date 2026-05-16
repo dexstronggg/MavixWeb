@@ -20,6 +20,9 @@
     const helloEl = document.querySelector('[data-role="hello-email"]');
     if (helloEl) helloEl.textContent = email;
 
+    const headerEmail = document.querySelector('[data-role="header-email"]');
+    if (headerEmail) headerEmail.textContent = email;
+
     const avatarEl = document.querySelector('[data-role="avatar"]');
     if (avatarEl) avatarEl.textContent = (email[0] || 'M').toUpperCase();
 
