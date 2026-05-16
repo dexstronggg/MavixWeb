@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Скачать ПО — Mavix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <script src="/config.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/auth-guard.js" defer></script>
+  <script src="/js/app.js" defer></script>
+  <script src="/js/pages/dashboard.js" defer></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="/dashboard">
+      <span class="logo-mark">M</span>
+      <span>MAVIX</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a class="nav-link" href="/dashboard">Кабинет</a>
+      <a class="nav-link" href="/dashboard/docs/user">Документация</a>
+      <a class="nav-link" href="/dashboard/software">Скачать</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="#" data-action="logout">Выйти</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Кабинет</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Главная
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Документация</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/docs/user">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v14a2 2 0 0 1 2-2h13"/></svg>
+          Пользовательская
+        </a>
+        <a class="sidebar-link" href="/dashboard/docs/technical">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Техническая
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Программы</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/software">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Скачать
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" data-role="avatar">M</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-email" data-role="email">—</div>
+        <div class="sidebar-user-id" data-role="user-id">—</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="app-main">
+
+    <header class="page-head">
+      <div class="page-eyebrow">Скачать программы</div>
+      <h1 class="page-title">Программы Mavix</h1>
+      <p class="page-sub">
+        Десктоп-клиент для оператора и прошивка для дрона. Установите сначала
+        десктоп, затем прошивку на Raspberry Pi.
+      </p>
+    </header>
+
+    <section class="software-grid">
+
+      <article class="software-card">
+        <div class="software-card-head">
+          <div class="software-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div style="flex: 1;">
+            <h3 class="software-card-title">MavixDesktop</h3>
+            <div class="software-card-tag">Приложение оператора · v0.1.0</div>
+          </div>
+          <span class="badge badge-accent">Stable</span>
+        </div>
+
+        <p class="software-card-desc">
+          Кроссплатформенный клиент для управления дронами: вход в аккаунт,
+          список ваших дронов, видеопоток с камер, калибровка, настройка
+          битрейта и FPS, поддержка USB-джойстика.
+        </p>
+
+        <div class="software-card-meta">
+          <span class="badge badge-muted">Windows 10+</span>
+          <span class="badge badge-muted">macOS 12+</span>
+          <span class="badge badge-muted">Linux x64</span>
+        </div>
+
+        <div class="software-card-actions">
+          <button class="btn btn-primary" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Скачать для Windows
+          </button>
+          <button class="btn btn-secondary" type="button">macOS</button>
+          <button class="btn btn-secondary" type="button">Linux (.deb)</button>
+        </div>
+      </article>
+
+      <article class="software-card">
+        <div class="software-card-head">
+          <div class="software-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
+          </div>
+          <div style="flex: 1;">
+            <h3 class="software-card-title">MavixBoard</h3>
+            <div class="software-card-tag">Прошивка дрона · v0.1.0</div>
+          </div>
+          <span class="badge badge-accent">Stable</span>
+        </div>
+
+        <p class="software-card-desc">
+          Сборка для Raspberry Pi с автоматически встроенным идентификатором
+          вашего аккаунта. После установки на дрон он сразу появится в вашем
+          приложении оператора — настраивать ничего не нужно.
+        </p>
+
+        <div class="software-card-meta">
+          <span class="badge badge-muted">Raspberry Pi 4+</span>
+          <span class="badge badge-muted">Ubuntu Server 24.04</span>
+          <span class="badge badge-muted">arm64</span>
+        </div>
+
+        <div class="software-card-actions">
+          <button class="btn btn-primary" type="button">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Скачать .deb
+          </button>
+          <button class="btn btn-secondary" type="button">Инструкция по установке</button>
+        </div>
+      </article>
+
+    </section>
+
+    <div class="info-note">
+      <svg class="info-note-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <div>
+        <strong>Порядок установки:</strong>
+        сначала установите MavixDesktop на ПК и войдите в аккаунт.
+        Затем скачайте MavixBoard и установите его на Raspberry Pi
+        командой <code>sudo apt install ./mavixboard.deb</code>.
+        Дрон автоматически зарегистрируется в системе и появится в списке.
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

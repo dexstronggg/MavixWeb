@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Руководство пользователя — Mavix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <script src="/config.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/auth-guard.js" defer></script>
+  <script src="/js/app.js" defer></script>
+  <script src="/js/pages/dashboard.js" defer></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="/dashboard">
+      <span class="logo-mark">M</span>
+      <span>MAVIX</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a class="nav-link" href="/dashboard">Кабинет</a>
+      <a class="nav-link" href="/dashboard/docs/user">Документация</a>
+      <a class="nav-link" href="/dashboard/software">Скачать</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="#" data-action="logout">Выйти</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Кабинет</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Главная
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Документация</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/docs/user">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v14a2 2 0 0 1 2-2h13"/></svg>
+          Пользовательская
+        </a>
+        <a class="sidebar-link" href="/dashboard/docs/technical">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Техническая
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Программы</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/software">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Скачать
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" data-role="avatar">M</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-email" data-role="email">—</div>
+        <div class="sidebar-user-id" data-role="user-id">—</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="app-main">
+    <article class="doc">
+
+      <header class="doc-header">
+        <div class="doc-eyebrow">Руководство пользователя</div>
+        <h1 class="doc-title">Mavix — начало работы</h1>
+        <div class="doc-meta">
+          <span>Версия 0.1.0</span>
+          <span>Обновлено: май 2026</span>
+        </div>
+      </header>
+
+      <div class="doc-toc">
+        <div class="doc-toc-title">Содержание</div>
+        <ol>
+          <li><a href="#what">Что такое Mavix</a></li>
+          <li><a href="#requirements">Что вам понадобится</a></li>
+          <li><a href="#first-flight">Первый полёт: от установки до взлёта</a></li>
+          <li><a href="#desktop">Работа в приложении оператора</a></li>
+          <li><a href="#joystick">Подключение и калибровка джойстика</a></li>
+          <li><a href="#video">Управление видеопотоком</a></li>
+          <li><a href="#troubleshooting">Если что-то пошло не так</a></li>
+        </ol>
+      </div>
+
+      <div class="doc-content">
+
+        <h2 id="what">Что такое Mavix</h2>
+        <p>
+          Mavix — система удалённого пилотирования дронов через интернет. Видеопоток
+          с камеры дрона приходит к вам напрямую по технологии WebRTC, а команды
+          управления с USB-джойстика уходят на полётный контроллер дрона. Сервер
+          отвечает только за авторизацию и за то, чтобы дрон и оператор нашли друг друга
+          в сети — само видео и команды проходят между ними напрямую.
+        </p>
+        <p>
+          Чтобы пользоваться системой, нужны три вещи: ваш аккаунт, прошивка
+          <strong>MavixBoard</strong> на дроне (Raspberry Pi) и приложение
+          <strong>MavixDesktop</strong> на вашем ПК.
+        </p>
+
+        <h2 id="requirements">Что вам понадобится</h2>
+        <ul>
+          <li>
+            <strong>Дрон с Raspberry Pi 4 или новее</strong> (минимум 4 ГБ ОЗУ).
+            К нему подключаются USB-камера и полётный контроллер по UART/USB.
+          </li>
+          <li>
+            <strong>Полётный контроллер</strong>, говорящий на MAVLink (например,
+            на базе ArduPilot или PX4), и приёмник CRSF для каналов управления.
+          </li>
+          <li>
+            <strong>USB-камера</strong> с поддержкой H.264 на стороне устройства
+            или совместимая с GStreamer.
+          </li>
+          <li>
+            <strong>ПК с Windows, macOS или Linux</strong> — для приложения оператора.
+          </li>
+          <li>
+            <strong>USB-джойстик или геймпад</strong> — для управления.
+          </li>
+          <li>
+            <strong>Стабильный интернет</strong> и на дроне, и на ПК. Желателен NAT
+            без strict-фильтрации; в сложных сетях используется TURN-сервер.
+          </li>
+        </ul>
+
+        <h2 id="first-flight">Первый полёт: от установки до взлёта</h2>
+
+        <h3>1. Зарегистрируйтесь и войдите</h3>
+        <p>
+          На сайте Mavix создайте аккаунт по email и паролю. Сервер пришлёт письмо
+          с подтверждением. После входа вам станет доступна страница
+          <a href="/dashboard/software">«Скачать»</a> — там лежат все программы.
+        </p>
+
+        <h3>2. Установите MavixDesktop на ПК</h3>
+        <p>
+          Скачайте приложение оператора для вашей операционной системы и установите.
+          При первом запуске войдите своим email и паролем. После авторизации
+          вы увидите экран со списком дронов — пока он будет пустым.
+        </p>
+
+        <h3>3. Установите MavixBoard на дрон</h3>
+        <p>
+          Скачайте .deb-пакет для Raspberry Pi. Перенесите его на дрон по SSH или
+          на флешке и установите командой:
+        </p>
+        <pre><code>sudo apt install ./mavixboard.deb</code></pre>
+        <p>
+          При сборке пакета сервер автоматически встраивает в него ваш идентификатор —
+          дрон будет привязан к вашему аккаунту без дополнительной настройки.
+          После установки запустите службу:
+        </p>
+        <pre><code>sudo systemctl enable --now mavixboard</code></pre>
+
+        <h3>4. Дождитесь появления дрона в списке</h3>
+        <p>
+          Когда дрон подключится к серверу, он автоматически появится в окне
+          <strong>MavixDesktop</strong> со статусом <em>online</em>. Список
+          обновляется каждые 5 секунд.
+        </p>
+
+        <h3>5. Подключитесь и взлетайте</h3>
+        <p>
+          Кликните по карточке дрона. Откроется окно с видеопотоком и панелью
+          настройки. На первом запуске рекомендуется выполнить калибровку камеры —
+          приложение само переберёт поддерживаемые разрешения и FPS.
+        </p>
+
+        <h2 id="desktop">Работа в приложении оператора</h2>
+        <p>
+          Главный экран приложения — список ваших дронов. Каждая карточка
+          показывает имя дрона и индикатор статуса:
+        </p>
+        <ul>
+          <li><strong>Зелёный</strong> — дрон подключён и готов к управлению.</li>
+          <li><strong>Серый</strong> — дрон не на связи (выключен или вне сети).</li>
+        </ul>
+        <p>
+          Сверху доступна страница настроек джойстиков. Внизу справа в окне
+          управления вы видите текущий пинг до дрона.
+        </p>
+
+        <h2 id="joystick">Подключение и калибровка джойстика</h2>
+        <p>
+          Подключите джойстик к USB-порту ПК — он сразу появится в списке.
+          Для каждого устройства доступны действия:
+        </p>
+        <ul>
+          <li><strong>Калибровка</strong> — пройдите шаги мастера, подвигайте стиками во все стороны.</li>
+          <li><strong>Загрузить из файла</strong> — восстановите ранее сохранённую калибровку.</li>
+          <li><strong>Сохранить в файл</strong> — выгрузите свою калибровку для другого ПК.</li>
+        </ul>
+        <p>
+          Список устройств обновляется автоматически: можно отключить и подключить
+          джойстик повторно — он не пропадёт из списка.
+        </p>
+
+        <h2 id="video">Управление видеопотоком</h2>
+        <p>
+          В окне управления дроном:
+        </p>
+        <ul>
+          <li>Переключайте активную камеру, если их несколько.</li>
+          <li>Регулируйте битрейт и FPS на лету — изменения применяются мгновенно.</li>
+          <li>Запускайте калибровку камеры. Во время неё на экране висит сообщение
+            <em>«Идёт калибровка камеры… Это может занять продолжительное время»</em>
+            — это нормально, дрон перебирает все доступные режимы.</li>
+        </ul>
+        <p>
+          Пинг до дрона отображается в правом нижнем углу — это реальная задержка
+          ответа по WebSocket, а не интернет-пинг до сервера.
+        </p>
+
+        <h2 id="troubleshooting">Если что-то пошло не так</h2>
+
+        <h3>Дрон не появляется в списке</h3>
+        <ul>
+          <li>Проверьте, что служба <code>mavixboard</code> запущена: <code>systemctl status mavixboard</code>.</li>
+          <li>Убедитесь, что у дрона есть выход в интернет.</li>
+          <li>Проверьте логи на дроне: <code>journalctl -u mavixboard -f</code>.</li>
+        </ul>
+
+        <h3>Видео фризит или прерывается</h3>
+        <ul>
+          <li>Снизьте битрейт и FPS в настройках камеры.</li>
+          <li>Проверьте мощность Wi-Fi на дроне — недостаточная пропускная способность
+            всегда даёт фризы.</li>
+          <li>Если оба устройства за NAT с симметричной фильтрацией, потребуется TURN.</li>
+        </ul>
+
+        <h3>Не работает джойстик</h3>
+        <ul>
+          <li>Проверьте, что устройство видно в системе (на Linux — <code>jstest /dev/input/js0</code>).</li>
+          <li>Сделайте новую калибровку — старая могла быть выполнена для другого устройства.</li>
+        </ul>
+
+        <h3>Забыли пароль</h3>
+        <p>
+          На странице входа нажмите «Забыли пароль?» — сервер отправит вам письмо
+          со ссылкой для сброса. Ссылка действительна один час.
+        </p>
+
+        <blockquote>
+          Полная техническая спецификация доступна в разделе
+          <a href="/dashboard/docs/technical">«Техническая документация»</a>.
+        </blockquote>
+
+      </div>
+    </article>
+  </main>
+</div>
+
+</body>
+</html>

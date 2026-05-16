@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Техническая документация — Mavix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <script src="/config.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/auth-guard.js" defer></script>
+  <script src="/js/app.js" defer></script>
+  <script src="/js/pages/dashboard.js" defer></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="/dashboard">
+      <span class="logo-mark">M</span>
+      <span>MAVIX</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a class="nav-link" href="/dashboard">Кабинет</a>
+      <a class="nav-link" href="/dashboard/docs/user">Документация</a>
+      <a class="nav-link" href="/dashboard/software">Скачать</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="#" data-action="logout">Выйти</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Кабинет</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+          Главная
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Документация</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/docs/user">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M4 4v14a2 2 0 0 1 2-2h13"/></svg>
+          Пользовательская
+        </a>
+        <a class="sidebar-link" href="/dashboard/docs/technical">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Техническая
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Программы</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/software">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Скачать
+        </a>
+      </nav>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-user-avatar" data-role="avatar">M</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-email" data-role="email">—</div>
+        <div class="sidebar-user-id" data-role="user-id">—</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="app-main">
+    <article class="doc">
+
+      <header class="doc-header">
+        <div class="doc-eyebrow">Техническая документация</div>
+        <h1 class="doc-title">Mavix — устройство системы</h1>
+        <div class="doc-meta">
+          <span>Версия 0.1.0</span>
+          <span>Обновлено: май 2026</span>
+        </div>
+      </header>
+
+      <div class="doc-toc">
+        <div class="doc-toc-title">Содержание</div>
+        <ol>
+          <li><a href="#overview">Общая архитектура</a></li>
+          <li><a href="#components">Компоненты системы</a></li>
+          <li><a href="#protocols">Протоколы и форматы</a></li>
+          <li><a href="#api">API сервера</a></li>
+          <li><a href="#security">Модель безопасности</a></li>
+          <li><a href="#build">Сборка и распространение</a></li>
+        </ol>
+      </div>
+
+      <div class="doc-content">
+
+        <h2 id="overview">Общая архитектура</h2>
+        <p>
+          Mavix состоит из трёх независимых модулей: прошивки <strong>Board</strong>
+          на дроне, десктоп-клиента <strong>Desktop</strong> на ПК оператора и
+          <strong>Server</strong> — сервиса сигнализации и авторизации.
+        </p>
+        <p>
+          Server занимается только тремя задачами: аутентификация пользователей
+          и дронов, регистрация дронов в системе и обмен SDP/ICE-кадрами между
+          Board и Desktop при установлении WebRTC-соединения. После handshake
+          обе стороны устанавливают прямой peer-to-peer-канал, и медиа с
+          данными управления идёт через него, минуя сервер.
+        </p>
+        <p>
+          Такой подход даёт два важных эффекта: <strong>низкую задержку</strong>
+          (видео не делает лишний хоп через сервер) и <strong>линейную
+          масштабируемость</strong> (нагрузка на сервер не зависит от количества
+          активных полётов).
+        </p>
+
+        <h2 id="components">Компоненты системы</h2>
+
+        <h3>MavixBoard — прошивка дрона</h3>
+        <p>
+          Запускается на Raspberry Pi под Ubuntu Server 24.04 или Raspberry Pi OS.
+          Реализована на Python 3.11+ с использованием <code>asyncio</code>,
+          <code>GStreamer</code> для захвата и кодирования видео, <code>aiortc</code>
+          для WebRTC, <code>pymavlink</code> для общения с полётным контроллером.
+        </p>
+        <p>
+          Координатор сессии связывает SignalClient (WebSocket к серверу),
+          WebRTCManager (peer-сессии с PC) и FCService (полётный контроллер).
+          Использует exponential backoff при переподключении, watcher отслеживает
+          USB-камеры и hot-plug полётного контроллера.
+        </p>
+
+        <h3>MavixDesktop — приложение оператора</h3>
+        <p>
+          Кроссплатформенный GUI на <code>PySide6</code>. WebRTC peer
+          организован через <code>aiortc</code>, видеообработка — через
+          <code>PyAV</code> и <code>OpenCV</code>. Джойстики опрашиваются через
+          <code>pygame</code>. Токены доступа хранятся в системном keyring
+          (Keychain на macOS, Secret Service на Linux, Credential Manager на Windows)
+          с фолбэком в JSON-файл.
+        </p>
+
+        <h3>MavixServer — сервер сигнализации</h3>
+        <p>
+          FastAPI на Uvicorn, Python 3.11+. PostgreSQL (через SQLAlchemy 2.0 async
+          и asyncpg) хранит пользователей и дронов. Alembic управляет миграциями.
+          Авторизация — JWT (HS256) через PyJWT, пароли — bcrypt. Письма
+          (welcome, восстановление пароля) уходят через fastapi-mail по SMTP.
+          Rate limiting — slowapi.
+        </p>
+        <p>
+          WebSocket-эндпоинты <code>/ws/drone</code> и <code>/ws/gcs</code>
+          обслуживают пары «дрон ↔ оператор»: ConnectionRegistry хранит
+          активные соединения, SignalRelay пересылает SDP и ICE-кандидатов.
+          HeartbeatMonitor закрывает зависшие сессии, AuthExpiryMonitor
+          предупреждает клиента за минуту до истечения JWT.
+        </p>
+
+        <h2 id="protocols">Протоколы и форматы</h2>
+
+        <h3>WebRTC</h3>
+        <p>
+          Сигнализация по WebSocket: дрон отправляет SDP-offer, оператор отвечает
+          SDP-answer, обе стороны обмениваются ICE-кандидатами. STUN/TURN-серверы
+          указываются в конфиге сервера и раздаются клиентам через эндпоинт
+          <code>/api/v1/ice-servers</code>.
+        </p>
+        <p>
+          После установления peer-соединения создаются три data-канала:
+        </p>
+        <ul>
+          <li><code>packet-channel</code> — пакеты CRSF от оператора к дрону.</li>
+          <li><code>ping-channel</code> — измерение задержки в обе стороны.</li>
+          <li><code>config-channel</code> — изменение параметров камеры на лету,
+            уведомления об ошибках pipeline, обновление списка камер.</li>
+        </ul>
+
+        <h3>MAVLink</h3>
+        <p>
+          Внутреннее общение Board с полётным контроллером. Поддерживается
+          стандартный набор сообщений (heartbeat, attitude, GPS, command_long).
+        </p>
+
+        <h3>CRSF</h3>
+        <p>
+          Команды каналов управления (стики джойстика) от оператора уходят
+          в формате CRSF и через UART-приёмник попадают на полётный контроллер.
+        </p>
+
+        <h2 id="api">API сервера</h2>
+        <p>
+          REST-эндпоинты с префиксом <code>/api/v1</code>. Все запросы и ответы —
+          JSON. Авторизация — заголовок <code>Authorization: Bearer &lt;JWT&gt;</code>.
+        </p>
+
+        <h3>Аутентификация</h3>
+        <ul>
+          <li><code>POST /api/v1/auth/register</code> — регистрация по email + паролю.</li>
+          <li><code>POST /api/v1/auth/login</code> — вход, возвращает access и refresh-токены.</li>
+          <li><code>POST /api/v1/auth/refresh</code> — обновление access-токена по refresh.</li>
+          <li><code>POST /api/v1/auth/password-reset/request</code> — отправка письма со ссылкой сброса.</li>
+          <li><code>POST /api/v1/auth/password-reset/confirm</code> — установка нового пароля по токену из письма.</li>
+        </ul>
+
+        <h3>Дроны и сборки</h3>
+        <ul>
+          <li><code>POST /api/v1/drones/register</code> — регистрация дрона за пользователем.</li>
+          <li><code>GET /api/v1/builds/board.deb</code> — .deb для дрона с вшитыми токенами (требует <code>?drone_id=…</code>).</li>
+          <li><code>GET /api/v1/builds/desktop.deb</code> — generic-пакет десктоп-клиента.</li>
+        </ul>
+
+        <h3>Системное</h3>
+        <ul>
+          <li><code>GET /api/v1/health</code> — проверка состояния сервера.</li>
+          <li><code>GET /api/v1/ice-servers</code> — список STUN/TURN для WebRTC.</li>
+        </ul>
+
+        <p>
+          Полная Swagger-схема доступна по адресу <code>/docs</code> на запущенном сервере.
+        </p>
+
+        <h2 id="security">Модель безопасности</h2>
+        <ul>
+          <li>
+            <strong>Пароли</strong> хранятся как bcrypt-хеши с автоматически
+            сгенерированной солью. Длина пароля ограничена 72 байтами (явное
+            ограничение из-за специфики bcrypt).
+          </li>
+          <li>
+            <strong>Access-токен</strong> живёт 15 минут, <strong>refresh-токен</strong> — 30 дней.
+            Refresh не ротируется при использовании: на сервер можно отправить
+            один и тот же refresh повторно, пока он не истёк или пользователь
+            не удалён.
+          </li>
+          <li>
+            <strong>Reset-токен</strong> для восстановления пароля живёт один час
+            и подписан тем же секретом сервера. Тип токена различается claim
+            <code>type</code>: <code>access</code> / <code>refresh</code> / <code>reset</code>.
+          </li>
+          <li>
+            <strong>Дрон</strong> аутентифицируется отдельным 64-символьным
+            <code>drone_token</code> при подключении к <code>/ws/drone</code>.
+            Этот токен встраивается в .deb-пакет при сборке и не передаётся
+            пользователю напрямую.
+          </li>
+          <li>
+            <strong>Anti-enumeration</strong>: запрос восстановления пароля
+            возвращает одинаковый ответ независимо от того, существует ли email
+            в базе. Ответы на неверный пароль и несуществующий email
+            идентичны (оба 401).
+          </li>
+          <li>
+            <strong>Rate limiting</strong> на уровне IP через slowapi.
+            Конфигурация — переменная <code>RPM</code> в окружении сервера.
+          </li>
+        </ul>
+
+        <h2 id="build">Сборка и распространение</h2>
+        <p>
+          Все три модуля используют <code>pyproject.toml</code> с hatchling
+          в качестве build-backend. Board и Desktop собираются в нативные пакеты:
+        </p>
+        <ul>
+          <li>
+            <strong>Board</strong> — .deb для Raspberry Pi. Сборка происходит
+            на сервере на лету: при запросе <code>/api/v1/builds/board.deb</code>
+            сервер копирует шаблон дерева пакета, пишет файл
+            <code>/etc/mavixboard/preset.env</code> с переменными
+            <code>USER_ID</code>, <code>DRONE_TOKEN</code> и
+            <code>SIGNAL_SERVER_IP</code>, и вызывает <code>dpkg-deb --build</code>.
+            Результат кэшируется по SHA256 от пакета и идентификатора дрона.
+          </li>
+          <li>
+            <strong>Desktop</strong> — generic .deb / Windows installer / macOS app,
+            без вшитых учётных данных (Desktop логинится email + паролем).
+          </li>
+          <li>
+            <strong>Server</strong> распространяется в Docker. Поставляется
+            с <code>Dockerfile</code> и <code>docker-compose.yaml</code> для
+            быстрого поднятия с PostgreSQL.
+          </li>
+        </ul>
+
+        <blockquote>
+          Все три репозитория содержат собственные документы по ГОСТ 19.402-78
+          (техническое описание) и ГОСТ 19.505-79 (руководство оператора).
+        </blockquote>
+
+      </div>
+    </article>
+  </main>
+</div>
+
+</body>
+</html>
