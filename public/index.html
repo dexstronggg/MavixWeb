@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mavix — управление дронами по WebRTC</title>
+  <meta name="description" content="Mavix — система удалённого управления дронами с прямой передачей видео по WebRTC P2P. Кроссплатформенный десктоп, прошивка для дронов на Raspberry Pi и защищённый сервер сигнализации.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/pages.css">
+  <script src="/config.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a class="logo" href="/">
+      <span class="logo-mark">M</span>
+      <span>MAVIX</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a class="nav-link" href="#features">Возможности</a>
+      <a class="nav-link" href="#architecture">Архитектура</a>
+      <a class="nav-link" href="#video">Демо</a>
+      <a class="nav-link" href="#about">О нас</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost btn-sm" href="/login">Войти</a>
+      <a class="btn btn-primary btn-sm" href="/register">Начать</a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <span class="eyebrow">
+        <span class="status-dot online"></span>
+        WebRTC · MAVLink · кроссплатформа
+      </span>
+      <h1 class="hero-title">
+        Управляйте дронами<br>
+        <span class="accent">из любой точки мира</span>
+      </h1>
+      <p class="hero-sub">
+        Mavix — система удалённого пилотирования: видеопоток с дрона напрямую на ваш ПК
+        по WebRTC, защищённая авторизация и USB-джойстик в качестве пульта.
+        Сервер только связывает участников — медиа идёт напрямую, без посредников.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/register">
+          Создать аккаунт
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a class="btn btn-secondary btn-lg" href="#video">Смотреть демо</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">P2P</div>
+          <div class="hero-stat-label">Без релея медиа</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">H.264</div>
+          <div class="hero-stat-label">Аппаратный кодек</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">JWT</div>
+          <div class="hero-stat-label">Безопасный доступ</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">3 OS</div>
+          <div class="hero-stat-label">Win · macOS · Linux</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Возможности</span>
+        <h2 class="section-title">Всё, что нужно для удалённого полёта</h2>
+        <p class="section-sub">
+          От захвата видео на дроне до управления джойстиком за тысячи километров —
+          в одном решении.
+        </p>
+      </div>
+
+      <div class="features">
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+          </div>
+          <h3 class="feature-title">Видео в реальном времени</h3>
+          <p class="feature-desc">
+            Поток с USB-камеры дрона уходит напрямую на ваш ПК через WebRTC peer-to-peer.
+            Кодирование H.264 на аппаратном кодере Raspberry Pi — минимальная задержка
+            и стабильный битрейт.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="feature-title">Защищённая авторизация</h3>
+          <p class="feature-desc">
+            JWT-токены с автоматическим обновлением, bcrypt-хеширование паролей,
+            восстановление через email. Дрон знает только свой токен — пароли
+            пользователя на нём не лежат.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3 class="feature-title">Кроссплатформенный десктоп</h3>
+          <p class="feature-desc">
+            Приложение оператора работает на Windows, macOS и Linux. Авторизация,
+            живой список дронов, видеопоток, калибровка камеры, переключение
+            битрейта и FPS — всё в одном окне.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="15"/></svg>
+          </div>
+          <h3 class="feature-title">Низкая задержка</h3>
+          <p class="feature-desc">
+            STUN/TURN-серверы для обхода NAT, оптимизированный pipeline GStreamer,
+            heartbeat-мониторинг WebSocket. Реальный пинг и статус соединения
+            видны в правом углу окна управления.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="feature-title">Стандартные протоколы</h3>
+          <p class="feature-desc">
+            Полётный контроллер подключается по MAVLink, команды управления —
+            по CRSF. Поддерживаются стандартные USB-джойстики через pygame
+            с калибровкой и сохранением профилей.
+          </p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <h3 class="feature-title">Открытая архитектура</h3>
+          <p class="feature-desc">
+            Прошивка дрона, десктопный клиент и сервер — три независимых модуля
+            с чёткими границами. Каждый собирается отдельно: Board в .deb для
+            Raspberry Pi, Desktop в нативный пакет, Server в Docker.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ARCHITECTURE -->
+  <section class="section" id="architecture" style="padding-top: 32px;">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Архитектура</span>
+        <h2 class="section-title">Три компонента, один протокол</h2>
+        <p class="section-sub">
+          Сервер занимается только сигнализацией и авторизацией. Видео
+          и команды управления идут напрямую между дроном и оператором.
+        </p>
+      </div>
+
+      <div class="arch-grid">
+
+        <div class="arch-node">
+          <div class="arch-node-badge">Board · на дроне</div>
+          <div class="arch-node-title">MavixBoard</div>
+          <div class="arch-node-desc">
+            Raspberry Pi с USB-камерой и полётным контроллером. Кодирует видео,
+            ретранслирует команды по MAVLink.
+          </div>
+        </div>
+
+        <div class="arch-arrow">
+          <span>WebSocket</span>
+          <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+          <span>JWT</span>
+        </div>
+
+        <div class="arch-node is-server">
+          <div class="arch-node-badge">Server · сигнализация</div>
+          <div class="arch-node-title">MavixServer</div>
+          <div class="arch-node-desc">
+            FastAPI: авторизация, регистрация дронов, обмен SDP/ICE,
+            выдача STUN/TURN. Медиа через него не идёт.
+          </div>
+        </div>
+
+        <div class="arch-arrow">
+          <span>WebSocket</span>
+          <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
+          <span>JWT</span>
+        </div>
+
+        <div class="arch-node">
+          <div class="arch-node-badge">Desktop · оператор</div>
+          <div class="arch-node-title">MavixDesktop</div>
+          <div class="arch-node-desc">
+            PySide6 на ПК: видеоокно, джойстик, телеметрия,
+            калибровка камер и битрейт на лету.
+          </div>
+        </div>
+
+      </div>
+
+      <p class="arch-note">
+        После handshake Board и Desktop устанавливают прямое WebRTC-соединение —
+        видео и команды управления идут P2P, минуя сервер.
+      </p>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="section" id="video">
+    <div class="container container-narrow">
+      <div class="section-head">
+        <span class="eyebrow">Демо</span>
+        <h2 class="section-title">Полёт в реальном времени</h2>
+        <p class="section-sub">
+          Запись сеанса управления дроном через Mavix Desktop — захват видео
+          с RPi-камеры, передача команд по CRSF, отображение телеметрии.
+        </p>
+      </div>
+
+      <div class="video-wrap">
+        <!-- Замените на свой <video src="/videos/demo.mp4" controls></video> -->
+        <div class="video-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+          <div>Видео скоро появится</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; opacity: 0.6;">/videos/demo.mp4</div>
+        </div>
+      </div>
+      <div class="video-caption">
+        <span>Источник: лётные испытания Mavix, 2026</span>
+        <span class="text-mono">1080p · H.264 · 60 fps</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about" style="padding-top: 32px;">
+    <div class="container container-narrow">
+      <div class="section-head" style="margin-bottom: 32px;">
+        <span class="eyebrow">О нас</span>
+        <h2 class="section-title">Команда инженеров и разработчиков</h2>
+      </div>
+      <div style="font-size: var(--fs-lg); color: var(--text-soft); line-height: 1.75;">
+        <p style="margin-bottom: 18px;">
+          Mavix создаётся командой, которая объединяет опыт в системном программировании,
+          компьютерном зрении и встраиваемых системах. Мы решаем конкретную задачу:
+          дать оператору надёжный канал к дрону независимо от расстояния и сети,
+          не жертвуя задержкой и качеством видео.
+        </p>
+        <p style="margin-bottom: 18px;">
+          Проект построен на открытых стандартах — WebRTC, MAVLink, CRSF, STUN/TURN —
+          и состоит из трёх модулей с чётким разделением ответственности. Это позволяет
+          независимо обновлять прошивку дрона, десктопный клиент и серверную часть
+          без рискованных миграций.
+        </p>
+        <p>
+          Документация ведётся по ГОСТ 19.402-78 и 19.505-79: техническое описание
+          и руководство оператора для каждого компонента доступны в личном кабинете.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top: 32px;">
+    <div class="container">
+      <div class="cta">
+        <span class="eyebrow">Готовы попробовать?</span>
+        <h2 class="cta-title">Создайте аккаунт и начните полёт</h2>
+        <p class="cta-sub">
+          Регистрация занимает минуту. После входа вы получите доступ к документации
+          и сможете скачать Desktop и прошивку дрона.
+        </p>
+        <div class="cta-actions">
+          <a class="btn btn-primary btn-lg" href="/register">
+            Создать аккаунт
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a class="btn btn-secondary btn-lg" href="/login">У меня уже есть аккаунт</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="/">
+          <span class="logo-mark">M</span>
+          <span>MAVIX</span>
+        </a>
+        <p class="footer-tagline">
+          Удалённое управление дронами через WebRTC. Прямое соединение,
+          защищённая авторизация, открытые стандарты.
+        </p>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Продукт</div>
+        <ul class="footer-links">
+          <li><a href="#features">Возможности</a></li>
+          <li><a href="#architecture">Архитектура</a></li>
+          <li><a href="#video">Демо</a></li>
+          <li><a href="/dashboard/software">Скачать</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Документация</div>
+        <ul class="footer-links">
+          <li><a href="/dashboard/docs/user">Руководство пользователя</a></li>
+          <li><a href="/dashboard/docs/technical">Техническое описание</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Аккаунт</div>
+        <ul class="footer-links">
+          <li><a href="/login">Войти</a></li>
+          <li><a href="/register">Регистрация</a></li>
+          <li><a href="/forgot-password">Восстановить пароль</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Mavix. Все права защищены.</span>
+      <span class="footer-meta">
+        <span class="status-dot online"></span>
+        v0.1.0 · build dev
+      </span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
