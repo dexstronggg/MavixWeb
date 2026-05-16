@@ -749,6 +749,10 @@
   max-width: 640px;
 }
 
+.welcome .eyebrow {
+  align-self: flex-start;
+}
+
 .welcome-title {
   font-size: var(--fs-3xl);
   letter-spacing: -0.02em;
