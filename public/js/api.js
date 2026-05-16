@@ -47,10 +47,15 @@
 
   // ---------- HTTP ----------
 
-  async function request(path, { method = 'GET', body, auth = false, retry = true } = {}) {
+  const REQUEST_TIMEOUT_MS = 10000;
+
+  async function request(path, { method = 'GET', body, auth = false, retry = true, timeout = REQUEST_TIMEOUT_MS } = {}) {
     const headers = { 'Accept': 'application/json' };
     if (body !== undefined) headers['Content-Type'] = 'application/json';
     if (auth && tokens.access) headers['Authorization'] = `Bearer ${tokens.access}`;
+
+    const ctrl = new AbortController();
+    const timeoutId = setTimeout(() => ctrl.abort(), timeout);
 
     let response;
     try {
@@ -58,10 +63,16 @@
         method,
         headers,
         body: body === undefined ? undefined : JSON.stringify(body),
+        signal: ctrl.signal,
       });
     } catch (networkErr) {
+      clearTimeout(timeoutId);
+      if (networkErr && networkErr.name === 'AbortError') {
+        throw new ApiError('Сервер не отвечает. Проверьте, что MavixServer запущен на ' + BASE.replace('/api/v1', '') + '.', 0, null);
+      }
       throw new ApiError('Не удалось подключиться к серверу. Проверьте сеть.', 0, null);
     }
+    clearTimeout(timeoutId);
 
     if (auth && response.status === 401 && retry && tokens.refresh) {
       const refreshed = await tryRefresh();
