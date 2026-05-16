@@ -34,6 +34,21 @@
   .header-inner-fluid { padding: 0 16px; }
 }
 
+/* Раскладка лендинга: логотип ↔ nav по центру ↔ кнопки */
+.header-inner-3col > .logo {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.header-inner-3col > .nav {
+  flex: 0 0 auto;
+}
+
+.header-inner-3col > .header-actions {
+  flex: 1 1 0;
+  justify-content: flex-end;
+}
+
 .logo {
   display: inline-flex;
   align-items: center;
