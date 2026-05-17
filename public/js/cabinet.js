@@ -39,8 +39,19 @@
     setText('[data-role="header-email"]', email || '—');
     setText('[data-role="avatar"]', initial);
     setText('[data-role="email"]', email || '—');
-    setText('[data-role="user-id"]', maskId(userId) || '—');
     setText('[data-role="hello-email"]', email || 'оператор');
+
+    // USER_ID: показываем только если действительно есть значение;
+    // иначе скрываем элемент, чтобы под «онлайн» не висело тире.
+    const idEl = document.querySelector('[data-role="user-id"]');
+    if (idEl) {
+      if (userId) {
+        idEl.textContent = maskId(userId);
+        idEl.classList.remove('is-skeleton');
+      } else {
+        idEl.style.display = 'none';
+      }
+    }
   }
 
   // ---------- Health-баннер ----------
