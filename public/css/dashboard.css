@@ -1,0 +1,100 @@
+/* ============================================================
+   Mavix Web — dashboard.css
+   Стили личного кабинета.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   Dashboard главная
+   ---------------------------------------------------------- */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 32px;
+}
+
+@media (max-width: 1000px) {
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .dashboard-grid { grid-template-columns: 1fr; }
+}
+
+.dashboard-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  transition: border-color var(--t-base) var(--ease), transform var(--t-base) var(--ease);
+  color: inherit;
+  text-decoration: none;
+}
+
+.dashboard-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  color: inherit;
+}
+
+.dashboard-card-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--r-md);
+}
+
+.dashboard-card-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dashboard-card-desc {
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.dashboard-card-foot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 640px;
+}
+
+.welcome .eyebrow {
+  align-self: flex-start;
+}
+
+.welcome-title {
+  font-size: var(--fs-3xl);
+  letter-spacing: -0.02em;
+}
+
+.welcome-sub {
+  color: var(--text-soft);
+  font-size: var(--fs-md);
+}
+
+.welcome-email {
+  font-family: var(--font-mono);
+  color: var(--accent);
+}

@@ -1,0 +1,176 @@
+/* ============================================================
+   Mavix Web — docs.css
+   Стили страниц документации (docs-user, docs-technical).
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   Документация: layout
+   ---------------------------------------------------------- */
+
+.doc {
+  max-width: 760px;
+}
+
+.doc-header {
+  padding-bottom: 28px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
+}
+
+.doc-title {
+  font-size: var(--fs-4xl);
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.doc-meta {
+  display: flex;
+  gap: 20px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.doc-subtitle {
+  font-size: var(--fs-lg);
+  color: var(--muted-strong);
+  line-height: 1.55;
+  margin: 4px 0 0;
+  max-width: 640px;
+}
+
+.doc-content {
+  color: var(--text-soft);
+  font-size: var(--fs-md);
+  line-height: 1.75;
+}
+
+.doc-content h2 {
+  font-size: var(--fs-2xl);
+  margin: 48px 0 16px;
+  color: var(--text);
+}
+
+.doc-content h3 {
+  font-size: var(--fs-xl);
+  margin: 32px 0 12px;
+  color: var(--text);
+}
+
+.doc-content p {
+  margin: 0 0 16px;
+}
+
+.doc-content ul,
+.doc-content ol {
+  margin: 0 0 18px;
+  padding-left: 22px;
+  list-style: disc;
+  color: var(--text-soft);
+}
+
+.doc-content ol {
+  list-style: decimal;
+}
+
+.doc-content li {
+  margin-bottom: 8px;
+}
+
+.doc-content li::marker {
+  color: var(--accent);
+}
+
+.doc-content strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.doc-content code {
+  background: var(--bg-elev-1);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: var(--r-sm);
+  font-size: 0.88em;
+  color: var(--muted-strong);
+}
+
+.doc-content pre {
+  background: var(--bg-elev-1);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 0 0 18px;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.doc-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-soft);
+  font-size: inherit;
+}
+
+.doc-content blockquote {
+  margin: 0 0 18px;
+  padding: 14px 20px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+
+.doc-content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 217, 255, 0.4);
+  text-underline-offset: 3px;
+}
+
+.doc-toc {
+  margin: 0 0 32px;
+  padding: 20px 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+
+.doc-toc-title {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.doc-toc ol {
+  list-style: decimal;
+  padding-left: 20px;
+}
+
+.doc-toc li {
+  margin-bottom: 6px;
+}
+
+.doc-toc a {
+  color: var(--text-soft);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+}
+
+.doc-toc a:hover {
+  color: var(--accent);
+}
+
