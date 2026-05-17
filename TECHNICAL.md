@@ -132,10 +132,10 @@ MavixWeb/
     │       ├── reset-password.js
     │       ├── dashboard.js
     │       └── settings.js
-    ├── images/           — изображения интерфейса
-    ├── videos/           — материалы для секции «Демо»
-    ├── favicon.*         — иконки приложения
-    └── site.webmanifest  — манифест веб-приложения
+    ├── images/           — изображения интерфейса, иконки
+    │                       приложения (favicon.*, apple-touch-icon,
+    │                       android-chrome) и site.webmanifest
+    └── videos/           — материалы для секции «Демо»
 ```
 
 ### 4.2. Серверная часть
