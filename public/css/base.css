@@ -86,6 +86,11 @@
   box-sizing: border-box;
 }
 
+/* HTML-атрибут hidden должен побеждать любой display: ... в CSS */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   margin: 0;
   padding: 0;
