@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#07090E">
-  <title>Скачать ПО — Mavix</title>
+  <title>Настройки — Mavix</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -24,7 +24,7 @@
   <script src="/js/auth-guard.js" defer></script>
   <script src="/js/cabinet.js" defer></script>
   <script src="/js/app.js" defer></script>
-  <script src="/js/pages/dashboard.js" defer></script>
+  <script src="/js/pages/settings.js" defer></script>
 </head>
 <body>
 
@@ -91,92 +91,29 @@
   <main class="app-main">
 
     <header class="page-head">
-      <div class="page-eyebrow">Скачать программы</div>
-      <h1 class="page-title">Программы Mavix</h1>
+      <div class="page-eyebrow">Настройки</div>
+      <h1 class="page-title">Безопасность</h1>
       <p class="page-sub">
-        Десктоп-клиент для оператора и прошивка для дрона. Установите сначала
-        десктоп, затем прошивку на Raspberry Pi.
+        Управляйте паролем своего аккаунта Mavix.
       </p>
     </header>
 
-    <section class="software-grid">
+    <section class="card" style="max-width: 640px;">
+      <h2 class="card-title">Смена пароля</h2>
+      <p class="card-subtitle" style="margin-bottom: 20px;">
+        Мы отправим письмо со ссылкой для смены пароля на
+        <strong data-role="user-email">ваш email</strong>.
+        Ссылка действительна один час.
+      </p>
 
-      <article class="software-card">
-        <div class="software-card-head">
-          <div class="software-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <div class="software-card-titles">
-            <h3 class="software-card-title">MavixDesktop</h3>
-            <div class="software-card-tag">Приложение оператора · v0.1.0</div>
-          </div>
-          <span class="badge badge-accent">Stable</span>
-        </div>
+      <div class="form-feedback success" data-role="form-success"></div>
+      <div class="form-feedback error" data-role="form-error"></div>
 
-        <p class="software-card-desc">
-          Клиент для управления дронами: вход в аккаунт, список ваших дронов,
-          видеопоток с камер, калибровка, настройка битрейта и FPS,
-          поддержка USB-джойстика.
-        </p>
-
-        <div class="software-card-meta">
-          <span class="badge badge-muted">Windows 10+</span>
-          <span class="badge badge-muted">Linux x64</span>
-        </div>
-
-        <div class="software-card-actions">
-          <button class="btn btn-primary" type="button">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Скачать для Windows
-          </button>
-          <button class="btn btn-secondary" type="button">Linux (.deb)</button>
-        </div>
-      </article>
-
-      <article class="software-card">
-        <div class="software-card-head">
-          <div class="software-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="20" x2="20" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
-          </div>
-          <div class="software-card-titles">
-            <h3 class="software-card-title">MavixBoard</h3>
-            <div class="software-card-tag">Прошивка дрона · v0.1.0</div>
-          </div>
-          <span class="badge badge-accent">Stable</span>
-        </div>
-
-        <p class="software-card-desc">
-          Сборка для Raspberry Pi с автоматически встроенным идентификатором
-          вашего аккаунта. После установки на дрон он сразу появится в вашем
-          приложении оператора — настраивать ничего не нужно.
-        </p>
-
-        <div class="software-card-meta">
-          <span class="badge badge-muted">Raspberry Pi 4+</span>
-          <span class="badge badge-muted">Ubuntu 24.04 / RPi OS</span>
-        </div>
-
-        <div class="software-card-actions">
-          <button class="btn btn-primary" type="button">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Скачать .deb
-          </button>
-          <button class="btn btn-secondary" type="button">Инструкция по установке</button>
-        </div>
-      </article>
-
+      <button class="btn btn-primary" type="button" data-role="reset-btn">
+        <span data-role="reset-btn-text">Отправить ссылку для смены пароля</span>
+        <span class="spinner" data-role="reset-btn-spinner" style="display: none;"></span>
+      </button>
     </section>
-
-    <div class="info-note">
-      <svg class="info-note-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <div>
-        <strong>Порядок установки:</strong>
-        сначала установите MavixDesktop на ПК и войдите в аккаунт.
-        Затем скачайте MavixBoard и установите его на Raspberry Pi
-        командой <code>sudo apt install ./mavixboard.deb</code>.
-        Дрон автоматически зарегистрируется в системе и появится в списке.
-      </div>
-    </div>
 
   </main>
 </div>

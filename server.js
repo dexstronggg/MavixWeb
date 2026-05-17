@@ -22,6 +22,7 @@ const PAGES = {
   '/forgot-password': 'forgot-password.html',
   '/reset-password': 'reset-password.html',
   '/dashboard': 'dashboard.html',
+  '/dashboard/settings': 'settings.html',
   '/dashboard/docs/user': 'docs-user.html',
   '/dashboard/docs/technical': 'docs-technical.html',
   '/dashboard/software': 'software.html',
