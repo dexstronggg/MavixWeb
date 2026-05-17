@@ -439,10 +439,14 @@
   z-index: 1;
 }
 
+/* Якорь «На главную» — фиксированный в верхнем-левом углу
+   viewport-а, поверх фона .auth-shell::before, отдельно от
+   карточки и её логотипа. */
 .auth-back {
-  position: absolute;
-  top: 16px;
-  left: 18px;
+  position: fixed;
+  top: 20px;
+  left: 24px;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -454,6 +458,13 @@
 
 .auth-back:hover {
   color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .auth-back {
+    top: 14px;
+    left: 14px;
+  }
 }
 
 .auth-header {
