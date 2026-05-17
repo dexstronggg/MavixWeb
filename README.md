@@ -67,6 +67,26 @@ Access- и refresh-токены хранятся в `localStorage` (`mavix_acces
 `mavix_refresh`). Очистка хранилища или смена браузера требует повторного
 входа.
 
+## Тесты
+
+```bash
+npm install
+npm test
+```
+
+Покрытие:
+
+- `tests/server.test.js` — Express-сервер (supertest): все маршруты
+  из `PAGES` возвращают 200 HTML, несуществующий URL — 404,
+  `/config.js` отдаёт валидный JS с `window.MAVIX_CONFIG.apiBaseUrl`.
+- `tests/video.test.js` — `setupVideoFallback` и `setupVideoPlayer`
+  из `js/app.js` (jsdom): HEAD 200 оставляет плеер, 404/сетевая
+  ошибка показывают placeholder, клики по кнопке и видео корректно
+  играют/паузят.
+- `tests/pw-strength.test.js` — `js/pw-strength.js` (jsdom): уровни
+  weak/medium/strong для эталонных паролей, скрытие блока при пустом
+  значении, обновление подписи.
+
 ## Документация
 
 - [TECHNICAL.md](./TECHNICAL.md) — техническое описание программы

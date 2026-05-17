@@ -42,7 +42,13 @@ app.use((_req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`[mavix-web] listening on http://localhost:${PORT}`);
-  console.log(`[mavix-web] proxying API to ${API_BASE_URL}`);
-});
+// Поднимаем сервер только если файл запущен напрямую — иначе он
+// импортируется тестами, и app.listen() занимал бы порт.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`[mavix-web] listening on http://localhost:${PORT}`);
+    console.log(`[mavix-web] proxying API to ${API_BASE_URL}`);
+  });
+}
+
+module.exports = { app, PAGES };
