@@ -253,9 +253,17 @@
         </p>
       </div>
 
-      <div class="video-wrap">
-        <!-- Замените на свой <video src="/videos/demo.mp4" controls></video> -->
-        <div class="video-placeholder">
+      <div class="video-wrap" data-role="video-wrap">
+        <video
+          controls
+          preload="metadata"
+          playsinline
+          poster="/images/demo-poster.jpg"
+          data-role="demo-video">
+          <source src="/videos/demo.mp4" type="video/mp4">
+          Ваш браузер не поддерживает встроенное воспроизведение видео.
+        </video>
+        <div class="video-placeholder" data-role="video-placeholder" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
           <div>Видео скоро появится</div>
           <div style="font-family: var(--font-mono); font-size: 11px; opacity: 0.6;">/videos/demo.mp4</div>

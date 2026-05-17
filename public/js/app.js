@@ -50,6 +50,20 @@
     });
   }
 
+  function setupVideoFallback() {
+    const video = document.querySelector('[data-role="demo-video"]');
+    const placeholder = document.querySelector('[data-role="video-placeholder"]');
+    if (!video || !placeholder) return;
+    const source = video.querySelector('source');
+    if (!source) return;
+    const showFallback = () => {
+      if (video.parentNode) video.parentNode.removeChild(video);
+      placeholder.hidden = false;
+    };
+    source.addEventListener('error', showFallback);
+    video.addEventListener('error', showFallback);
+  }
+
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
@@ -60,5 +74,6 @@
     highlightCurrentNavLinks();
     setupLogoutButtons();
     setupCardGlow();
+    setupVideoFallback();
   });
 })();
