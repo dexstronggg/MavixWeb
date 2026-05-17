@@ -26,13 +26,13 @@
     </a>
     <nav class="nav" id="nav">
       <a class="nav-link" href="#features">Возможности</a>
-      <a class="nav-link" href="#architecture">Архитектура</a>
+      <a class="nav-link" href="#architecture">Как это работает</a>
       <a class="nav-link" href="#video">Демо</a>
       <a class="nav-link" href="#about">О нас</a>
     </nav>
     <div class="header-actions">
       <a class="btn btn-ghost btn-sm" href="/login">Войти</a>
-      <a class="btn btn-primary btn-sm" href="/register">Начать</a>
+      <a class="btn btn-primary btn-sm" href="/register">Зарегистрироваться</a>
       <button class="menu-toggle" id="menu-toggle" aria-label="Открыть меню" aria-controls="nav" aria-expanded="false">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
       </button>
@@ -176,64 +176,60 @@
     </div>
   </section>
 
-  <!-- ARCHITECTURE -->
+  <!-- HOW IT WORKS -->
   <section class="section" id="architecture" style="padding-top: 32px;">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Архитектура</span>
-        <h2 class="section-title">Три компонента, один протокол</h2>
+        <span class="eyebrow">Как это работает</span>
+        <h2 class="section-title">Дрон и ваш компьютер общаются напрямую</h2>
         <p class="section-sub">
-          Сервер занимается только сигнализацией и авторизацией. Видео
-          и команды управления идут напрямую между дроном и оператором.
+          Mavix помогает им найти друг друга в интернете. Дальше видео
+          и команды управления летают между ними напрямую — без посредников.
         </p>
       </div>
 
       <div class="arch-grid">
 
         <div class="arch-node">
-          <div class="arch-node-badge">Board · на дроне</div>
-          <div class="arch-node-title">MavixBoard</div>
+          <div class="arch-node-badge">В небе</div>
+          <div class="arch-node-title">Ваш дрон</div>
           <div class="arch-node-desc">
-            Raspberry Pi с USB-камерой и полётным контроллером. Кодирует видео,
-            ретранслирует команды по MAVLink.
+            Снимает видео с камеры и принимает ваши команды управления.
+            На борту установлено приложение Mavix.
           </div>
         </div>
 
         <div class="arch-arrow">
-          <span>WebSocket</span>
           <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
-          <span>JWT</span>
         </div>
 
         <div class="arch-node is-server">
-          <div class="arch-node-badge">Server · сигнализация</div>
-          <div class="arch-node-title">MavixServer</div>
+          <div class="arch-node-badge">Посередине</div>
+          <div class="arch-node-title">Сервис Mavix</div>
           <div class="arch-node-desc">
-            FastAPI: авторизация, регистрация дронов, обмен SDP/ICE,
-            выдача STUN/TURN. Медиа через него не идёт.
+            Проверяет, что и дрон, и оператор — это вы. Помогает им
+            найти друг друга. Видео и команды через него не идут.
           </div>
         </div>
 
         <div class="arch-arrow">
-          <span>WebSocket</span>
           <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
-          <span>JWT</span>
         </div>
 
         <div class="arch-node">
-          <div class="arch-node-badge">Desktop · оператор</div>
-          <div class="arch-node-title">MavixDesktop</div>
+          <div class="arch-node-badge">У вас в руках</div>
+          <div class="arch-node-title">Ваш компьютер</div>
           <div class="arch-node-desc">
-            PySide6 на ПК: видеоокно, джойстик, телеметрия,
-            калибровка камер и битрейт на лету.
+            Показывает видео с дрона на экране. Передаёт нажатия
+            джойстика и кнопок обратно на дрон.
           </div>
         </div>
 
       </div>
 
       <p class="arch-note">
-        После handshake Board и Desktop устанавливают прямое WebRTC-соединение —
-        видео и команды управления идут P2P, минуя сервер.
+        Когда знакомство завершено, сервер выпадает из цепочки — дрон
+        и ваш компьютер связываются напрямую.
       </p>
     </div>
   </section>
@@ -334,7 +330,7 @@
         <div class="footer-col-title">Продукт</div>
         <ul class="footer-links">
           <li><a href="#features">Возможности</a></li>
-          <li><a href="#architecture">Архитектура</a></li>
+          <li><a href="#architecture">Как это работает</a></li>
           <li><a href="#video">Демо</a></li>
           <li><a href="/dashboard/software">Скачать</a></li>
         </ul>
