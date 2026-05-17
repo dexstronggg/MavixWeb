@@ -92,12 +92,22 @@ html, body {
   height: 100%;
 }
 
+html {
+  background: var(--bg);
+  scroll-behavior: smooth;
+}
+
+/* Якоря и сами секции не должны прятаться под sticky-шапкой */
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 12px);
+}
+
 body {
   font-family: var(--font-sans);
   font-size: var(--fs-base);
   line-height: 1.55;
   color: var(--text);
-  background: var(--bg);
+  background: transparent;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -294,4 +304,5 @@ code, kbd, samp, pre {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  html { scroll-behavior: auto; }
 }

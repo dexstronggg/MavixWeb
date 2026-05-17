@@ -4,6 +4,75 @@
    ============================================================ */
 
 /* ----------------------------------------------------------
+   Фоновый эффект: плавающие cyan/blue-пятна (только index.html)
+   ---------------------------------------------------------- */
+
+.bg-fx {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.bg-fx-blob {
+  position: absolute;
+  width: 720px;
+  height: 720px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.22;
+  will-change: transform;
+}
+
+.bg-fx-blob-1 {
+  top: -180px;
+  left: -160px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+  animation: bg-float-1 32s ease-in-out infinite;
+}
+
+.bg-fx-blob-2 {
+  top: 30%;
+  right: -220px;
+  width: 820px;
+  height: 820px;
+  background: radial-gradient(circle, #1d4ed8 0%, transparent 65%);
+  opacity: 0.28;
+  animation: bg-float-2 40s ease-in-out infinite;
+}
+
+.bg-fx-blob-3 {
+  bottom: -200px;
+  left: 35%;
+  width: 760px;
+  height: 760px;
+  background: radial-gradient(circle, var(--accent-press) 0%, transparent 65%);
+  animation: bg-float-3 36s ease-in-out infinite;
+}
+
+@keyframes bg-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(140px, 220px) scale(1.15); }
+}
+
+@keyframes bg-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-200px, -160px) scale(1.1); }
+}
+
+@keyframes bg-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(100px, -220px) scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-fx-blob { animation: none; }
+}
+
+
+
+/* ----------------------------------------------------------
    Лендинг: hero
    ---------------------------------------------------------- */
 
