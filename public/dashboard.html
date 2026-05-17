@@ -22,6 +22,7 @@
   <script src="/config.js" defer></script>
   <script src="/js/api.js" defer></script>
   <script src="/js/auth-guard.js" defer></script>
+  <script src="/js/cabinet.js" defer></script>
   <script src="/js/app.js" defer></script>
   <script src="/js/pages/dashboard.js" defer></script>
 </head>
@@ -34,7 +35,7 @@
       <span>MAVIX</span>
     </a>
     <div class="header-actions">
-      <span class="header-user" data-role="header-email">—</span>
+      <span class="header-user is-skeleton" data-role="header-email" style="min-width:11ch">&nbsp;</span>
       <a class="btn btn-ghost btn-sm" href="#" data-action="logout">Выйти</a>
     </div>
   </div>
@@ -78,10 +79,10 @@
     </div>
 
     <div class="sidebar-user" data-role="sidebar-user">
-      <div class="sidebar-user-avatar" data-role="avatar">M</div>
+      <div class="sidebar-user-avatar is-skeleton" data-role="avatar"></div>
       <div class="sidebar-user-info">
-        <div class="sidebar-user-email" data-role="email">—</div>
-        <div class="sidebar-user-id" data-role="user-id">—</div>
+        <div class="sidebar-user-email is-skeleton" data-role="email" style="min-width:14ch">&nbsp;</div>
+        <div class="sidebar-user-id is-skeleton" data-role="user-id" style="min-width:18ch">&nbsp;</div>
       </div>
     </div>
   </aside>
@@ -90,7 +91,7 @@
 
     <section class="welcome">
       <span class="eyebrow">Добро пожаловать</span>
-      <h1 class="welcome-title">Здравствуйте, <span class="welcome-email" data-role="hello-email">оператор</span></h1>
+      <h1 class="welcome-title">Здравствуйте, <span class="welcome-email is-skeleton" data-role="hello-email" style="min-width:12ch">&nbsp;</span></h1>
       <p class="welcome-sub">
         Это ваш личный кабинет Mavix. Здесь вы найдёте документацию по системе
         и сможете скачать программы для дрона и оператора.

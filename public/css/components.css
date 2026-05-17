@@ -408,3 +408,45 @@
   height: 1px;
   background: var(--border);
 }
+
+/* ----------------------------------------------------------
+   Skeleton-плейсхолдеры (для шапки/сайдбара кабинета)
+   ---------------------------------------------------------- */
+
+.is-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    rgba(0, 217, 255, 0.08) 50%,
+    var(--border) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  color: transparent !important;
+  border-radius: 4px;
+  user-select: none;
+  pointer-events: none;
+  /* Гарантируем высоту даже у пустых элементов */
+  min-height: 1em;
+}
+
+.is-skeleton::before {
+  content: '\00a0';
+}
+
+/* Аватарка — круглая, без бордер-радиуса как у текстовых плейсхолдеров */
+.sidebar-user-avatar.is-skeleton {
+  border-radius: 50%;
+}
+.sidebar-user-avatar.is-skeleton::before {
+  content: '';
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-skeleton { animation: none; }
+}
