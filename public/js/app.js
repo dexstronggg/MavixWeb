@@ -55,13 +55,20 @@
     const placeholder = document.querySelector('[data-role="video-placeholder"]');
     if (!video || !placeholder) return;
     const source = video.querySelector('source');
-    if (!source) return;
+    const src = source && source.getAttribute('src');
+    if (!src) return;
+
     const showFallback = () => {
       if (video.parentNode) video.parentNode.removeChild(video);
       placeholder.hidden = false;
     };
-    source.addEventListener('error', showFallback);
-    video.addEventListener('error', showFallback);
+
+    // Полагаемся на явный HEAD-запрос, а не на квирки <source> error /
+    // <video> error: эти события могут срабатывать на валидном файле
+    // (например, из-за отсутствующего poster) и приводят к ложному фолбэку.
+    fetch(src, { method: 'HEAD', cache: 'no-store' })
+      .then((res) => { if (!res.ok) showFallback(); })
+      .catch(() => showFallback());
   }
 
   function ready(fn) {
