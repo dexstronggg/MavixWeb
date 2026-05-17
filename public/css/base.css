@@ -117,7 +117,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
-  overflow-x: hidden;
+  /* clip вместо hidden — не создаёт scroll-container и не ломает
+     position: sticky на дочернем .header (особенно заметно на
+     длинных страницах кабинета: docs, software). */
+  overflow-x: clip;
 }
 
 img, svg, video, canvas {
