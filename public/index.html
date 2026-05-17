@@ -255,7 +255,6 @@
 
       <div class="video-wrap" data-role="video-wrap">
         <video
-          controls
           preload="metadata"
           playsinline
           poster="/images/demo-poster.jpg"
@@ -263,6 +262,9 @@
           <source src="/videos/demo.mp4" type="video/mp4">
           Ваш браузер не поддерживает встроенное воспроизведение видео.
         </video>
+        <button class="video-play-btn" type="button" data-role="video-play" aria-label="Воспроизвести видео">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="8 5 19 12 8 19"/></svg>
+        </button>
         <div class="video-placeholder" data-role="video-placeholder" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
           <div>Видео скоро появится</div>

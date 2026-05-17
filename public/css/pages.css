@@ -383,6 +383,62 @@
   border: none;
 }
 
+.video-wrap video {
+  cursor: pointer;
+}
+
+.video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #001017;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 8px rgba(0, 217, 255, 0.15),
+    0 0 0 18px rgba(0, 217, 255, 0.07),
+    0 16px 40px var(--accent-glow);
+  transition:
+    opacity 220ms var(--ease),
+    transform 220ms var(--ease),
+    background 200ms var(--ease),
+    box-shadow 220ms var(--ease);
+  z-index: 2;
+}
+
+.video-play-btn svg {
+  width: 36px;
+  height: 36px;
+  margin-left: 4px; /* визуальная компенсация треугольника */
+}
+
+.video-play-btn:hover {
+  background: var(--accent-hover);
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow:
+    0 0 0 10px rgba(0, 217, 255, 0.22),
+    0 0 0 22px rgba(0, 217, 255, 0.10),
+    0 20px 48px var(--accent-glow);
+}
+
+.video-play-btn:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+.video-play-btn.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
 .video-placeholder {
   position: absolute;
   inset: 0;
