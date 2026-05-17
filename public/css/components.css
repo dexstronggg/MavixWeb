@@ -215,14 +215,18 @@
 }
 
 .form-feedback {
-  padding: 12px 14px;
+  padding: 10px 14px;
   border-radius: var(--r-md);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
   display: none;
   border: 1px solid transparent;
 }
 
-.form-feedback[data-visible="true"] { display: block; }
+.form-feedback[data-visible="true"] {
+  display: block;
+  margin-bottom: 16px;
+}
 
 .form-feedback.success {
   background: var(--success-soft);
