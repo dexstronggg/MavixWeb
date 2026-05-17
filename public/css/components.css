@@ -450,3 +450,45 @@
 @media (prefers-reduced-motion: reduce) {
   .is-skeleton { animation: none; }
 }
+
+/* ----------------------------------------------------------
+   Индикатор силы пароля
+   ---------------------------------------------------------- */
+
+.pw-strength {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pw-strength-bar {
+  position: relative;
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.pw-strength-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  transition: width 220ms ease, background-color 220ms ease;
+}
+
+.pw-strength[data-level="weak"]   .pw-strength-fill { background: var(--danger, #F87171); }
+.pw-strength[data-level="medium"] .pw-strength-fill { background: var(--warning, #FBBF24); }
+.pw-strength[data-level="strong"] .pw-strength-fill { background: var(--success, #4ADE80); }
+
+.pw-strength-label {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  min-width: 6em;
+  text-align: right;
+}
+
+.pw-strength[data-level="weak"]   .pw-strength-label { color: var(--danger, #F87171); }
+.pw-strength[data-level="medium"] .pw-strength-label { color: var(--warning, #FBBF24); }
+.pw-strength[data-level="strong"] .pw-strength-label { color: var(--success, #4ADE80); }
