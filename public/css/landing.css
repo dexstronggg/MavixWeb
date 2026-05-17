@@ -97,7 +97,7 @@
 
 .hero {
   position: relative;
-  padding: 120px 0 96px;
+  padding: 56px 0 48px;
   overflow: hidden;
 }
 
@@ -140,7 +140,7 @@
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.05;
-  margin: 24px 0 22px;
+  margin: 16px 0 18px;
   background: linear-gradient(180deg, var(--text) 0%, var(--muted-strong) 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -157,9 +157,9 @@
 .hero-sub {
   font-size: clamp(16px, 1.6vw, 19px);
   color: var(--text-soft);
-  line-height: 1.6;
+  line-height: 1.55;
   max-width: 640px;
-  margin: 0 auto 36px;
+  margin: 0 auto 24px;
 }
 
 .hero-actions {
@@ -168,7 +168,7 @@
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 56px;
+  margin-bottom: 32px;
 }
 
 .hero-stats {
