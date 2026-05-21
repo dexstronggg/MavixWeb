@@ -47,7 +47,16 @@ npm start
 | `/dashboard/docs/user`           | Пользовательская документация    |
 | `/dashboard/docs/technical`      | Техническая документация         |
 | `/dashboard/software`            | Скачивание клиентского ПО        |
+| `/downloads/mavix-desktop-windows.exe` | Дистрибутив MavixDesktop для Windows |
+| `/downloads/mavix-desktop-linux.deb`   | Дистрибутив MavixDesktop для Linux (.deb)  |
 | `/config.js`                     | Runtime-конфиг для браузера      |
+
+`/downloads/*` — whitelist-маршруты: отдают файлы из `public/downloads/`
+через `res.download()`. Если файл отсутствует — текстовый 404 с понятным
+сообщением. Сами `.exe`/`.deb` в репозиторий не коммитятся
+(`public/downloads/*` в `.gitignore`), кладутся туда после сборки в
+[MavixDesktop-UI](https://github.com/dexstronggg/MavixDesktop-UI) —
+см. `scripts/README.md` в том репо.
 
 ## API
 
