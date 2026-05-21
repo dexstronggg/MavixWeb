@@ -34,6 +34,32 @@ for (const [route, file] of Object.entries(PAGES)) {
   });
 }
 
+// Скачивание дистрибутивов MavixDesktop. Whitelisted-маршруты — каждый
+// явно перечислен, никакой подстановки имени файла из URL: исключает
+// path traversal. Файлы кладутся в public/downloads/ из CI/CD сборки
+// MavixDesktop-UI (scripts/build_windows.ps1 + scripts/build_linux.sh).
+// Если файла нет — отдаём 404 с понятным сообщением вместо стандартной
+// HTML-страницы.
+const DOWNLOADS = {
+  '/downloads/mavix-desktop-windows.exe': 'mavix-desktop-windows.exe',
+  '/downloads/mavix-desktop-linux.deb':   'mavix-desktop-linux.deb',
+};
+const DOWNLOADS_DIR = path.join(__dirname, 'public', 'downloads');
+
+for (const [route, filename] of Object.entries(DOWNLOADS)) {
+  app.get(route, (_req, res) => {
+    const filepath = path.join(DOWNLOADS_DIR, filename);
+    res.download(filepath, filename, (err) => {
+      if (err && !res.headersSent) {
+        res.status(404).type('text/plain; charset=utf-8').send(
+          `Файл ${filename} ещё не загружен на сервер.\n` +
+          `Свяжитесь с администратором или повторите попытку позже.`,
+        );
+      }
+    });
+  });
+}
+
 app.use(express.static(path.join(__dirname, 'public'), { etag: false, lastModified: false }));
 
 app.use((_req, res) => {
