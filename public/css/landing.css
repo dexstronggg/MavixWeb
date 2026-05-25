@@ -674,3 +674,25 @@
   }
 }
 
+
+/* ----------------------------------------------------------
+   Header авторизованного пользователя на лендинге.
+   До решения «гость/авторизован» оба блока скрыты через [hidden].
+   landing.js после синхронной проверки localStorage снимает hidden
+   с нужного блока — это происходит мгновенно, мигания нет.
+   ---------------------------------------------------------- */
+
+.header-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-actions-group[hidden] {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  /* На узких экранах email прячем — кнопок «Кабинет» и «Выйти» достаточно. */
+  [data-role="header-actions-auth"] .header-user { display: none; }
+}
