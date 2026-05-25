@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    container_name: mavixweb
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "${PORT:-3001}:3001"
