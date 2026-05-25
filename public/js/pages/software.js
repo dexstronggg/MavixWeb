@@ -1,90 +1,41 @@
 /* ============================================================
    Mavix Web — pages/software.js
 
-   Логика страницы «Скачать ПО»:
-     • Скачивание MavixDesktop (.exe / .AppImage) с собственных
-       /downloads/* маршрутов. Если файла нет — показываем
-       inline-notice прямо на странице, без перехода на 404.
-     • Скачивание MavixBoard через API сервера. На ошибки —
-       человеческие сообщения, никаких голых JSON-`alert`.
+   Логика страницы «Скачать ПО»: оба продукта (MavixBoard tarball и
+   MavixDesktop pre-built бинарь) качаются через единый API сервера
+   `/api/v1/builds/<kind>`. На ошибки — человеческие сообщения,
+   никаких голых JSON / alert(error).
    ============================================================ */
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
-    initDesktopDownloads();
-    initBoardDownload();
+    initBuildDownloads();
   });
 
-  /* -------- Desktop (.exe / .AppImage) -------- */
-
-  function initDesktopDownloads() {
-    const links = document.querySelectorAll('a[href^="/downloads/"]');
-    links.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        downloadDesktop(link).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.error('[software] desktop download failed', err);
-          showNotice('error', err.message || 'Не удалось скачать файл. Попробуйте позже.');
+  function initBuildDownloads() {
+    document.querySelectorAll('[data-action="download-board"], [data-action="download-desktop"]')
+      .forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          downloadBuild(link).catch((err) => {
+            // eslint-disable-next-line no-console
+            console.error('[software] build download failed', err);
+            showNotice('error', err.message || 'Не удалось скачать сборку. Попробуйте позже.');
+          });
         });
       });
-    });
   }
 
-  async function downloadDesktop(link) {
+  async function downloadBuild(link) {
     const href = link.getAttribute('href');
-    const filename = href.split('/').pop() || 'mavix-desktop';
-
-    setLoading(link, true);
-    clearNotice();
-
-    try {
-      // Проверяем доступность файла через HEAD: если 404 — показываем
-      // понятный notice, а не открываем новую вкладку с голым текстом.
-      const head = await fetch(href, { method: 'HEAD' });
-      if (!head.ok) {
-        if (head.status === 404) {
-          throw new Error(
-            'Сборка для рабочего стола ещё не загружена на сервер. ' +
-            'Обратитесь к администратору или попробуйте позже.',
-          );
-        }
-        throw new Error(`Не удалось скачать файл (ошибка ${head.status}).`);
-      }
-
-      // Файл есть — запускаем штатное скачивание через скрытую ссылку.
-      const a = document.createElement('a');
-      a.href = href;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } finally {
-      setLoading(link, false);
-    }
-  }
-
-  /* -------- Board (.deb через API) -------- */
-
-  function initBoardDownload() {
-    const links = document.querySelectorAll('[data-action="download-board"]');
-    links.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        downloadBoardBuild(link).catch((err) => {
-          // eslint-disable-next-line no-console
-          console.error('[software] board download failed', err);
-          showNotice('error', err.message || 'Не удалось скачать сборку. Попробуйте позже.');
-        });
-      });
-    });
-  }
-
-  async function downloadBoardBuild(link) {
-    const url = new URL(link.getAttribute('href'), window.location.origin);
+    const url = new URL(href, window.location.origin);
+    const kind = url.pathname.includes('/desktop') ? 'desktop' : 'board';
     const buildType = url.searchParams.get('build_type') || 'deb';
 
     const apiBase = (window.MAVIX_CONFIG && window.MAVIX_CONFIG.apiBaseUrl) || '';
-    const fullUrl = `${apiBase.replace(/\/+$/, '')}/api/v1/builds/board?build_type=${encodeURIComponent(buildType)}`;
+    const apiRoot = `${apiBase.replace(/\/+$/, '')}/api/v1/builds/${kind}`;
+    const fullUrl = kind === 'desktop'
+      ? `${apiRoot}?build_type=${encodeURIComponent(buildType)}`
+      : apiRoot;
 
     const headers = { 'Accept': 'application/octet-stream' };
     const access = localStorage.getItem('mavix_access');
@@ -104,12 +55,12 @@
       }
 
       if (!res.ok) {
-        throw await buildErrorFromResponse(res);
+        throw await buildErrorFromResponse(res, kind, buildType);
       }
 
       const blob = await res.blob();
       const filename = extractFilename(res.headers.get('content-disposition'))
-        || `mavixboard.${buildType}`;
+        || defaultFilename(kind, buildType);
 
       const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -124,9 +75,15 @@
     }
   }
 
+  function defaultFilename(kind, buildType) {
+    if (kind === 'board') return 'mavixboard.tar.gz';
+    if (buildType === 'exe') return 'mavixdesktop.exe';
+    return 'mavixdesktop-linux.AppImage';
+  }
+
   /* -------- Ошибки API → человеческие сообщения -------- */
 
-  async function buildErrorFromResponse(res) {
+  async function buildErrorFromResponse(res, kind, buildType) {
     // Пытаемся разобрать тело: сервер обычно возвращает {detail: "..."}
     // в JSON, но не гарантирует. Никогда не показываем сырой JSON.
     const raw = await res.text().catch(() => '');
@@ -157,17 +114,21 @@
 
     // Wheels-директория отсутствует на сервере (известный кейс
     // MavixServer: {"detail":"wheels dir not found: /srv/mavix/wheels/board"}).
-    if (detail && detail.toLowerCase().includes('wheels dir not found')) {
+    if (detail && /wheels dir not found|no wheels in/i.test(detail)) {
+      const subject = kind === 'desktop' ? 'для рабочего стола' : 'для платы';
       return new Error(
-        'Сборка для платы временно недоступна. ' +
+        `Сборка ${subject} временно недоступна. ` +
         'Обратитесь к администратору сервера или попробуйте позже.',
       );
     }
 
-    // 404: сборки нет.
+    // 404: сборки нет (типично для desktop, когда .exe/.AppImage не залит).
     if (res.status === 404) {
+      const subject = kind === 'desktop'
+        ? (buildType === 'exe' ? 'Windows (.exe)' : 'Linux (.AppImage)')
+        : 'MavixBoard';
       return new Error(
-        'Сборка не найдена на сервере. ' +
+        `Сборка ${subject} ещё не загружена на сервер. ` +
         'Обратитесь к администратору или попробуйте позже.',
       );
     }

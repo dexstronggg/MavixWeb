@@ -178,20 +178,36 @@
 
         <h3 id="install-board">3. Установите MavixBoard на дрон</h3>
         <p>
-          Скачайте <code>.deb</code>-пакет для Raspberry Pi — при сборке сервер
-          автоматически встроит в него токен вашего аккаунта, дрон сразу
-          привяжется к вам. Перенесите файл на RPi и установите:
+          Скачайте установщик MavixBoard (архив <code>.tar.gz</code>) — при
+          сборке сервер автоматически встроит в него токен вашего аккаунта
+          и идентификатор дрона, так что дрон сразу привяжется к вам.
+          Перенесите файл на Raspberry Pi и распакуйте:
         </p>
-        <pre><code>sudo apt install ./mavixboard.deb</code></pre>
+        <pre><code>tar xzf mavixboard-XXXXXXXX.tar.gz
+cd mavixboard-XXXXXXXX
+sudo ./install.sh</code></pre>
         <p>
-          Затем запустите службу автоматического старта:
+          Установщик создаст изолированный Python-venv в
+          <code>/opt/mavixboard/</code>, поставит все зависимости из
+          архива (интернет в этот момент <strong>не нужен</strong>) и
+          положит ваш токен в <code>/etc/mavixboard/preset.env</code>.
         </p>
-        <pre><code>sudo systemctl enable --now mavix.service</code></pre>
         <p>
-          Проверить что всё работает:
+          <strong>Ручной запуск</strong> (для проверки, что всё работает):
         </p>
-        <pre><code>sudo systemctl status mavix.service
-sudo journalctl -u mavix.service -f</code></pre>
+        <pre><code>set -a; . /etc/mavixboard/preset.env; set +a
+sudo /opt/mavixboard/.venv/bin/python -m mavixboard</code></pre>
+        <p>
+          Останавливается <code>Ctrl+C</code>. Если хотите, чтобы дрон
+          стартовал автоматически при включении питания, включите
+          systemd-юнит:
+        </p>
+        <pre><code>sudo systemctl enable --now mavixboard
+sudo journalctl -u mavixboard -f</code></pre>
+        <p>
+          После этого служба будет автоматически запускаться при каждой
+          загрузке RPi.
+        </p>
 
         <h3>4. Настройте полётный контроллер</h3>
         <p>

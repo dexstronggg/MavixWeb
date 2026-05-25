@@ -126,11 +126,11 @@
         </div>
 
         <div class="software-card-actions">
-          <a class="btn btn-primary" href="/downloads/mavix-desktop-windows.exe" download>
+          <a class="btn btn-primary" href="/api/v1/builds/desktop?build_type=exe" data-action="download-desktop">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Windows (.exe)
           </a>
-          <a class="btn btn-primary" href="/downloads/mavix-desktop-linux.AppImage" download>
+          <a class="btn btn-primary" href="/api/v1/builds/desktop?build_type=deb" data-action="download-desktop">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Linux (.AppImage)
           </a>
@@ -161,9 +161,9 @@
         </div>
 
         <div class="software-card-actions">
-          <a class="btn btn-primary" href="/api/v1/builds/board?build_type=deb" data-action="download-board">
+          <a class="btn btn-primary" href="/api/v1/builds/board" data-action="download-board">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Скачать .deb
+            Скачать установщик (.tar.gz)
           </a>
           <a class="btn btn-secondary" href="/dashboard/docs/user#install-board">Инструкция по установке</a>
         </div>
@@ -176,8 +176,9 @@
       <div>
         <strong>Порядок установки:</strong>
         сначала установите MavixDesktop на ПК и войдите в аккаунт.
-        Затем скачайте MavixBoard и установите его на Raspberry Pi
-        командой <code>sudo apt install ./mavixboard.deb</code>.
+        Затем скачайте установщик MavixBoard и распакуйте его на Raspberry Pi:
+        <code>tar xzf mavixboard-*.tar.gz</code>, далее
+        <code>cd mavixboard-*</code> и <code>sudo ./install.sh</code>.
         Дрон автоматически зарегистрируется в системе и появится в списке.
       </div>
     </div>
