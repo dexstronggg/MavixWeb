@@ -50,55 +50,6 @@
     });
   }
 
-  function setupVideoFallback() {
-    const video = document.querySelector('[data-role="demo-video"]');
-    const placeholder = document.querySelector('[data-role="video-placeholder"]');
-    if (!video || !placeholder) return;
-    const source = video.querySelector('source');
-    const src = source && source.getAttribute('src');
-    if (!src) return;
-
-    const button = document.querySelector('[data-role="video-play"]');
-
-    const showFallback = () => {
-      if (video.parentNode) video.parentNode.removeChild(video);
-      if (button && button.parentNode) button.parentNode.removeChild(button);
-      placeholder.hidden = false;
-    };
-
-    // Полагаемся на явный HEAD-запрос, а не на квирки <source> error /
-    // <video> error: эти события могут срабатывать на валидном файле
-    // (например, из-за отсутствующего poster) и приводят к ложному фолбэку.
-    fetch(src, { method: 'HEAD', cache: 'no-store' })
-      .then((res) => { if (!res.ok) showFallback(); })
-      .catch(() => showFallback());
-  }
-
-  function setupVideoPlayer() {
-    const video = document.querySelector('[data-role="demo-video"]');
-    const button = document.querySelector('[data-role="video-play"]');
-    if (!video || !button) return;
-
-    const showButton = () => button.classList.remove('is-hidden');
-    const hideButton = () => button.classList.add('is-hidden');
-
-    const togglePlay = () => {
-      if (video.paused || video.ended) {
-        const p = video.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-      } else {
-        video.pause();
-      }
-    };
-
-    button.addEventListener('click', togglePlay);
-    video.addEventListener('click', togglePlay);
-
-    video.addEventListener('play', hideButton);
-    video.addEventListener('pause', showButton);
-    video.addEventListener('ended', showButton);
-  }
-
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
@@ -109,7 +60,5 @@
     highlightCurrentNavLinks();
     setupLogoutButtons();
     setupCardGlow();
-    setupVideoFallback();
-    setupVideoPlayer();
   });
 })();
