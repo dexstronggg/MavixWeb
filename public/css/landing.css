@@ -298,70 +298,191 @@
 }
 
 /* ----------------------------------------------------------
-   Архитектура (диаграмма из трёх блоков)
+   Архитектура (триангулярная диаграмма: сервер / дрон / оператор)
+   локальный акцент для архитектурной схемы (не выносим в base.css)
    ---------------------------------------------------------- */
 
-.arch-grid {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  gap: 18px;
-  align-items: center;
+.arch-head {
+  margin-bottom: 28px;
 }
 
+.arch-title {
+  font-size: var(--fs-5xl);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+  line-height: 1.1;
+}
+
+.arch-sub {
+  font-size: var(--fs-md);
+  color: var(--muted);
+  margin: 0;
+}
+
+.arch-diagram {
+  --arch-pink: #ec4899;          /* локальный акцент схемы (rose/pink) */
+  --arch-pink-soft: rgba(236, 72, 153, 0.18);
+  --arch-line: rgba(136, 147, 164, 0.45); /* приглушённая серая линия */
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    ".      server    .       "
+    "drone  .         operator";
+  column-gap: 32px;
+  row-gap: 120px;
+  align-items: start;
+  padding: 16px 0 8px 0;
+  min-height: 520px;
+}
+
+/* SVG с линиями-связями — слой ниже нод */
+.arch-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.arch-line {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.arch-line-thin {
+  stroke: var(--arch-line);
+  stroke-width: 1.5;
+}
+
+.arch-line-p2p {
+  stroke: var(--arch-pink);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 6px var(--arch-pink-soft));
+}
+
+/* Ноды */
 .arch-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 28px 20px;
+  position: relative;
+  z-index: 2;
+  padding: 22px 24px 22px 28px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  text-align: center;
+  box-shadow: var(--shadow-card);
+  max-width: 320px;
 }
 
-.arch-node-badge {
-  font-family: var(--font-mono);
-  font-size: var(--fs-xs);
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+.arch-node::before {
+  /* цветная акцент-полоска слева */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 4px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+}
+
+.arch-node--server {
+  grid-area: server;
+  justify-self: center;
+}
+
+.arch-node--server::before {
+  background: var(--accent);
+}
+
+.arch-node--drone {
+  grid-area: drone;
+  justify-self: start;
+}
+
+.arch-node--drone::before {
+  background: var(--arch-pink);
+}
+
+.arch-node--operator {
+  grid-area: operator;
+  justify-self: end;
+}
+
+.arch-node--operator::before {
+  background: var(--arch-pink);
 }
 
 .arch-node-title {
-  font-size: var(--fs-lg);
+  font-size: var(--fs-2xl);
   font-weight: 600;
   color: var(--text);
+  margin-bottom: 10px;
+  line-height: 1.2;
 }
 
 .arch-node-desc {
   font-size: var(--fs-sm);
   color: var(--text-soft);
-  line-height: 1.5;
+  line-height: 1.55;
+  white-space: pre-line;
 }
 
-.arch-node.is-server {
-  border-color: rgba(0, 217, 255, 0.35);
-  box-shadow: 0 0 0 1px rgba(0, 217, 255, 0.1), 0 20px 60px -20px var(--accent-glow);
-}
-
-.arch-arrow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+/* Лейблы линий */
+.arch-edge-label {
+  position: absolute;
+  z-index: 1;
+  font-size: var(--fs-sm);
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  line-height: 1.35;
+  pointer-events: none;
 }
 
-.arch-arrow svg {
-  width: 32px;
-  height: 16px;
-  color: var(--accent);
-  opacity: 0.7;
+.arch-edge-label--left {
+  top: 50%;
+  left: 28%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.arch-edge-label--right {
+  top: 50%;
+  right: 28%;
+  transform: translate(50%, -50%);
+  text-align: center;
+}
+
+.arch-edge-label--p2p {
+  left: 50%;
+  bottom: 110px;
+  transform: translate(-50%, 50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.arch-p2p-accent {
+  color: var(--arch-pink);
+  font-weight: 600;
+}
+
+.arch-p2p-dot {
+  color: var(--muted);
+}
+
+.arch-p2p-text {
+  color: var(--text-soft);
 }
 
 .arch-note {
@@ -371,12 +492,46 @@
   font-size: var(--fs-sm);
 }
 
-@media (max-width: 900px) {
-  .arch-grid {
+/* ---- Адаптив: на узких экранах — вертикальный stacked layout ---- */
+@media (max-width: 720px) {
+  .arch-diagram {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "server"
+      "drone"
+      "operator";
+    row-gap: 28px;
+    min-height: 0;
+    padding: 8px 0;
   }
-  .arch-arrow {
-    transform: rotate(90deg);
+
+  .arch-lines {
+    display: none;
+  }
+
+  .arch-edge-label--left,
+  .arch-edge-label--right {
+    position: static;
+    transform: none;
+    display: block;
+    text-align: center;
+    padding: 4px 0;
+  }
+
+  .arch-edge-label--p2p {
+    position: static;
+    transform: none;
+    margin: 8px auto;
+  }
+
+  .arch-node {
+    max-width: 100%;
+    justify-self: stretch !important;
+  }
+
+  .arch-title {
+    font-size: var(--fs-4xl);
   }
 }
 
@@ -417,5 +572,105 @@
   margin-top: 12px;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+/* ----------------------------------------------------------
+   Контакты
+   ---------------------------------------------------------- */
+
+.contacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  padding: 48px 40px;
+  background: linear-gradient(180deg, var(--card), var(--bg-elev-1));
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+}
+
+.contacts-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contacts-title {
+  font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.contacts-sub {
+  color: var(--text-soft);
+  max-width: 440px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--bg-elev-1);
+  color: var(--text);
+  text-decoration: none;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.contact-item:hover {
+  border-color: var(--border-focus);
+  background: var(--card-hover);
+  transform: translateY(-1px);
+}
+
+.contact-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--r-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.contact-item-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact-item-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-soft);
+}
+
+.contact-item-value {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: var(--fs-base);
+  color: var(--text);
+  word-break: break-all;
+}
+
+@media (max-width: 800px) {
+  .contacts {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 36px 24px;
+  }
 }
 

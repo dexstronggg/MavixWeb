@@ -59,7 +59,7 @@
   <section class="hero">
     <div class="container hero-inner">
       <span class="eyebrow">
-        WebRTC · MAVLink · кроссплатформа
+        WebRTC · MAVLink + CRSF · кроссплатформа
       </span>
       <h1 class="hero-title">
         Дистанционное управление дронами<br>
@@ -115,7 +115,7 @@
           <h3 class="feature-title">Видео в реальном времени</h3>
           <p class="feature-desc">
             Поток с USB-камеры дрона уходит напрямую на ваш ПК через WebRTC peer-to-peer.
-            Кодирование H.264 на аппаратном кодере Raspberry Pi — минимальная задержка
+            Кодирование H.264 на Raspberry Pi — минимальная задержка
             и стабильный битрейт.
           </p>
         </div>
@@ -138,9 +138,9 @@
           </div>
           <h3 class="feature-title">Кроссплатформенный десктоп</h3>
           <p class="feature-desc">
-            Приложение оператора работает на Windows, macOS и Linux. Авторизация,
-            живой список дронов, видеопоток, калибровка камеры, переключение
-            битрейта и FPS — всё в одном окне.
+            Приложение оператора работает на Windows и Linux. Авторизация,
+            выбор дрона из вашего парка, видеопоток, калибровка камеры,
+            переключение битрейта и FPS — всё в одном окне.
           </p>
         </div>
 
@@ -187,57 +187,69 @@
   <!-- HOW IT WORKS -->
   <section class="section" id="architecture" style="padding-top: 32px;">
     <div class="container">
-      <div class="section-head">
-        <span class="eyebrow">Как это работает</span>
-        <h2 class="section-title">Дрон и ваш компьютер обмениваются данными напрямую</h2>
-        <p class="section-sub">
-          Mavix устанавливает соединение между ними. После этого видео
-          и команды управления передаются напрямую — минуя сервер.
-        </p>
+      <div class="arch-head">
+        <h2 class="arch-title">Как это устроено</h2>
+        <p class="arch-sub">три участника: дрон, наш сервер, оператор</p>
       </div>
 
-      <div class="arch-grid">
+      <div class="arch-diagram">
 
-        <div class="arch-node">
-          <div class="arch-node-badge">На стороне дрона</div>
-          <div class="arch-node-title">Ваш дрон</div>
+        <!-- SVG со связями между нодами -->
+        <svg class="arch-lines" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+          <!-- Сервер -> Дрон (диагональ влево-вниз) -->
+          <line class="arch-line arch-line-thin" x1="430" y1="140" x2="180" y2="380"/>
+          <!-- Сервер -> Оператор (диагональ вправо-вниз) -->
+          <line class="arch-line arch-line-thin" x1="570" y1="140" x2="820" y2="380"/>
+          <!-- Дрон <-> Оператор (толстая горизонталь P2P) -->
+          <line class="arch-line arch-line-p2p" x1="270" y1="430" x2="730" y2="430"/>
+        </svg>
+
+        <!-- Лейблы для линий -->
+        <div class="arch-edge-label arch-edge-label--left">
+          регистрация<br>и сигналинг
+        </div>
+        <div class="arch-edge-label arch-edge-label--right">
+          вход<br>и список дронов
+        </div>
+        <div class="arch-edge-label arch-edge-label--p2p">
+          <span class="arch-p2p-accent">WebRTC P2P</span>
+          <span class="arch-p2p-dot">·</span>
+          <span class="arch-p2p-text">видео + команды напрямую</span>
+        </div>
+
+        <!-- Ноды -->
+        <div class="arch-node arch-node--server">
+          <div class="arch-node-title">Сервер</div>
           <div class="arch-node-desc">
-            Снимает видео с камеры и принимает команды управления.
-            На борту установлено приложение Mavix.
+            наша инфраструктура в РФ —
+            знакомит дрон с оператором,
+            хранит аккаунты и доступы
           </div>
         </div>
 
-        <div class="arch-arrow">
-          <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
-        </div>
-
-        <div class="arch-node is-server">
-          <div class="arch-node-badge">На стороне сервера</div>
-          <div class="arch-node-title">Сервис Mavix</div>
+        <div class="arch-node arch-node--drone">
+          <div class="arch-node-title">Дрон</div>
           <div class="arch-node-desc">
-            Проверяет права доступа дрона и оператора. Устанавливает
-            между ними соединение. Видео и команды через него не передаются.
+            одноплатник на борту
+            (Raspberry Pi и совместимые) —
+            снимает видео, говорит с FC
           </div>
         </div>
 
-        <div class="arch-arrow">
-          <svg viewBox="0 0 32 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="8" x2="28" y2="8"/><polyline points="22 4 28 8 22 12"/></svg>
-        </div>
-
-        <div class="arch-node">
-          <div class="arch-node-badge">На стороне оператора</div>
-          <div class="arch-node-title">Ваш компьютер</div>
+        <div class="arch-node arch-node--operator">
+          <div class="arch-node-title">Оператор</div>
           <div class="arch-node-desc">
-            Отображает видео с дрона. Передаёт команды джойстика
-            и клавиатуры на дрон.
+            программа на ПК —
+            принимает видео, передаёт
+            команды с джойстика
           </div>
         </div>
 
       </div>
 
       <p class="arch-note">
-        После того как соединение установлено, обмен данными между
-        дроном и компьютером происходит напрямую — без участия сервера.
+        Сервер только знакомит участников — затем дрон и оператор
+        обмениваются данными напрямую (P2P).
       </p>
     </div>
   </section>
@@ -258,10 +270,10 @@
         </p>
         <p style="margin-bottom: 18px;">
           В основе системы — открытые отраслевые стандарты: WebRTC для прямой
-          передачи видео и данных, MAVLink для связи с полётным контроллером,
-          CRSF для каналов управления, JWT для авторизации. Любой совместимый
-          дрон, полётный контроллер или джойстик встраивается в систему без
-          модификаций и без проприетарных компонентов.
+          передачи видео и данных, MAVLink и CRSF для связи с полётным
+          контроллером (ArduPilot, PX4, Betaflight, iNav), JWT для авторизации.
+          Любой совместимый дрон, полётный контроллер или джойстик встраивается
+          в систему без модификаций и без проприетарных компонентов.
         </p>
         <p>
           Платформа разделена на три независимых модуля: бортовой, серверный
@@ -289,6 +301,41 @@
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </a>
           <a class="btn btn-secondary btn-lg" href="/login">У меня уже есть аккаунт</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTS -->
+  <section class="section" id="contacts" style="padding-top: 32px;">
+    <div class="container">
+      <div class="contacts">
+        <div class="contacts-head">
+          <span class="eyebrow">Контакты</span>
+          <h2 class="contacts-title">Связаться с командой</h2>
+          <p class="contacts-sub">
+            Напишите нам по вопросам интеграции, сотрудничества или технической поддержки.
+          </p>
+        </div>
+        <div class="contacts-list">
+          <a class="contact-item" href="mailto:info@mavix.tech">
+            <span class="contact-item-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <span class="contact-item-body">
+              <span class="contact-item-label">Email</span>
+              <span class="contact-item-value">info@mavix.tech</span>
+            </span>
+          </a>
+          <a class="contact-item" href="https://github.com/AurunChill" target="_blank" rel="noopener">
+            <span class="contact-item-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </span>
+            <span class="contact-item-body">
+              <span class="contact-item-label">GitHub</span>
+              <span class="contact-item-value">github.com/AurunChill</span>
+            </span>
+          </a>
         </div>
       </div>
     </div>
