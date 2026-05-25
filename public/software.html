@@ -25,6 +25,7 @@
   <script src="/js/cabinet.js" defer></script>
   <script src="/js/app.js" defer></script>
   <script src="/js/pages/dashboard.js" defer></script>
+  <script src="/js/pages/software.js" defer></script>
 </head>
 <body>
 
@@ -83,10 +84,6 @@
       <div class="sidebar-user-avatar is-skeleton" data-role="avatar"></div>
       <div class="sidebar-user-info">
         <div class="sidebar-user-email is-skeleton" data-role="email" style="min-width:14ch">&nbsp;</div>
-        <div class="sidebar-user-status">
-          <span class="status-dot online"></span>
-          <span>онлайн</span>
-        </div>
         <div class="sidebar-user-id is-skeleton" data-role="user-id" style="min-width:18ch">&nbsp;</div>
       </div>
     </div>
@@ -164,10 +161,10 @@
         </div>
 
         <div class="software-card-actions">
-          <button class="btn btn-primary" type="button">
+          <a class="btn btn-primary" href="/api/v1/builds/board?build_type=deb" data-action="download-board">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Скачать .deb
-          </button>
+          </a>
           <a class="btn btn-secondary" href="/dashboard/docs/user#install-board">Инструкция по установке</a>
         </div>
       </article>

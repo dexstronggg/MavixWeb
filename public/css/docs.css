@@ -228,3 +228,28 @@
 @media (max-width: 1279px) {
   .floating-toc { display: none; }
 }
+
+/* Таблица в документации — для маппинга джойстика, поддерживаемых FC и т.п. */
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: var(--fs-sm);
+}
+
+.doc-table th,
+.doc-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc-table thead th {
+  color: var(--muted-strong);
+  font-weight: 600;
+  background: var(--bg-input, rgba(255,255,255,0.02));
+}
+
+.doc-table tbody tr:hover {
+  background: rgba(34, 211, 238, 0.04);
+}
