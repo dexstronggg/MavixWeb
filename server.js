@@ -49,9 +49,9 @@ const DOWNLOADS = {
     filename: 'mavix-desktop-windows.exe',
     mime:     'application/octet-stream',
   },
-  '/downloads/mavix-desktop-linux.deb': {
-    filename: 'mavix-desktop-linux.deb',
-    mime:     'application/vnd.debian.binary-package',
+  '/downloads/mavix-desktop-linux.AppImage': {
+    filename: 'mavix-desktop-linux.AppImage',
+    mime:     'application/octet-stream',
   },
 };
 const DOWNLOADS_DIR = path.join(__dirname, 'public', 'downloads');

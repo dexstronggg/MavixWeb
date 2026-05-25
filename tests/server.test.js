@@ -50,22 +50,22 @@ describe('Express server', () => {
 
   describe('GET /downloads/*', () => {
     const DOWNLOADS_DIR = path.join(__dirname, '..', 'public', 'downloads');
-    const DEB = path.join(DOWNLOADS_DIR, 'mavix-desktop-linux.deb');
+    const APPIMAGE = path.join(DOWNLOADS_DIR, 'mavix-desktop-linux.AppImage');
     const EXE = path.join(DOWNLOADS_DIR, 'mavix-desktop-windows.exe');
 
-    test('.deb отдаёт 200 и application/vnd.debian.binary-package, если файл есть', async () => {
-      if (!fs.existsSync(DEB)) {
+    test('.AppImage отдаёт 200 и application/octet-stream, если файл есть', async () => {
+      if (!fs.existsSync(APPIMAGE)) {
         // в CI без артефакта пропускаем — поведение проверяется
         // отдельным тестом «404 на отсутствующий файл»
         return;
       }
       const res = await request(app)
-        .get('/downloads/mavix-desktop-linux.deb')
+        .get('/downloads/mavix-desktop-linux.AppImage')
         .buffer(false);
       expect(res.status).toBe(200);
-      expect(res.headers['content-type']).toMatch(/debian\.binary-package/);
+      expect(res.headers['content-type']).toMatch(/octet-stream/);
       expect(res.headers['content-disposition']).toMatch(/attachment/);
-      expect(res.headers['content-disposition']).toMatch(/mavix-desktop-linux\.deb/);
+      expect(res.headers['content-disposition']).toMatch(/mavix-desktop-linux\.AppImage/);
     });
 
     test('.exe → 404 plain-text для XHR (Accept: application/octet-stream), если файла нет', async () => {

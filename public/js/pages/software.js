@@ -2,7 +2,7 @@
    Mavix Web — pages/software.js
 
    Логика страницы «Скачать ПО»:
-     • Скачивание MavixDesktop (.exe / .deb) с собственных
+     • Скачивание MavixDesktop (.exe / .AppImage) с собственных
        /downloads/* маршрутов. Если файла нет — показываем
        inline-notice прямо на странице, без перехода на 404.
      • Скачивание MavixBoard через API сервера. На ошибки —
@@ -14,7 +14,7 @@
     initBoardDownload();
   });
 
-  /* -------- Desktop (.exe / .deb) -------- */
+  /* -------- Desktop (.exe / .AppImage) -------- */
 
   function initDesktopDownloads() {
     const links = document.querySelectorAll('a[href^="/downloads/"]');
