@@ -2,7 +2,7 @@
    Mavix Web — landing.js
    Логика лендинга для авторизованного пользователя.
    - Если в localStorage есть access/refresh токен — в шапке
-     показываем email + ссылку «Личный кабинет» + «Выйти»
+     показываем ссылку «Личный кабинет» + «Выйти»
      вместо кнопок «Войти/Зарегистрироваться».
    - Hero и нижний CTA «Создать аккаунт» превращаются
      в «Перейти в кабинет» с href=/dashboard.
@@ -40,14 +40,11 @@
     if (secondary) secondary.hidden = false;
   }
 
-  function applyAuthState(email) {
+  function applyAuthState() {
     const guest = $('[data-role="header-actions-guest"]');
     const auth = $('[data-role="header-actions-auth"]');
     if (guest) guest.hidden = true;
     if (auth) auth.hidden = false;
-
-    const emailEl = $('[data-role="header-email"]', auth);
-    if (emailEl) emailEl.textContent = email || '—';
 
     // CTA в hero и нижней секции — auth-вариант (в кабинет).
     document.querySelectorAll('[data-cta-auth-href]').forEach((cta) => {
@@ -86,7 +83,7 @@
     // фоновая проверка ниже откатит на гостя.
     const authenticated = API.session.isAuthenticated();
     if (authenticated) {
-      applyAuthState(API.session.email);
+      applyAuthState();
 
       // Фоном валидируем refresh. Если он мёртв — ensureFreshAccess()
       // вернёт false и сам очистит токены через tryRefresh(). Тогда
