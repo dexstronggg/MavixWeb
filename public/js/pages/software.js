@@ -41,12 +41,17 @@
     const fullUrl = `${apiBase.replace(/\/+$/, '')}/api/v1/builds/desktop?build_type=${encodeURIComponent(buildType)}`;
 
     // Проверяем, что файл вообще существует — иначе direct-переход
-    // открыл бы голую JSON-страницу с 404 в новой вкладке.
+    // открыл бы голую JSON-страницу с 404 в новой вкладке. Если сервер
+    // не поддерживает HEAD на этом маршруте (405) — пропускаем проверку
+    // и идём напрямую: в худшем случае браузер покажет JSON-ошибку,
+    // что приемлемо для редкого кейса «файл не залит».
     clearNotice();
     setLoading(link, true);
     try {
       const head = await fetch(fullUrl, { method: 'HEAD' });
-      if (!head.ok) {
+      if (head.status === 405) {
+        // skip — старый сервер без HEAD-support, идём напрямую
+      } else if (!head.ok) {
         if (head.status === 404) {
           const label = buildType === 'exe' ? 'Windows (.exe)' : 'Linux (.AppImage)';
           throw new Error(
