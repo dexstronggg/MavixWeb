@@ -105,6 +105,7 @@
         <ol>
           <li><a href="#what">Что такое Mavix</a></li>
           <li><a href="#requirements">Что вам понадобится</a></li>
+          <li><a href="#rpi-prep">Подготовка Raspberry Pi</a></li>
           <li><a href="#first-flight">Первый полёт: от установки до взлёта</a></li>
           <li><a href="#fc">Поддерживаемые полётные контроллеры</a></li>
           <li><a href="#desktop">Работа в приложении оператора</a></li>
@@ -159,6 +160,82 @@
           </li>
         </ul>
 
+        <h2 id="rpi-prep">Подготовка Raspberry Pi</h2>
+        <p>
+          Установщик <code>install.sh</code> ставит только программную часть —
+          GStreamer, Python-зависимости и службу MavixBoard. Доступ к
+          UART-порту, отключение служебной консоли и права на устройства
+          установщик <strong>не настраивает</strong>: это нужно сделать один
+          раз вручную <em>до</em> установки MavixBoard. Без этого дрон с
+          Betaflight/iNav не получит управление по CRSF (FC будет показывать
+          <code>RXLOSS</code>).
+        </p>
+        <blockquote>
+          Если у вас <strong>ArduPilot или PX4</strong> и связь идёт по USB
+          (<code>/dev/ttyACM*</code>), настройка UART из этого раздела не нужна —
+          переходите сразу к шагу <a href="#install-board">установки MavixBoard</a>.
+          Раздел обязателен только для <strong>Betaflight/iNav</strong> (CRSF по UART)
+          либо если ваш ArduPilot/PX4 подключён к FC не по USB, а по аппаратному UART.
+        </blockquote>
+
+        <h3>1. Включите аппаратный UART (только Betaflight/iNav по CRSF)</h3>
+        <p>
+          Добавьте в <code>/boot/firmware/config.txt</code>:
+        </p>
+        <pre><code>enable_uart=1
+dtoverlay=disable-bt</code></pre>
+        <p>
+          <code>dtoverlay=disable-bt</code> обязателен — он отключает Bluetooth и
+          переключает выводы GPIO14/15 с медленного mini-UART на полноценный
+          PL011 (<code>ttyAMA0</code>), который держит 420 000 бод, нужные для CRSF.
+        </p>
+
+        <h3>2. Отключите служебную консоль на порту</h3>
+        <p>
+          По умолчанию Linux держит на <code>ttyAMA0</code> вход в систему
+          (serial console) — он мешает CRSF. Отключите его:
+        </p>
+        <pre><code>sudo raspi-config
+# Interface Options -> Serial Port:
+#   Login shell over serial: No
+#   Serial port hardware:    Yes</code></pre>
+        <p>
+          Либо вручную уберите <code>console=serial0,115200</code> из
+          <code>/boot/firmware/cmdline.txt</code> и отключите getty-службу:
+        </p>
+        <pre><code>sudo systemctl disable --now serial-getty@ttyAMA0.service</code></pre>
+
+        <h3>3. Дайте права на serial-порты без sudo</h3>
+        <p>
+          Добавьте пользователя в группы <code>dialout</code> и <code>tty</code>:
+        </p>
+        <pre><code>sudo usermod -aG dialout,tty $USER</code></pre>
+        <p>
+          Чтобы права на устройства держались стабильно после каждой загрузки,
+          создайте udev-правило <code>/etc/udev/rules.d/99-serial.rules</code>:
+        </p>
+        <pre><code>KERNEL=="ttyAMA[0-9]*", GROUP="dialout", MODE="0660"
+KERNEL=="ttyUSB[0-9]*", GROUP="dialout", MODE="0660"
+KERNEL=="ttyACM[0-9]*", GROUP="dialout", MODE="0660"</code></pre>
+        <p>И примените его:</p>
+        <pre><code>sudo udevadm control --reload-rules &amp;&amp; sudo udevadm trigger</code></pre>
+        <p>
+          Служба MavixBoard запускается от <code>root</code>, поэтому работает с
+          портом и без групп. Группы нужны для ручного запуска и отладки без
+          <code>sudo</code>, а также для камеры (группа <code>video</code>).
+        </p>
+
+        <h3>4. Перезагрузите Raspberry Pi</h3>
+        <p>
+          Изменения в <code>config.txt</code> и <code>cmdline.txt</code>
+          применяются только после перезагрузки:
+        </p>
+        <pre><code>sudo reboot</code></pre>
+        <p>
+          После перезапуска порт <code>/dev/ttyAMA0</code> готов к работе на
+          420 000 бод без дополнительных команд при каждом старте.
+        </p>
+
         <h2 id="first-flight">Первый полёт: от установки до взлёта</h2>
 
         <h3>1. Зарегистрируйтесь и войдите</h3>
@@ -211,13 +288,20 @@ sudo journalctl -u mavixboard -f</code></pre>
 
         <h3>4. Настройте полётный контроллер</h3>
         <p>
-          Подключите три провода между RPi и FC: <code>RPi TX (Pin 8)</code> →
-          <code>FC UART RX</code>, <code>FC UART TX</code> → <code>RPi RX (Pin 10)</code>,
-          и <code>GND</code> на <code>GND</code>. Питание не нужно — оба устройства 3.3В.
+          <strong>Betaflight / iNav (CRSF).</strong> Подключите три провода между
+          RPi и FC: <code>RPi TX (Pin 8)</code> → <code>FC UART RX</code>,
+          <code>FC UART TX</code> → <code>RPi RX (Pin 10)</code>, и <code>GND</code>
+          на <code>GND</code>. Соединение перекрёстное (TX идёт на RX), питание не
+          нужно — оба устройства 3.3В.
         </p>
         <p>
-          Конкретная настройка зависит от вашей прошивки (Betaflight, iNav или ArduPilot)
-          — подробности в разделе <a href="#fc">«Поддерживаемые полётные контроллеры»</a>.
+          <strong>ArduPilot / PX4 (MAVLink).</strong> Просто соедините FC с
+          Raspberry Pi кабелем USB. Трансмиттер сам найдёт FC на
+          <code>/dev/ttyACM*</code> — провода UART и настройка из шага 4 не нужны.
+        </p>
+        <p>
+          Конкретная настройка прошивки зависит от вашего FC — подробности в
+          разделе <a href="#fc">«Поддерживаемые полётные контроллеры»</a>.
         </p>
 
         <h3>5. Дождитесь появления дрона в списке</h3>
@@ -242,25 +326,67 @@ sudo journalctl -u mavixboard -f</code></pre>
           <li><strong>iNav</strong> — CRSF по UART (требует <code>receiver_type = SERIAL</code> и <code>serialrx_halfduplex = OFF</code>)</li>
           <li><strong>ArduPilot / PX4</strong> — MAVLink по USB через <code>/dev/ttyACM*</code></li>
         </ul>
+        <h3>Betaflight (CRSF)</h3>
         <p>
-          Для CRSF минимальный конфиг через CLI (на примере UART4):
+          Подключите FC по USB, откройте Betaflight Configurator → вкладка
+          <strong>CLI</strong>. Минимальный конфиг на примере UART4 (пады T4/R4):
         </p>
-        <pre><code>serial 3 64 115200 115200 0 115200
+        <pre><code>serial 3 64 115200 57600 0 115200
 set serialrx_provider = CRSF
 set serialrx_inverted = OFF
 feature TELEMETRY
-map TAER
+map TAER1234
 aux 0 0 0 1800 2100 0 0
 save</code></pre>
         <p>
-          Для iNav дополнительно нужны <code>set receiver_type = SERIAL</code>,
-          <code>set small_angle = 180</code> и <code>set min_check = 1000</code>.
+          Здесь <code>serial 3 64 …</code> — UART4 в режиме Serial RX,
+          <code>aux 0 …</code> — ARM на тумблере AUX1 (CH5, диапазон 1800–2100).
         </p>
+
+        <h3>iNav (CRSF)</h3>
         <p>
-          Для ArduPilot настройка не требуется — трансмиттер автоматически
-          определяет MAVLink FC по USB и пробрасывает поток в QGroundControl
-          через UDP 14550.
+          iNav, в отличие от Betaflight, требует явно указать
+          <code>receiver_type = SERIAL</code> и <code>serialrx_halfduplex = OFF</code>
+          — без этого FC не примет CRSF-кадры, даже если порт настроен верно.
+          Полный конфиг через CLI (UART4):
         </p>
+        <pre><code>serial 3 64 115200 115200 0 115200
+set receiver_type = SERIAL
+set serialrx_provider = CRSF
+set serialrx_inverted = OFF
+set serialrx_halfduplex = OFF
+set small_angle = 180
+set min_check = 1000
+feature TELEMETRY
+map TAER
+aux 0 0 0 1800 2100 0 0
+aux 1 3 0 900 2100 0 0
+calibrate acc
+save</code></pre>
+        <ul>
+          <li><code>set min_check = 1000</code> — без него iNav считает, что газ не на нуле (CRSF в покое ≈ 989), и не армится (флаг <code>THR</code>).</li>
+          <li><code>set small_angle = 180</code> — снимает блокировку арма при наклоне дрона больше 25°.</li>
+          <li><code>aux 1 3 0 900 2100</code> — режим ANGLE всегда активен. Без стабилизации дрон летит в ACRO — это опасно при управлении через интернет.</li>
+          <li>Перед <code>calibrate acc</code> положите FC ровно на стол. Скорость CRSF в iNav жёстко задана как 420 000 бод — цифры baudrate в команде <code>serial</code> игнорируются.</li>
+        </ul>
+
+        <h3>ArduPilot / PX4 (MAVLink)</h3>
+        <p>
+          Настройка трансмиттера не требуется — он автоматически определяет
+          MAVLink FC по USB (<code>/dev/ttyACM*</code>) и пробрасывает поток в
+          QGroundControl через UDP 14550. Что может понадобиться на стороне FC
+          (через QGroundControl → Parameters):
+        </p>
+        <ul>
+          <li><code>BRD_SAFETY_DEFLT = Disabled</code> — если на плате (например, Pixracer) нет физической кнопки безопасности или вы её не используете.</li>
+          <li><code>ARMING_CHECK = 0</code> — отключает <strong>все</strong> предполётные проверки. Только для наземных тестов без пропеллеров!</li>
+          <li><code>RC_PROTOCOLS</code> — протокол приёмника: <code>1</code> для PPM, <code>256</code> для iBUS (например, FlySky FS-iA6B).</li>
+        </ul>
+        <blockquote>
+          ArduPilot 4.0+ работает только на ChibiOS (поддержка NuttX убрана).
+          PX4 по-прежнему использует NuttX. На современных платах (Pixracer,
+          Matek H743, Skystars H743) для ArduPilot выбирайте ChibiOS.
+        </blockquote>
 
         <h2 id="desktop">Работа в приложении оператора</h2>
         <p>
@@ -342,9 +468,9 @@ save</code></pre>
 
         <h3>Дрон не появляется в списке</h3>
         <ul>
-          <li>Проверьте, что служба запущена: <code>systemctl status mavix.service</code>.</li>
+          <li>Проверьте, что служба запущена: <code>systemctl status mavixboard</code>.</li>
           <li>Убедитесь, что у дрона есть выход в интернет (Wi-Fi или LTE).</li>
-          <li>Проверьте логи на дроне: <code>journalctl -u mavix.service -f</code>.</li>
+          <li>Проверьте логи на дроне: <code>journalctl -u mavixboard -f</code>.</li>
         </ul>
 
         <h3>FC не армируется</h3>

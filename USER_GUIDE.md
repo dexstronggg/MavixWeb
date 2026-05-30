@@ -178,11 +178,13 @@ Mavix соответственно. Документация структури�
    пользователь вводит свои учётные данные.
 
 2. **MavixBoard** — пакет бортового программного обеспечения
-   для Raspberry Pi (формат `.deb`). При скачивании сервер
-   автоматически встраивает в пакет идентификатор пользователя
-   и токен дрона. Это значит, что один и тот же пакет, скачанный
-   разными пользователями, будет различаться вшитыми
-   идентификаторами.
+   для Raspberry Pi (архив `.tar.gz` с установщиком `install.sh`).
+   При скачивании сервер автоматически встраивает в пакет
+   идентификатор пользователя и токен дрона. Это значит, что один
+   и тот же пакет, скачанный разными пользователями, будет
+   различаться вшитыми идентификаторами. Перед установкой
+   MavixBoard бортовой компьютер нужно подготовить (UART, права на
+   порты) — см. раздел 4.11.
 
 ### 4.9. Настройки и смена пароля
 
@@ -204,6 +206,130 @@ Mavix соответственно. Документация структури�
 Локальные данные учётной записи будут удалены из хранилища
 браузера, после чего произойдёт перенаправление на страницу
 входа.
+
+### 4.11. Подготовка бортового компьютера и установка MavixBoard
+
+Скачанный со страницы «Скачать» архив MavixBoard
+(`mavixboard-XXXXXXXX.tar.gz`) устанавливается на бортовой
+компьютер дрона (Raspberry Pi). Установщик `install.sh` ставит
+только программную часть (GStreamer, Python-зависимости, службу).
+Доступ к UART-порту и права на устройства он **не настраивает** —
+это выполняется один раз вручную **до** установки.
+
+> Раздел 4.11.1 обязателен только для полётных контроллеров с
+> прошивкой **Betaflight** или **iNav** (управление по протоколу
+> CRSF через аппаратный UART). Если используется **ArduPilot** или
+> **PX4** с подключением по USB (`/dev/ttyACM*`), настройка UART не
+> требуется — переходите к разделу 4.11.2.
+
+#### 4.11.1. Настройка UART (Betaflight / iNav)
+
+1. Включить аппаратный UART. В файл `/boot/firmware/config.txt`
+   добавить:
+   ```
+   enable_uart=1
+   dtoverlay=disable-bt
+   ```
+   Параметр `dtoverlay=disable-bt` обязателен: он отключает
+   Bluetooth и переключает выводы GPIO14/15 на полноценный UART
+   `ttyAMA0`, поддерживающий скорость 420 000 бод.
+
+2. Отключить служебную консоль на порту:
+   ```
+   sudo raspi-config
+   ```
+   → Interface Options → Serial Port → Login shell over serial:
+   **No**, Serial port hardware: **Yes**. Либо вручную:
+   ```
+   sudo systemctl disable --now serial-getty@ttyAMA0.service
+   ```
+
+3. Выдать права на serial-порты без `sudo`:
+   ```
+   sudo usermod -aG dialout,tty $USER
+   ```
+   Создать постоянное udev-правило
+   `/etc/udev/rules.d/99-serial.rules`:
+   ```
+   KERNEL=="ttyAMA[0-9]*", GROUP="dialout", MODE="0660"
+   KERNEL=="ttyUSB[0-9]*", GROUP="dialout", MODE="0660"
+   KERNEL=="ttyACM[0-9]*", GROUP="dialout", MODE="0660"
+   ```
+   Применить:
+   ```
+   sudo udevadm control --reload-rules && sudo udevadm trigger
+   ```
+
+4. Перезагрузить Raspberry Pi (изменения в `config.txt`
+   применяются только после перезагрузки):
+   ```
+   sudo reboot
+   ```
+
+#### 4.11.2. Установка MavixBoard
+
+Перенести архив на Raspberry Pi, распаковать и запустить
+установщик от имени суперпользователя:
+```
+tar xzf mavixboard-XXXXXXXX.tar.gz
+cd mavixboard-XXXXXXXX
+sudo ./install.sh
+```
+Установщик создаст изолированное Python-окружение в
+`/opt/mavixboard/`, установит зависимости из архива (доступ в
+интернет не требуется) и запишет токен дрона в
+`/etc/mavixboard/preset.env`.
+
+Проверочный ручной запуск:
+```
+set -a; . /etc/mavixboard/preset.env; set +a
+sudo /opt/mavixboard/.venv/bin/python -m mavixboard
+```
+
+Автозапуск при включении питания:
+```
+sudo systemctl enable --now mavixboard
+sudo journalctl -u mavixboard -f
+```
+
+#### 4.11.3. Настройка полётного контроллера
+
+Минимальный конфиг через CLI (на примере UART4):
+
+- **Betaflight:**
+  ```
+  serial 3 64 115200 57600 0 115200
+  set serialrx_provider = CRSF
+  set serialrx_inverted = OFF
+  feature TELEMETRY
+  map TAER1234
+  aux 0 0 0 1800 2100 0 0
+  save
+  ```
+
+- **iNav** (дополнительно требует `receiver_type = SERIAL` и
+  `serialrx_halfduplex = OFF`):
+  ```
+  serial 3 64 115200 115200 0 115200
+  set receiver_type = SERIAL
+  set serialrx_provider = CRSF
+  set serialrx_inverted = OFF
+  set serialrx_halfduplex = OFF
+  set small_angle = 180
+  set min_check = 1000
+  feature TELEMETRY
+  map TAER
+  aux 0 0 0 1800 2100 0 0
+  aux 1 3 0 900 2100 0 0
+  calibrate acc
+  save
+  ```
+
+- **ArduPilot / PX4:** настройка трансмиттера не требуется — FC
+  определяется по USB автоматически. На стороне FC через
+  QGroundControl может потребоваться отключить кнопку
+  безопасности (`BRD_SAFETY_DEFLT = Disabled`) и выбрать протокол
+  приёмника (`RC_PROTOCOLS`).
 
 ---
 
