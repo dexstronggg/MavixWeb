@@ -132,14 +132,30 @@
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid var(--border);
-  white-space: nowrap;
   color: var(--text-soft);
+}
+
+/* Широкие текстовые колонки (Назначение/Адрес/Груз) переносятся по словам,
+   чтобы таблица влезала в карточку без горизонтального скролла. Длинные
+   неразрывные токены (например 64-символьный ID дрона) тоже ломаются. */
+.admin-table td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Служебные колонки не переносим: бейдж статуса и кнопки действий. */
+.admin-table td:has(.badge),
+.admin-table td:has(.btn) {
+  white-space: nowrap;
+  overflow-wrap: normal;
 }
 
 .admin-table th {
   font-weight: 600;
   color: var(--text);
   background: rgba(255, 255, 255, 0.02);
+  /* заголовки короткие — оставляем в одну строку */
+  white-space: nowrap;
 }
 
 .admin-table tbody tr:last-child td {
@@ -249,6 +265,11 @@
   border: 1px solid var(--border);
   overflow: hidden;
   margin-top: 8px;
+  /* изолируем стекинг-контекст: внутренние z-index Leaflet (панорамы/контролы
+     до ~1000) не вылезают над sticky-хедером (z-index 50) при прокрутке */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
 }
 
 .map-pick .leaflet-container {
