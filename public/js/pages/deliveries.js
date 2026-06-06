@@ -169,8 +169,69 @@
           drones.map((d) => `<option value="${esc(d.drone_id)}">${esc(d.name)} (${esc(d.online ? 'онлайн' : 'не в сети')})</option>`).join('');
       } catch (err) {
         droneSelect.innerHTML = '<option value="">Не удалось загрузить дроны</option>';
+      } finally {
+        buildDropdown();
       }
     }
+
+    // Кастомный дропдаун поверх скрытого <select>: ховер опции серый
+    // (var(--card-hover)), как у пунктов меню сайдбара, а не системный синий.
+    function buildDropdown() {
+      const old = droneSelect.parentElement.querySelector('.dd');
+      if (old) old.remove();
+      droneSelect.classList.add('dd-native');
+
+      const dd = document.createElement('div');
+      dd.className = 'dd';
+
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'dd-trigger input';
+      const label = document.createElement('span');
+      label.className = 'dd-trigger-label';
+      trigger.appendChild(label);
+      trigger.insertAdjacentHTML(
+        'beforeend',
+        '<svg class="dd-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+      );
+
+      const menu = document.createElement('div');
+      menu.className = 'dd-menu';
+
+      function syncLabel() {
+        const sel = droneSelect.options[droneSelect.selectedIndex];
+        label.textContent = sel ? sel.textContent : '';
+        trigger.classList.toggle('dd-placeholder', !droneSelect.value);
+      }
+
+      Array.from(droneSelect.options).forEach((opt) => {
+        const item = document.createElement('div');
+        item.className = 'dd-option';
+        item.textContent = opt.textContent;
+        if (opt.value === droneSelect.value) item.classList.add('is-selected');
+        item.addEventListener('click', () => {
+          droneSelect.value = opt.value;
+          droneSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          menu.querySelectorAll('.dd-option').forEach((o) => o.classList.remove('is-selected'));
+          item.classList.add('is-selected');
+          syncLabel();
+          dd.classList.remove('is-open');
+        });
+        menu.appendChild(item);
+      });
+
+      trigger.addEventListener('click', () => dd.classList.toggle('is-open'));
+      dd.appendChild(trigger);
+      dd.appendChild(menu);
+      droneSelect.after(dd);
+      syncLabel();
+    }
+
+    // закрываем меню по клику вне дропдауна (вешается один раз)
+    document.addEventListener('click', (e) => {
+      const dd = form.querySelector('.dd');
+      if (dd && !dd.contains(e.target)) dd.classList.remove('is-open');
+    });
 
     /* -------- Журнал заявок -------- */
 
