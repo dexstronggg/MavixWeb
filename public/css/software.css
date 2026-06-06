@@ -99,7 +99,6 @@
   color: var(--text-soft);
   font-size: var(--fs-sm);
   line-height: 1.6;
-  flex: 1;
 }
 
 .software-card-meta {
@@ -111,11 +110,13 @@
 
 .software-card-meta .badge { padding: 3px 9px; }
 
+/* actions прижаты к низу карточки — meta/описание сверху без переменного
+   зазора, карточки выровнены в единый стиль независимо от длины описания */
 .software-card-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: auto;
 }
 
 .info-note {

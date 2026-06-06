@@ -102,10 +102,10 @@
         if (coordsHint) coordsHint.textContent = 'Карта недоступна — введите координаты вручную.';
         return;
       }
-      map = L.map(mapEl).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
+      map = L.map(mapEl, { attributionControl: false }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '© OpenStreetMap',
+        attribution: '',
       }).addTo(map);
       map.on('click', (e) => {
         setPoint(e.latlng.lat, e.latlng.lng);
