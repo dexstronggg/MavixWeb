@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <link rel="manifest" href="/images/site.webmanifest">
   <meta name="theme-color" content="#07090E">
-  <title>Скачать ПО — Mavix</title>
+  <title>Операторы — Mavix</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -19,12 +19,13 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/software.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
   <script src="/config.js" defer></script>
   <script src="/js/api.js" defer></script>
   <script src="/js/auth-guard.js" defer></script>
   <script src="/js/cabinet.js" defer></script>
   <script src="/js/app.js" defer></script>
-  <script src="/js/pages/dashboard.js" defer></script>
+  <script src="/js/pages/operators.js" defer></script>
 </head>
 <body>
 
@@ -108,97 +109,83 @@
   <main class="app-main">
 
     <header class="page-head">
-      <div class="page-eyebrow">Скачать программы</div>
-      <h1 class="page-title">Программы Mavix</h1>
+      <div class="page-eyebrow">Управление</div>
+      <h1 class="page-title">Операторы</h1>
       <p class="page-sub">
-        Прошивка для дронов и приложение оператора для системы
-        автоматизированной доставки грузов.
+        Создавайте учётные записи операторов, которые принимают заявки на
+        доставку и управляют дронами через приложение MavixDesktop.
       </p>
     </header>
 
-    <section class="software-grid">
+    <section class="card" style="max-width: 720px;">
+      <h2 class="card-title">Добавить оператора</h2>
+      <p class="card-subtitle" style="margin-bottom: 20px;">
+        Логин и пароль сгенерируются автоматически. Передайте их оператору —
+        пароль показывается <strong>только один раз</strong>.
+      </p>
 
-      <article class="software-card">
-        <div class="software-card-head">
-          <div class="software-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="20" x2="20" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>
-          </div>
-          <div class="software-card-titles">
-            <h3 class="software-card-title">MavixBoard</h3>
-            <div class="software-card-tag">Прошивка дрона · v0.1.0</div>
-          </div>
-          <span class="badge badge-accent">Stable</span>
+      <div class="form-feedback error" data-role="form-error"></div>
+
+      <form class="form" data-role="create-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="op-full-name">ФИО</label>
+          <input class="input" id="op-full-name" name="full_name" type="text" autocomplete="off" required>
         </div>
-
-        <p class="software-card-desc">
-          Сборка для бортового компьютера дрона с автоматически встроенным
-          идентификатором вашего аккаунта. Один архив ставится на все дроны —
-          после установки каждый дрон сам регистрируется в системе.
-        </p>
-
-        <div class="software-card-meta">
-          <span class="badge badge-muted">Raspberry Pi 4+</span>
-          <span class="badge badge-muted">Ubuntu 24.04 / Ubuntu Server LTS </span>
+        <div class="form-group">
+          <label class="form-label" for="op-passport">Паспорт</label>
+          <input class="input" id="op-passport" name="passport" type="text" autocomplete="off" required>
         </div>
-
-        <div class="software-card-actions">
-          <a class="btn btn-primary" href="/dashboard/drones">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Перейти к дронам и скачать
-          </a>
-          <a class="btn btn-secondary" href="/dashboard/docs/user#install-board">Инструкция по установке</a>
+        <div class="form-group">
+          <label class="form-label" for="op-address">Адрес</label>
+          <input class="input" id="op-address" name="address" type="text" autocomplete="off" required>
         </div>
-      </article>
+        <button class="btn btn-primary" type="submit" data-role="create-btn">
+          <span data-role="create-btn-text">Создать оператора</span>
+          <span class="spinner" data-role="create-btn-spinner" style="display: none;"></span>
+        </button>
+      </form>
 
-      <article class="software-card">
-        <div class="software-card-head">
-          <div class="software-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
-          <div class="software-card-titles">
-            <h3 class="software-card-title">MavixDesktop</h3>
-            <div class="software-card-tag">Приложение оператора · v0.1.0</div>
-          </div>
-          <span class="badge badge-accent">Stable</span>
+      <div class="creds-box" data-role="creds-box" style="display: none;">
+        <p class="creds-box-title">Учётные данные оператора</p>
+        <p class="creds-box-warn">⚠ Сохраните пароль сейчас — позже он не отображается.</p>
+        <div class="creds-row">
+          <span class="creds-row-label">Логин</span>
+          <span class="creds-row-value" data-role="cred-username"></span>
+          <button class="btn btn-secondary btn-sm" type="button" data-role="copy-username">Копировать</button>
         </div>
-
-        <p class="software-card-desc">
-          Приложение оператора для приёма заявок на доставку и отслеживания
-          полёта дрона. Логин и пароль операторам выдаёт администратор —
-          скачать клиент можно на публичной странице без регистрации.
-        </p>
-
-        <div class="software-card-meta">
-          <span class="badge badge-muted">Windows 10+</span>
-          <span class="badge badge-muted">Linux x64</span>
+        <div class="creds-row">
+          <span class="creds-row-label">Пароль</span>
+          <span class="creds-row-value" data-role="cred-password"></span>
+          <button class="btn btn-secondary btn-sm" type="button" data-role="copy-password">Копировать</button>
         </div>
-
-        <div class="software-card-actions">
-          <a class="btn btn-primary" href="/download/desktop">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Открыть страницу скачивания
-          </a>
-        </div>
-      </article>
-
+      </div>
     </section>
 
-    <div class="info-note">
-      <svg class="info-note-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <div>
-        <strong>Порядок настройки:</strong>
-        скачайте прошивку MavixBoard на странице
-        <a href="/dashboard/drones">Дроны</a> и распакуйте её на бортовом
-        компьютере: <code>tar xzf mavixboard-*.tar.gz</code>, далее
-        <code>cd mavixboard-*</code> и <code>sudo ./install.sh</code>.
-        Дрон зарегистрируется автоматически. Затем создайте операторов в разделе
-        <a href="/dashboard/operators">Операторы</a> и передайте им логин/пароль —
-        приложение MavixDesktop они скачают на публичной странице.
+    <section class="admin-section">
+      <h2 class="admin-section-title">Список операторов</h2>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ФИО</th>
+              <th>Логин</th>
+              <th>Паспорт</th>
+              <th>Адрес</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody data-role="operators-body">
+            <tr><td colspan="6" class="admin-table-empty">Загрузка...</td></tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+    </section>
 
   </main>
 </div>
+
+<div class="toast-stack" data-role="toast-stack"></div>
 
 </body>
 </html>

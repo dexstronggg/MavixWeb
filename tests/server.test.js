@@ -17,6 +17,28 @@ describe('Express server', () => {
     expect(res.status).toBe(404);
   });
 
+  describe('Маршруты админ-панели и публичного скачивания', () => {
+    const ROUTES = {
+      '/dashboard/operators': 'operators.html',
+      '/dashboard/drones': 'drones.html',
+      '/dashboard/deliveries': 'deliveries.html',
+      '/download/desktop': 'download-desktop.html',
+    };
+
+    describe.each(Object.entries(ROUTES))('маршрут %s', (route, file) => {
+      test('зарегистрирован в PAGES и отдаёт правильный файл', () => {
+        expect(PAGES[route]).toBe(file);
+        expect(fs.existsSync(path.join(__dirname, '..', 'public', file))).toBe(true);
+      });
+
+      test('возвращает 200 и HTML', async () => {
+        const res = await request(app).get(route);
+        expect(res.status).toBe(200);
+        expect(res.headers['content-type']).toMatch(/html/);
+      });
+    });
+  });
+
   describe('GET /config.js', () => {
     let res;
 

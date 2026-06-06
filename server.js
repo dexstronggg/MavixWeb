@@ -26,6 +26,11 @@ const PAGES = {
   '/dashboard/docs/user': 'docs-user.html',
   '/dashboard/docs/technical': 'docs-technical.html',
   '/dashboard/software': 'software.html',
+  '/dashboard/operators': 'operators.html',
+  '/dashboard/drones': 'drones.html',
+  '/dashboard/deliveries': 'deliveries.html',
+  // Публичная страница скачивания десктоп-клиента оператора (без auth-guard).
+  '/download/desktop': 'download-desktop.html',
 };
 
 for (const [route, file] of Object.entries(PAGES)) {
