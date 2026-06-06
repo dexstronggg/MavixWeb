@@ -205,6 +205,9 @@
       }
 
       Array.from(droneSelect.options).forEach((opt) => {
+        // плейсхолдер/служебные опции с пустым value в меню не дублируем —
+        // их текст и так показывается в самом триггере (syncLabel)
+        if (!opt.value) return;
         const item = document.createElement('div');
         item.className = 'dd-option';
         item.textContent = opt.textContent;
