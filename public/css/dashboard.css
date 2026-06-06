@@ -98,3 +98,161 @@
   font-family: var(--font-mono);
   color: var(--accent);
 }
+
+/* ----------------------------------------------------------
+   Админ-панель: таблицы, формы, тосты
+   ---------------------------------------------------------- */
+
+.admin-section {
+  margin-top: 28px;
+}
+
+.admin-section-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 14px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  color: var(--text-soft);
+}
+
+.admin-table th {
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table td.is-mono {
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+.admin-table-empty {
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--text-muted, #9aa4b2);
+  font-size: var(--fs-sm);
+}
+
+.admin-row-actions {
+  display: inline-flex;
+  gap: 8px;
+}
+
+/* Блок «учётные данные оператора» (показываются один раз) */
+.creds-box {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--warning, #FBBF24);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.creds-box-title {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.creds-box-warn {
+  color: var(--warning, #FBBF24);
+  font-size: var(--fs-sm);
+  margin: 0 0 14px;
+}
+
+.creds-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.creds-row-label {
+  min-width: 84px;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+}
+
+.creds-row-value {
+  font-family: var(--font-mono);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 10px;
+  border-radius: var(--r-sm, 6px);
+  flex: 1;
+}
+
+/* Тосты (уведомления WS) */
+.toast-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  max-width: 360px;
+}
+
+.toast {
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--accent);
+  background: var(--card);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: toast-in 0.2s var(--ease, ease) both;
+}
+
+.toast.toast-success { border-color: var(--success, #4ADE80); }
+.toast.toast-error { border-color: var(--danger, #F87171); }
+
+.toast-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Карта выбора точки назначения (Leaflet) */
+.map-pick {
+  height: 320px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.map-pick .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #0b0e14;
+}

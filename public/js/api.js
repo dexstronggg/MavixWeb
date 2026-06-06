@@ -12,6 +12,8 @@
     access: 'mavix_access',
     refresh: 'mavix_refresh',
     email: 'mavix_email',
+    // Ключ хранилища оставляем прежним для совместимости, но кладём в него
+    // admin_id (бэкенд переименовал user_id → admin_id в /auth/register).
     userId: 'mavix_user_id',
   };
 
@@ -334,8 +336,9 @@
       body: { email, password },
     });
     // Авто-логин после регистрации: сервер не возвращает токены — логинимся отдельно.
+    // Сервер теперь отдаёт admin_id (а не user_id).
     if (data && data.email) {
-      session.saveProfile(data.email, data.user_id);
+      session.saveProfile(data.email, data.admin_id);
     }
     const loginData = await login(email, password);
     return loginData;
@@ -378,6 +381,111 @@
     return request('/health');
   }
 
+  // ---------- Операторы ----------
+
+  async function listOperators() {
+    return request('/operators', { auth: true });
+  }
+
+  async function createOperator({ full_name, passport, address }) {
+    return request('/operators', {
+      method: 'POST',
+      auth: true,
+      body: { full_name, passport, address },
+    });
+  }
+
+  async function setOperatorActive(id, isActive) {
+    return request(`/operators/${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      auth: true,
+      body: { is_active: Boolean(isActive) },
+    });
+  }
+
+  async function deleteOperator(id) {
+    return request(`/operators/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      auth: true,
+    });
+  }
+
+  // ---------- Дроны ----------
+
+  async function listDrones() {
+    return request('/drones', { auth: true });
+  }
+
+  // ---------- Доставки ----------
+
+  async function listDeliveries(status) {
+    const qs = status ? `?status=${encodeURIComponent(status)}` : '';
+    return request(`/deliveries${qs}`, { auth: true });
+  }
+
+  async function createDelivery(body) {
+    return request('/deliveries', {
+      method: 'POST',
+      auth: true,
+      body,
+    });
+  }
+
+  async function cancelDelivery(id) {
+    return request(`/deliveries/${encodeURIComponent(id)}/cancel`, {
+      method: 'POST',
+      auth: true,
+    });
+  }
+
+  // ---------- Сборка для дрона (Board) ----------
+
+  // Скачивание .tar.gz требует Bearer-токена, поэтому простой <a href> не
+  // подходит — тянем через fetch с заголовком Authorization и возвращаем
+  // { blob, filename } для последующего создания objectURL на странице.
+  async function downloadBoardTarball() {
+    // Гарантируем свежий access перед скачиванием — запрос идёт мимо
+    // общего request(), значит авто-refresh на 401 здесь не сработает.
+    await ensureFreshAccess();
+
+    const url = `${BASE}/builds/board`;
+    const headers = { 'Accept': 'application/octet-stream' };
+    if (tokens.access) headers['Authorization'] = `Bearer ${tokens.access}`;
+
+    let res;
+    try {
+      res = await fetch(url, { headers });
+    } catch (_) {
+      throw new ApiError('Сервер недоступен. Проверьте соединение или попробуйте позже.', 0, null);
+    }
+
+    if (!res.ok) {
+      let payload = null;
+      try { payload = await res.text(); } catch (_) {}
+      throw new ApiError(extractErrorMessage(payload, res.status), res.status, payload);
+    }
+
+    const blob = await res.blob();
+    const filename = extractFilenameFromDisposition(res.headers.get('content-disposition'))
+      || 'mavixboard.tar.gz';
+    return { blob, filename };
+  }
+
+  function extractFilenameFromDisposition(disposition) {
+    if (!disposition) return null;
+    const match = /filename\*?=(?:UTF-8'')?["']?([^;"']+)["']?/i.exec(disposition);
+    return match ? decodeURIComponent(match[1]) : null;
+  }
+
+  // ---------- WebSocket уведомлений администратора ----------
+
+  // Строит ws(s)-URL для /ws/admin в КОРНЕ сервера (не под /api/v1).
+  function adminWsUrl() {
+    const httpBase = (CFG.apiBaseUrl || 'http://localhost:8000').replace(/\/+$/, '');
+    const wsBase = httpBase.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:');
+    return `${wsBase}/ws/admin`;
+  }
+
   // ---------- Экспорт ----------
 
   window.MavixAPI = {
@@ -394,6 +502,17 @@
     passwordResetRequest,
     passwordResetConfirm,
     health,
+    // Админ-панель: операторы, дроны, доставки, сборка, WS.
+    listOperators,
+    createOperator,
+    setOperatorActive,
+    deleteOperator,
+    listDrones,
+    listDeliveries,
+    createDelivery,
+    cancelDelivery,
+    downloadBoardTarball,
+    adminWsUrl,
     // Session lifecycle helpers (используются auth-guard.js на защищённых
     // страницах кабинета). Не зови их с публичных страниц — на /login и
     // /landing фоновый рефреш не нужен.
