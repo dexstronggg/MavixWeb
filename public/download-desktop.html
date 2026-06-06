@@ -20,6 +20,19 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/software.css">
+  <style>
+    /* публичная страница скачивания — всё по центру, одна широкая карточка */
+    .dl-page { text-align: center; }
+    .dl-page .page-head { max-width: none; margin-left: auto; margin-right: auto; }
+    .dl-page .software-grid { grid-template-columns: 1fr; max-width: 620px; margin: 0 auto 36px; }
+    .dl-page .software-card { text-align: center; }
+    .dl-page .software-card-head { justify-content: center; }
+    .dl-page .software-card-titles { flex: 0 1 auto; text-align: left; }
+    .dl-page .software-card-meta { justify-content: center; }
+    /* кнопки скачивания — рядом по горизонтали, по центру */
+    .dl-page .software-card-actions { justify-content: center; flex-wrap: nowrap; }
+    .dl-page .info-note { text-align: left; }
+  </style>
   <script src="/config.js" defer></script>
   <script src="/js/app.js" defer></script>
 </head>
@@ -37,7 +50,7 @@
   </div>
 </header>
 
-<main class="app-main" style="max-width: 880px; margin: 0 auto; padding: 48px 24px;">
+<main class="app-main dl-page" style="max-width: 880px; margin: 0 auto; padding: 48px 24px;">
 
   <header class="page-head">
     <div class="page-eyebrow">Приложение оператора</div>

@@ -256,3 +256,31 @@
   width: 100%;
   background: #0b0e14;
 }
+
+/* ----------------------------------------------------------
+   Выпадающие списки и числовые поля — единая тёмная стилистика
+   ---------------------------------------------------------- */
+
+select.input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* собственная стрелка вместо системной */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b96a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 38px;
+  cursor: pointer;
+  /* тёмная нативная подложка раскрытого списка опций */
+  color-scheme: dark;
+}
+
+select.input option {
+  background: var(--card);
+  color: var(--text);
+}
+
+/* стрелки вверх/вниз у числовых полей — тёмная тема под общую стилистику */
+input[type="number"].input {
+  color-scheme: dark;
+}
