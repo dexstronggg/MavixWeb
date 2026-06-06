@@ -63,12 +63,15 @@
     const formError = document.querySelector('[data-role="form-error"]');
     const latInput = form.destination_lat;
     const lonInput = form.destination_lon;
+    const addrInput = form.destination_address;
     const coordsHint = document.querySelector('[data-role="coords-hint"]');
     const tbody = document.querySelector('[data-role="deliveries-body"]');
     const mapEl = document.querySelector('[data-role="map"]');
 
     let map = null;
     let marker = null;
+    // токен последнего reverse-geocode: ответы более старых кликов игнорируем
+    let geocodeToken = 0;
 
     function setError(message) {
       if (!formError) return;
@@ -97,6 +100,35 @@
       }
     }
 
+    // Обратное геокодирование через Nominatim (OSM): по координатам клика
+    // подставляем человекочитаемый адрес в поле «Адрес назначения».
+    async function reverseGeocode(lat, lon) {
+      const token = ++geocodeToken;
+      if (coordsHint) {
+        coordsHint.textContent = `Точка назначения: ${lat.toFixed(6)}, ${lon.toFixed(6)} · определяем адрес…`;
+      }
+      try {
+        const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&accept-language=ru&zoom=18`;
+        const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+        if (token !== geocodeToken) return;     // пришёл устаревший ответ
+        if (!resp.ok) throw new Error(`geocode HTTP ${resp.status}`);
+        const data = await resp.json();
+        if (token !== geocodeToken) return;
+        const address = data && data.display_name ? data.display_name : '';
+        if (address && addrInput) addrInput.value = address;
+        if (coordsHint) {
+          coordsHint.textContent = address
+            ? `Точка назначения: ${address}`
+            : `Точка назначения: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+        }
+      } catch (_err) {
+        if (token !== geocodeToken) return;
+        if (coordsHint) {
+          coordsHint.textContent = `Точка назначения: ${lat.toFixed(6)}, ${lon.toFixed(6)} · адрес не определён, впишите вручную`;
+        }
+      }
+    }
+
     function initMap() {
       if (typeof L === 'undefined' || !mapEl) {
         if (coordsHint) coordsHint.textContent = 'Карта недоступна — введите координаты вручную.';
@@ -109,6 +141,7 @@
       }).addTo(map);
       map.on('click', (e) => {
         setPoint(e.latlng.lat, e.latlng.lng);
+        reverseGeocode(e.latlng.lat, e.latlng.lng);
       });
       // Если оператор уже вписал координаты руками — синхронизируем маркер.
       [latInput, lonInput].forEach((inp) => {
