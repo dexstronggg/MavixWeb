@@ -53,27 +53,55 @@
       btnText.style.opacity = loading ? '0.7' : '1';
     }
 
-    function renderRows(drones) {
-      if (!drones || !drones.length) {
-        tbody.innerHTML = '<tr><td colspan="4" class="admin-table-empty">Дронов пока нет. Установите прошивку на бортовой компьютер — дрон появится здесь автоматически.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = drones.map((d) => `
+    function rowHtml(d) {
+      return `
         <tr>
           <td class="is-mono">${esc(d.name)}</td>
           <td class="is-mono">${esc(d.drone_id)}</td>
           <td>${onlineBadge(d.online)}</td>
           <td>${formatDate(d.last_seen_at)}</td>
         </tr>
-      `).join('');
+      `;
     }
+
+    const EMPTY_DRONES = 'Дронов пока нет. Установите прошивку на бортовой компьютер — дрон появится здесь автоматически.';
+
+    const dt = window.MavixDataTable && window.MavixDataTable.create({
+      table: tbody.closest('table'),
+      renderRow: rowHtml,
+      searchPlaceholder: 'Поиск по имени или ID дрона…',
+      emptyHtml: EMPTY_DRONES,
+      columns: [
+        { getText: (d) => d.name, sortable: true },
+        { getText: (d) => d.drone_id, sortable: true },
+        {
+          getText: (d) => (d.online ? 'Онлайн' : 'Не в сети'),
+          sortable: true,
+          filter: {
+            label: 'статус',
+            options: [{ value: 'on', label: 'Онлайн' }, { value: 'off', label: 'Не в сети' }],
+            match: (d, v) => (v === 'on' ? !!d.online : v === 'off' ? !d.online : true),
+          },
+        },
+        {
+          getText: (d) => (d.last_seen_at ? new Date(d.last_seen_at).toLocaleString('ru-RU') : ''),
+          sortable: true,
+          sortValue: (d) => (d.last_seen_at ? new Date(d.last_seen_at).getTime() : 0),
+        },
+      ],
+    });
 
     async function loadDrones() {
       try {
         const drones = await API.listDrones();
-        renderRows(drones);
+        if (dt) dt.setData(drones);
+        else tbody.innerHTML = (drones && drones.length)
+          ? drones.map(rowHtml).join('')
+          : `<tr><td colspan="4" class="admin-table-empty">${EMPTY_DRONES}</td></tr>`;
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="admin-table-empty">${esc((err && err.message) || 'Не удалось загрузить дроны.')}</td></tr>`;
+        const msg = esc((err && err.message) || 'Не удалось загрузить дроны.');
+        if (dt) dt.setError(msg);
+        else tbody.innerHTML = `<tr><td colspan="4" class="admin-table-empty">${msg}</td></tr>`;
       }
     }
 

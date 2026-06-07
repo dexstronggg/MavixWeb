@@ -373,3 +373,141 @@ input[type="number"].input {
 .dd-option:hover { background: var(--card-hover); color: var(--text); }
 
 .dd-option.is-selected { background: var(--accent-soft); color: var(--text); }
+
+/* ----------------------------------------------------------
+   Панель управления таблицей: поиск, фильтры по колонкам,
+   выбор размера страницы; сортируемые заголовки; пагинация.
+   ---------------------------------------------------------- */
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.table-toolbar-search {
+  flex: 1 1 240px;
+  min-width: 200px;
+  max-width: 380px;
+}
+
+.table-toolbar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.table-toolbar-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.table-toolbar-size-label {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+/* Фильтры и размер страницы используют кастомный дропдаун .dd (как выбор
+   дрона). Нативный select скрыт (.dd-native), видимый контрол — .dd.dd-inline. */
+.dd.dd-inline { display: inline-block; vertical-align: middle; }
+.dd.dd-inline .dd-trigger { padding-top: 9px; padding-bottom: 9px; }
+.table-toolbar-size .dd.dd-inline { margin: 0; }
+
+/* Сортируемые заголовки */
+.admin-table th.is-sortable { cursor: pointer; user-select: none; }
+.admin-table th.is-sortable:hover { color: var(--accent); }
+
+.th-sort { display: inline-flex; align-items: center; gap: 6px; }
+
+.th-sort-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  opacity: 0.28;
+  transition: opacity var(--t-fast) var(--ease);
+}
+
+.admin-table th.is-sortable:hover .th-sort-caret { opacity: 0.6; }
+
+.admin-table th.is-sorted-asc .th-sort-caret {
+  border-top: none;
+  border-bottom: 5px solid var(--accent);
+  opacity: 1;
+}
+
+.admin-table th.is-sorted-desc .th-sort-caret {
+  border-top: 5px solid var(--accent);
+  opacity: 1;
+}
+
+/* Пагинация */
+.table-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.table-pager-info {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+
+.table-pager-nav {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.table-pager-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elev-1);
+  color: var(--text-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.table-pager-btn:hover:not(:disabled):not(.is-active) {
+  background: var(--card-hover);
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.table-pager-btn.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: rgba(0, 217, 255, 0.35);
+  cursor: default;
+}
+
+.table-pager-btn:disabled { opacity: 0.4; cursor: default; }
+
+.table-pager-btn.is-ellipsis {
+  background: transparent;
+  border-color: transparent;
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .table-toolbar-size { margin-left: 0; }
+  .table-toolbar-search { max-width: none; }
+}

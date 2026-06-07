@@ -252,18 +252,22 @@
       return '—';
     }
 
-    function renderRows(deliveries) {
-      if (!deliveries || !deliveries.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="admin-table-empty">Заявок пока нет.</td></tr>';
-        return;
+    // Назначение в виде простого текста — для поиска/сортировки в таблице.
+    function destinationPlain(d) {
+      if (d.destination_address) return d.destination_address;
+      if (d.destination_lat != null && d.destination_lon != null) {
+        return `${d.destination_lat}, ${d.destination_lon}`;
       }
-      tbody.innerHTML = deliveries.map((d) => {
-        const id = esc(d.delivery_id);
-        const canCancel = FINAL_STATUSES.indexOf(d.status) === -1;
-        const cancelBtn = canCancel
-          ? `<button class="btn btn-ghost btn-sm" type="button" data-action="cancel">Отменить</button>`
-          : '<span class="form-hint">—</span>';
-        return `
+      return '';
+    }
+
+    function rowHtml(d) {
+      const id = esc(d.delivery_id);
+      const canCancel = FINAL_STATUSES.indexOf(d.status) === -1;
+      const cancelBtn = canCancel
+        ? `<button class="btn btn-ghost btn-sm" type="button" data-action="cancel">Отменить</button>`
+        : '<span class="form-hint">—</span>';
+      return `
           <tr data-id="${id}">
             <td>${statusBadge(d.status)}</td>
             <td class="is-mono">${esc(d.drone_name || d.drone_id || '—')}</td>
@@ -273,15 +277,42 @@
             <td>${cancelBtn}</td>
           </tr>
         `;
-      }).join('');
     }
+
+    const dt = window.MavixDataTable && window.MavixDataTable.create({
+      table: tbody.closest('table'),
+      renderRow: rowHtml,
+      searchPlaceholder: 'Поиск по дрону, оператору, назначению, грузу…',
+      emptyHtml: 'Заявок пока нет.',
+      columns: [
+        {
+          getText: (d) => STATUS_LABELS[d.status] || d.status,
+          sortable: true,
+          filter: {
+            label: 'статус',
+            options: Object.keys(STATUS_LABELS).map((k) => ({ value: k, label: STATUS_LABELS[k] })),
+            match: (d, v) => !v || d.status === v,
+          },
+        },
+        { getText: (d) => d.drone_name || d.drone_id || '', sortable: true },
+        { getText: (d) => d.operator_name || '', sortable: true },
+        { getText: (d) => destinationPlain(d), sortable: true },
+        { getText: (d) => d.cargo_description || '', sortable: true },
+        {},
+      ],
+    });
 
     async function loadDeliveries() {
       try {
         const deliveries = await API.listDeliveries();
-        renderRows(deliveries);
+        if (dt) dt.setData(deliveries);
+        else tbody.innerHTML = (deliveries && deliveries.length)
+          ? deliveries.map(rowHtml).join('')
+          : '<tr><td colspan="6" class="admin-table-empty">Заявок пока нет.</td></tr>';
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="admin-table-empty">${esc((err && err.message) || 'Не удалось загрузить заявки.')}</td></tr>`;
+        const msg = esc((err && err.message) || 'Не удалось загрузить заявки.');
+        if (dt) dt.setError(msg);
+        else tbody.innerHTML = `<tr><td colspan="6" class="admin-table-empty">${msg}</td></tr>`;
       }
     }
 

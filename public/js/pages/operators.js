@@ -75,15 +75,10 @@
         : '<span class="badge badge-warning">Заблокирован</span>';
     }
 
-    function renderRows(operators) {
-      if (!operators || !operators.length) {
-        tbody.innerHTML = '<tr><td colspan="6" class="admin-table-empty">Операторов пока нет.</td></tr>';
-        return;
-      }
-      tbody.innerHTML = operators.map((op) => {
-        const id = esc(op.operator_id);
-        const toggleLabel = op.is_active ? 'Заблокировать' : 'Разблокировать';
-        return `
+    function rowHtml(op) {
+      const id = esc(op.operator_id);
+      const toggleLabel = op.is_active ? 'Заблокировать' : 'Разблокировать';
+      return `
           <tr data-id="${id}">
             <td class="is-mono">${esc(op.full_name)}</td>
             <td class="is-mono">${esc(op.username)}</td>
@@ -99,15 +94,42 @@
             </td>
           </tr>
         `;
-      }).join('');
     }
+
+    const dt = window.MavixDataTable && window.MavixDataTable.create({
+      table: tbody.closest('table'),
+      renderRow: rowHtml,
+      searchPlaceholder: 'Поиск по ФИО, логину, паспорту, адресу…',
+      emptyHtml: 'Операторов пока нет.',
+      columns: [
+        { getText: (o) => o.full_name, sortable: true },
+        { getText: (o) => o.username, sortable: true },
+        { getText: (o) => o.passport, sortable: true },
+        { getText: (o) => o.address, sortable: true },
+        {
+          getText: (o) => (o.is_active ? 'Активен' : 'Заблокирован'),
+          sortable: true,
+          filter: {
+            label: 'статус',
+            options: [{ value: 'active', label: 'Активен' }, { value: 'blocked', label: 'Заблокирован' }],
+            match: (o, v) => (v === 'active' ? !!o.is_active : v === 'blocked' ? !o.is_active : true),
+          },
+        },
+        {},
+      ],
+    });
 
     async function loadOperators() {
       try {
         const operators = await API.listOperators();
-        renderRows(operators);
+        if (dt) dt.setData(operators);
+        else tbody.innerHTML = (operators && operators.length)
+          ? operators.map(rowHtml).join('')
+          : '<tr><td colspan="6" class="admin-table-empty">Операторов пока нет.</td></tr>';
       } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="admin-table-empty">${esc((err && err.message) || 'Не удалось загрузить операторов.')}</td></tr>`;
+        const msg = esc((err && err.message) || 'Не удалось загрузить операторов.');
+        if (dt) dt.setError(msg);
+        else tbody.innerHTML = `<tr><td colspan="6" class="admin-table-empty">${msg}</td></tr>`;
       }
     }
 
