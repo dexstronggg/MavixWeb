@@ -157,12 +157,11 @@
     }
 
     /* -------- Автоподсказки адреса (форвард-геокодинг) -------- */
-    // Админ вводит адрес → Nominatim search отдаёт варианты выпадающим
-    // списком; по выбору ставим точку на карте и заполняем координаты.
-    function initAddressAutocomplete() {
-      const field = document.querySelector('[data-role="addr-field"]');
-      const box = document.querySelector('[data-role="addr-suggest"]');
-      if (!field || !box || !addrInput) return;
+    // Переиспользуемый виджет: ввод адреса → Nominatim search отдаёт варианты
+    // выпадающим списком; onSelect(it) вызывается при выборе (для назначения —
+    // ставит точку на карту, для отправления — только заполняет поле).
+    function setupAddressSuggest(input, field, box, onSelect) {
+      if (!input || !field || !box) return;
 
       let token = 0;
       let timer = null;
@@ -206,8 +205,8 @@
       }
 
       // ввод с дебаунсом: меньше 3 символов — не дёргаем сервис
-      addrInput.addEventListener('input', () => {
-        const q = addrInput.value.trim();
+      input.addEventListener('input', () => {
+        const q = input.value.trim();
         if (timer) clearTimeout(timer);
         if (q.length < 3) { token++; hide(); return; }
         timer = setTimeout(() => search(q), 350);
@@ -218,21 +217,40 @@
         if (!btn) return;
         const it = items[parseInt(btn.getAttribute('data-i'), 10)];
         if (!it) return;
-        const lat = parseFloat(it.lat);
-        const lon = parseFloat(it.lon);
-        addrInput.value = it.display_name;
+        input.value = it.display_name;
         token++;          // отменяем висящие запросы подсказок
-        geocodeToken++;   // и пендинг reverse-geocode, чтобы он не перезаписал адрес
         hide();
-        if (!isNaN(lat) && !isNaN(lon)) {
-          setPoint(lat, lon);
-          if (map) map.setView([lat, lon], Math.max(map.getZoom(), 15));
-          if (coordsHint) coordsHint.textContent = `Точка назначения: ${it.display_name}`;
-        }
+        if (onSelect) onSelect(it);
       });
 
-      addrInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+      input.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
       document.addEventListener('click', (e) => { if (!field.contains(e.target)) hide(); });
+    }
+
+    function initAddressAutocomplete() {
+      // Назначение: по выбору ставим точку на карту и заполняем координаты.
+      setupAddressSuggest(
+        addrInput,
+        document.querySelector('[data-role="addr-field"]'),
+        document.querySelector('[data-role="addr-suggest"]'),
+        (it) => {
+          const lat = parseFloat(it.lat);
+          const lon = parseFloat(it.lon);
+          geocodeToken++; // отменяем пендинг reverse-geocode, чтобы не перезаписал адрес
+          if (!isNaN(lat) && !isNaN(lon)) {
+            setPoint(lat, lon);
+            if (map) map.setView([lat, lon], Math.max(map.getZoom(), 15));
+            if (coordsHint) coordsHint.textContent = `Точка назначения: ${it.display_name}`;
+          }
+        },
+      );
+      // Отправление: только подсказки в текстовое поле (карты/координат нет).
+      setupAddressSuggest(
+        form.departure_address,
+        document.querySelector('[data-role="dep-addr-field"]'),
+        document.querySelector('[data-role="dep-addr-suggest"]'),
+        null,
+      );
     }
 
     /* -------- Дроны -------- */

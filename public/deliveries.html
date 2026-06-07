@@ -139,7 +139,11 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="dl-dep-address">Адрес отправления (необязательно)</label>
-            <input class="input" id="dl-dep-address" name="departure_address" type="text" autocomplete="off">
+            <div class="addr-field" data-role="dep-addr-field">
+              <input class="input" id="dl-dep-address" name="departure_address" type="text"
+                autocomplete="off" placeholder="Начните вводить адрес…">
+              <div class="addr-suggest" data-role="dep-addr-suggest" hidden></div>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label" for="dl-dest-address">Адрес назначения</label>

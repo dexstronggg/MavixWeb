@@ -136,6 +136,13 @@
   gap: 12px;
 }
 
+/* колонки-поля внутри .form-row делим поровну, чтобы инпуты занимали всю
+   ширину половины, а не сжимались по содержимому */
+.form-row > .form-group {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .form-label {
   font-size: var(--fs-sm);
   font-weight: 500;
