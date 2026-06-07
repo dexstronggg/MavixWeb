@@ -21,22 +21,40 @@
   <link rel="stylesheet" href="/css/layout.css">
   <link rel="stylesheet" href="/css/software.css">
   <style>
-    /* публичная страница скачивания — всё по центру, одна широкая карточка */
+    /* публичная страница скачивания — intro по центру, карточка слева как в кабинете */
     .dl-page { text-align: center; }
     .dl-page .page-head { max-width: none; margin-left: auto; margin-right: auto; }
-    .dl-page .software-grid { grid-template-columns: 1fr; max-width: 620px; margin: 0 auto 36px; }
-    .dl-page .software-card { text-align: center; }
-    .dl-page .software-card-head { justify-content: center; }
-    .dl-page .software-card-titles { flex: 0 1 auto; text-align: left; }
-    .dl-page .software-card-meta { justify-content: center; }
-    /* кнопки скачивания — рядом по горизонтали, по центру */
-    .dl-page .software-card-actions { justify-content: center; flex-wrap: nowrap; }
+    /* ширина карточки = карточке в кабинете: (1100 − padding 96 − gap 20) / 2 ≈ 492px */
+    .dl-page .software-grid { grid-template-columns: 1fr; max-width: 492px; margin: 0 auto 36px; }
+    /* карточка — левое выравнивание контента, как в личном кабинете */
+    .dl-page .software-card { text-align: left; }
     .dl-page .info-note { text-align: left; }
+
+    /* «← На главную» в стиле страницы входа, но под шапкой */
+    .dl-back { top: calc(var(--header-height) + 16px); }
+    @media (max-width: 600px) { .dl-back { top: calc(var(--header-height) + 10px); left: 14px; } }
+
+    /* Фоновый градиент — как на главной (плавающие cyan/blue-пятна) */
+    .bg-fx { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+    .bg-fx-blob { position: absolute; width: 380px; height: 380px; border-radius: 50%; filter: blur(60px); opacity: 0.10; will-change: transform; }
+    .bg-fx-blob-1 { top: -80px; left: -60px; background: radial-gradient(circle, var(--accent) 0%, transparent 65%); animation: bg-float-1 32s ease-in-out infinite; }
+    .bg-fx-blob-2 { top: 30%; right: -100px; width: 420px; height: 420px; background: radial-gradient(circle, #1d4ed8 0%, transparent 65%); opacity: 0.12; animation: bg-float-2 40s ease-in-out infinite; }
+    .bg-fx-blob-3 { bottom: -100px; left: 38%; background: radial-gradient(circle, var(--accent-press) 0%, transparent 65%); animation: bg-float-3 36s ease-in-out infinite; }
+    @keyframes bg-float-1 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(80px, 140px) scale(1.1); } }
+    @keyframes bg-float-2 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-120px, -100px) scale(1.08); } }
+    @keyframes bg-float-3 { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(60px, -140px) scale(1.12); } }
+    @media (prefers-reduced-motion: reduce) { .bg-fx-blob { animation: none; } }
   </style>
   <script src="/config.js" defer></script>
   <script src="/js/app.js" defer></script>
 </head>
 <body>
+
+<div class="bg-fx" aria-hidden="true">
+  <div class="bg-fx-blob bg-fx-blob-1"></div>
+  <div class="bg-fx-blob bg-fx-blob-2"></div>
+  <div class="bg-fx-blob bg-fx-blob-3"></div>
+</div>
 
 <header class="header">
   <div class="header-inner header-inner-fluid">
@@ -49,6 +67,8 @@
     </div>
   </div>
 </header>
+
+<a class="auth-back dl-back" href="/">← На главную</a>
 
 <main class="app-main dl-page" style="max-width: 880px; margin: 0 auto; padding: 48px 24px;">
 
