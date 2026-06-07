@@ -64,9 +64,10 @@
     );
     visibilityObserver.observe(inlineToc);
 
-    // 2) Подсветка активного раздела.
-    // Полоса 20% сверху и 70% снизу: активен тот заголовок,
-    // что попал в верхнюю четверть вьюпорта.
+    // 2) Подсветка активного раздела по позиции при скролле.
+    // Надёжнее узкой полосы IntersectionObserver: корректно работает при
+    // клике (когда заголовок прыгает к верху вьюпорта, выше любой полосы) и
+    // для последних/коротких секций, которые до полосы не доходят.
     let activeId = null;
     const setActive = (id) => {
       if (id === activeId) return;
@@ -81,23 +82,76 @@
       }
     };
 
-    const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        // Берём верхний (с минимальным top) из видимых.
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .map((e) => ({ id: e.target.id, top: e.boundingClientRect.top }));
-        if (visible.length) {
-          visible.sort((a, b) => a.top - b.top);
-          setActive(visible[0].id);
-        }
-      },
-      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
-    );
-
+    const sections = [];
     linkById.forEach((_link, id) => {
-      const target = document.getElementById(id);
-      if (target) sectionObserver.observe(target);
+      const t = document.getElementById(id);
+      if (t) sections.push(t);
     });
+    sections.sort((a, b) => a.offsetTop - b.offsetTop);
+
+    // Линия «активности» чуть ниже залипшего хедера (см. scroll-margin-top секций).
+    const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height'), 10) || 64;
+    const OFFSET = headerH + 24;
+
+    function updateActive() {
+      const scrollBottom = window.innerHeight + (window.scrollY || window.pageYOffset || 0);
+      // У дна страницы активна последняя секция — она может не дойти до линии.
+      if (scrollBottom >= document.documentElement.scrollHeight - 2) {
+        setActive(sections[sections.length - 1].id);
+        return;
+      }
+      let current = sections[0].id;
+      for (let i = 0; i < sections.length; i++) {
+        if (sections[i].getBoundingClientRect().top - OFFSET <= 1) current = sections[i].id;
+        else break;
+      }
+      setActive(current);
+    }
+
+    // «Замок» на время клик-перехода: при плавной прокрутке к выбранной
+    // секции (scroll-behavior: smooth) не пересчитываем активный пункт по
+    // скроллу, иначе промежуточные заголовки мигают синим. Снимаем замок,
+    // когда прокрутка остановилась (scrollend) или по страховочному таймауту.
+    let spyLocked = false;
+    let lockTimer = null;
+    function unlockSpy() {
+      spyLocked = false;
+      if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
+    }
+    function lockSpy() {
+      spyLocked = true;
+      if (lockTimer) clearTimeout(lockTimer);
+      lockTimer = setTimeout(() => { unlockSpy(); updateActive(); }, 1000);
+    }
+
+    let ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { if (!spyLocked) updateActive(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    if ('onscrollend' in window) {
+      window.addEventListener('scrollend', () => {
+        if (!spyLocked) return;
+        unlockSpy();
+        updateActive();
+      });
+    }
+
+    // Клик по пункту: сразу подсвечиваем только целевой и держим его, пока
+    // идёт плавная прокрутка (промежуточные пункты не вспыхивают).
+    list.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = (a.getAttribute('href') || '').slice(1);
+      if (!linkById.has(id)) return;
+      lockSpy();
+      setActive(id);
+    });
+
+    updateActive();
   });
 })();
