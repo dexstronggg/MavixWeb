@@ -122,8 +122,8 @@
     <section class="card" style="max-width: 760px;">
       <h2 class="card-title">Новая заявка на доставку</h2>
       <p class="card-subtitle" style="margin-bottom: 20px;">
-        Выберите дрон и точку назначения. Кликните по карте, чтобы задать
-        координаты сброса груза.
+        Выберите дрон и точку назначения. Введите адрес и выберите из подсказок —
+        точка встанет на карту автоматически, либо кликните по карте сами.
       </p>
 
       <div class="form-feedback error" data-role="form-error"></div>
@@ -143,7 +143,11 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="dl-dest-address">Адрес назначения</label>
-            <input class="input" id="dl-dest-address" name="destination_address" type="text" autocomplete="off">
+            <div class="addr-field" data-role="addr-field">
+              <input class="input" id="dl-dest-address" name="destination_address" type="text"
+                autocomplete="off" placeholder="Начните вводить адрес…">
+              <div class="addr-suggest" data-role="addr-suggest" hidden></div>
+            </div>
           </div>
         </div>
 

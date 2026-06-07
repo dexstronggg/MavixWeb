@@ -156,6 +156,85 @@
       });
     }
 
+    /* -------- Автоподсказки адреса (форвард-геокодинг) -------- */
+    // Админ вводит адрес → Nominatim search отдаёт варианты выпадающим
+    // списком; по выбору ставим точку на карте и заполняем координаты.
+    function initAddressAutocomplete() {
+      const field = document.querySelector('[data-role="addr-field"]');
+      const box = document.querySelector('[data-role="addr-suggest"]');
+      if (!field || !box || !addrInput) return;
+
+      let token = 0;
+      let timer = null;
+      let items = [];
+
+      function hide() { box.hidden = true; box.innerHTML = ''; }
+
+      function showLoading() {
+        box.innerHTML = '<div class="addr-suggest-loading">Поиск адреса…</div>';
+        box.hidden = false;
+      }
+
+      function render(list) {
+        if (!list.length) {
+          box.innerHTML = '<div class="addr-suggest-empty">Ничего не найдено</div>';
+          box.hidden = false;
+          return;
+        }
+        box.innerHTML = list
+          .map((it, i) => `<button type="button" class="addr-suggest-item" data-i="${i}">${esc(it.display_name)}</button>`)
+          .join('');
+        box.hidden = false;
+      }
+
+      async function search(q) {
+        const t = ++token;
+        showLoading();
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(q)}&accept-language=ru&limit=6`;
+          const resp = await fetch(url, { headers: { Accept: 'application/json' } });
+          if (t !== token) return;
+          if (!resp.ok) throw new Error('geocode');
+          const data = await resp.json();
+          if (t !== token) return;
+          items = Array.isArray(data) ? data : [];
+          render(items);
+        } catch (_) {
+          if (t !== token) return;
+          hide();
+        }
+      }
+
+      // ввод с дебаунсом: меньше 3 символов — не дёргаем сервис
+      addrInput.addEventListener('input', () => {
+        const q = addrInput.value.trim();
+        if (timer) clearTimeout(timer);
+        if (q.length < 3) { token++; hide(); return; }
+        timer = setTimeout(() => search(q), 350);
+      });
+
+      box.addEventListener('click', (e) => {
+        const btn = e.target.closest('.addr-suggest-item');
+        if (!btn) return;
+        const it = items[parseInt(btn.getAttribute('data-i'), 10)];
+        if (!it) return;
+        const lat = parseFloat(it.lat);
+        const lon = parseFloat(it.lon);
+        addrInput.value = it.display_name;
+        token++;          // отменяем висящие запросы подсказок
+        geocodeToken++;   // и пендинг reverse-geocode, чтобы он не перезаписал адрес
+        hide();
+        if (!isNaN(lat) && !isNaN(lon)) {
+          setPoint(lat, lon);
+          if (map) map.setView([lat, lon], Math.max(map.getZoom(), 15));
+          if (coordsHint) coordsHint.textContent = `Точка назначения: ${it.display_name}`;
+        }
+      });
+
+      addrInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+      document.addEventListener('click', (e) => { if (!field.contains(e.target)) hide(); });
+    }
+
     /* -------- Дроны -------- */
 
     async function loadDrones() {
@@ -440,6 +519,7 @@
     /* -------- Старт -------- */
 
     initMap();
+    initAddressAutocomplete();
     loadDrones();
     loadDeliveries();
     setInterval(loadDeliveries, REFRESH_INTERVAL_MS);
