@@ -47,16 +47,13 @@ npm start
 | `/dashboard/docs/user`           | Пользовательская документация    |
 | `/dashboard/docs/technical`      | Техническая документация         |
 | `/dashboard/software`            | Скачивание клиентского ПО        |
-| `/downloads/mavix-desktop-windows.exe` | Дистрибутив MavixDesktop для Windows |
-| `/downloads/mavix-desktop-linux.deb`   | Дистрибутив MavixDesktop для Linux (.deb)  |
 | `/config.js`                     | Runtime-конфиг для браузера      |
 
-`/downloads/*` — whitelist-маршруты: отдают файлы из `public/downloads/`
-через `res.download()`. Если файл отсутствует — текстовый 404 с понятным
-сообщением. Сами `.exe`/`.deb` в репозиторий не коммитятся
-(`public/downloads/*` в `.gitignore`), кладутся туда после сборки в
-[MavixDesktop-UI](https://github.com/dexstronggg/MavixDesktop-UI) —
-см. `scripts/README.md` в том репо.
+Дистрибутивы MavixDesktop (`.exe` для Windows, `.AppImage` для Linux)
+раздаёт **MavixServer** по `/api/v1/builds/desktop?build_type=exe|deb`
+(см. кнопки на `software.html`). Веб-сервер сам бинарники не отдаёт.
+Сборка и размещение — см. `scripts/README.md` в
+[MavixDesktop-UI](https://github.com/dexstronggg/MavixDesktop-UI).
 
 ## API
 
