@@ -7,9 +7,3 @@ yarn-error.log*
 .idea/
 .vscode/
 *.log
-
-# Дистрибутивы MavixDesktop — кладутся вручную/CI в public/downloads/
-# (см. server.js: /downloads/* маршруты). Бинарники в репозиторий не
-# коммитим, только .gitkeep чтобы директория существовала.
-public/downloads/*
-!public/downloads/.gitkeep
