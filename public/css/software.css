@@ -95,6 +95,9 @@
   margin-top: 4px;
 }
 
+/* desc растягивается на свободное место, поэтому блок meta+actions
+   прижимается к низу карточки — бейджи ОС и кнопки скачивания оказываются
+   на одном уровне у обеих карточек независимо от длины описания */
 .software-card-desc {
   color: var(--text-soft);
   font-size: var(--fs-sm);
@@ -111,11 +114,19 @@
 
 .software-card-meta .badge { padding: 3px 9px; }
 
+/* небольшой зазор от бейджей до кнопок (кнопки чуть приподняты, не на дне).
+   Кнопки в столбик и на всю ширину — чтобы блок действий имел одинаковую
+   высоту в обеих карточках, и чипы/кнопки вставали на один уровень
+   (низ выравнивается за счёт flex:1 на .software-card-desc). */
 .software-card-actions {
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 14px;
+}
+
+.software-card-actions .btn {
+  width: 100%;
 }
 
 .info-note {

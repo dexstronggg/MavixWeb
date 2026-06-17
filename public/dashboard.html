@@ -59,6 +59,24 @@
     </div>
 
     <div class="sidebar-section">
+      <div class="sidebar-section-title">Управление</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="/dashboard/deliveries">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Доставки
+        </a>
+        <a class="sidebar-link" href="/dashboard/operators">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Операторы
+        </a>
+        <a class="sidebar-link" href="/dashboard/drones">
+          <svg class="sidebar-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 9 4.5 4.5M15 9l4.5-4.5M9 15l-4.5 4.5M15 15l4.5 4.5"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/></svg>
+          Дроны
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-section">
       <div class="sidebar-section-title">Документация</div>
       <nav class="sidebar-nav">
         <a class="sidebar-link" href="/dashboard/docs/user">
@@ -86,7 +104,6 @@
       <div class="sidebar-user-avatar is-skeleton" data-role="avatar"></div>
       <div class="sidebar-user-info">
         <div class="sidebar-user-email is-skeleton" data-role="email" style="min-width:14ch">&nbsp;</div>
-        <div class="sidebar-user-id is-skeleton" data-role="user-id" style="min-width:18ch">&nbsp;</div>
       </div>
     </div>
   </aside>
@@ -97,12 +114,57 @@
       <span class="eyebrow">Добро пожаловать</span>
       <h1 class="welcome-title">Здравствуйте, <span class="welcome-email is-skeleton" data-role="hello-email" style="min-width:12ch">&nbsp;</span></h1>
       <p class="welcome-sub">
-        Это ваш личный кабинет Mavix. Здесь вы найдёте документацию по системе
-        и сможете скачать программы для дрона и оператора.
+        Это панель администратора Mavix. Управляйте операторами и дронами,
+        создавайте заявки на доставку грузов и следите за их статусом.
       </p>
     </section>
 
     <section class="dashboard-grid">
+
+      <a class="dashboard-card" href="/dashboard/deliveries">
+        <div class="dashboard-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        </div>
+        <div class="dashboard-card-title">Доставки</div>
+        <p class="dashboard-card-desc">
+          Создавайте заявки на доставку: выбирайте дрон и точку назначения на
+          карте, следите за статусами и принятием заявок операторами.
+        </p>
+        <span class="dashboard-card-foot">
+          Перейти
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="dashboard-card" href="/dashboard/operators">
+        <div class="dashboard-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="dashboard-card-title">Операторы</div>
+        <p class="dashboard-card-desc">
+          Создавайте учётные записи операторов, выдавайте логин и пароль,
+          блокируйте и удаляйте доступ при необходимости.
+        </p>
+        <span class="dashboard-card-foot">
+          Перейти
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+
+      <a class="dashboard-card" href="/dashboard/drones">
+        <div class="dashboard-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 9 4.5 4.5M15 9l4.5-4.5M9 15l-4.5 4.5M15 15l4.5 4.5"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="20" r="2"/></svg>
+        </div>
+        <div class="dashboard-card-title">Дроны</div>
+        <p class="dashboard-card-desc">
+          Список ваших дронов и их статус. Скачайте прошивку — один архив
+          ставится на все дроны, и они регистрируются автоматически.
+        </p>
+        <span class="dashboard-card-foot">
+          Перейти
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
 
       <a class="dashboard-card" href="/dashboard/docs/user">
         <div class="dashboard-card-icon">
@@ -110,8 +172,8 @@
         </div>
         <div class="dashboard-card-title">Руководство пользователя</div>
         <p class="dashboard-card-desc">
-          С чего начать, как зарегистрировать дрон, как подключиться и
-          настроить джойстик. Пошаговая инструкция для оператора.
+          С чего начать, как подключить дрон, создать оператора и оформить
+          заявку на доставку. Пошаговая инструкция администратора.
         </p>
         <span class="dashboard-card-foot">
           Открыть
@@ -140,8 +202,8 @@
         </div>
         <div class="dashboard-card-title">Скачать программы</div>
         <p class="dashboard-card-desc">
-          Десктоп-приложение оператора для Windows, macOS и Linux,
-          и .deb-сборка прошивки для дрона на Raspberry Pi.
+          Прошивка для дронов и приложение оператора MavixDesktop
+          для Windows и Linux.
         </p>
         <span class="dashboard-card-foot">
           Перейти

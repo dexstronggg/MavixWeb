@@ -98,3 +98,466 @@
   font-family: var(--font-mono);
   color: var(--accent);
 }
+
+/* ----------------------------------------------------------
+   Админ-панель: таблицы, формы, тосты
+   ---------------------------------------------------------- */
+
+.admin-section {
+  margin-top: 28px;
+}
+
+.admin-section-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 14px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--card);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-soft);
+}
+
+/* Широкие текстовые колонки (Назначение/Адрес/Груз) переносятся по словам,
+   чтобы таблица влезала в карточку без горизонтального скролла. Длинные
+   неразрывные токены (например 64-символьный ID дрона) тоже ломаются. */
+.admin-table td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Служебные колонки не переносим: бейдж статуса и кнопки действий. */
+.admin-table td:has(.badge),
+.admin-table td:has(.btn) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.admin-table th {
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+  /* заголовки короткие — оставляем в одну строку */
+  white-space: nowrap;
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table td.is-mono {
+  font-family: var(--font-mono);
+  color: var(--text);
+}
+
+.admin-table-empty {
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--text-muted, #9aa4b2);
+  font-size: var(--fs-sm);
+}
+
+.admin-row-actions {
+  display: inline-flex;
+  gap: 8px;
+}
+
+/* Блок «учётные данные оператора» (показываются один раз) */
+.creds-box {
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--warning, #FBBF24);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+.creds-box-title {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.creds-box-warn {
+  color: var(--warning, #FBBF24);
+  font-size: var(--fs-sm);
+  margin: 0 0 14px;
+}
+
+.creds-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.creds-row-label {
+  min-width: 84px;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+}
+
+.creds-row-value {
+  font-family: var(--font-mono);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 10px;
+  border-radius: var(--r-sm, 6px);
+  flex: 1;
+}
+
+/* Тосты (уведомления WS) */
+.toast-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  max-width: 360px;
+}
+
+.toast {
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--accent);
+  background: var(--card);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  animation: toast-in 0.2s var(--ease, ease) both;
+}
+
+.toast.toast-success { border-color: var(--success, #4ADE80); }
+.toast.toast-error { border-color: var(--danger, #F87171); }
+
+.toast-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Карта выбора точки назначения (Leaflet) */
+.map-pick {
+  height: 320px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-top: 8px;
+  /* изолируем стекинг-контекст: внутренние z-index Leaflet (панорамы/контролы
+     до ~1000) не вылезают над sticky-хедером (z-index 50) при прокрутке */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+
+.map-pick .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #0b0e14;
+}
+
+/* ----------------------------------------------------------
+   Выпадающие списки и числовые поля — единая тёмная стилистика
+   ---------------------------------------------------------- */
+
+select.input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* собственная стрелка вместо системной */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b96a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 38px;
+  cursor: pointer;
+  /* тёмная нативная подложка раскрытого списка опций */
+  color-scheme: dark;
+}
+
+select.input option {
+  background: var(--card);
+  color: var(--text);
+}
+
+/* стрелки вверх/вниз у числовых полей — тёмная тема под общую стилистику */
+input[type="number"].input {
+  color-scheme: dark;
+}
+
+/* ----------------------------------------------------------
+   Кастомный выпадающий список (выбор дрона в доставках):
+   нативный <select> скрыт, value синхронизируется. Ховер опции — серый,
+   как у пунктов меню в сайдбаре (var(--card-hover)), а не системный синий.
+   ---------------------------------------------------------- */
+
+.dd { position: relative; }
+
+/* нативный select остаётся в форме (value сабмитится), но визуально скрыт */
+.dd-native {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dd-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dd-trigger.dd-placeholder .dd-trigger-label { color: var(--muted); }
+
+.dd-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.dd.is-open .dd-chevron { transform: rotate(180deg); }
+
+.dd-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: none;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.dd.is-open .dd-menu { display: block; }
+
+.dd-option {
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-soft);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.dd-option:hover { background: var(--card-hover); color: var(--text); }
+
+.dd-option.is-selected { background: var(--accent-soft); color: var(--text); }
+
+/* ----------------------------------------------------------
+   Автоподсказки адреса (форвард-геокодинг в форме доставки):
+   ввод адреса → выпадающий список вариантов, как в поисковике.
+   ---------------------------------------------------------- */
+
+.addr-field { position: relative; }
+
+.addr-suggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.addr-suggest[hidden] { display: none; }
+
+.addr-suggest-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.addr-suggest-item:hover,
+.addr-suggest-item.is-active { background: var(--card-hover); color: var(--text); }
+
+.addr-suggest-empty,
+.addr-suggest-loading {
+  padding: 9px 12px;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+/* ----------------------------------------------------------
+   Панель управления таблицей: поиск, фильтры по колонкам,
+   выбор размера страницы; сортируемые заголовки; пагинация.
+   ---------------------------------------------------------- */
+
+.table-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.table-toolbar-search {
+  flex: 1 1 240px;
+  min-width: 200px;
+  max-width: 380px;
+}
+
+.table-toolbar-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.table-toolbar-size {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.table-toolbar-size-label {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+
+/* Фильтры и размер страницы используют кастомный дропдаун .dd (как выбор
+   дрона). Нативный select скрыт (.dd-native), видимый контрол — .dd.dd-inline. */
+.dd.dd-inline { display: inline-block; vertical-align: middle; }
+.dd.dd-inline .dd-trigger { padding-top: 9px; padding-bottom: 9px; }
+.table-toolbar-size .dd.dd-inline { margin: 0; }
+
+/* Сортируемые заголовки */
+.admin-table th.is-sortable { cursor: pointer; user-select: none; }
+.admin-table th.is-sortable:hover { color: var(--accent); }
+
+.th-sort { display: inline-flex; align-items: center; gap: 6px; }
+
+.th-sort-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid currentColor;
+  opacity: 0.28;
+  transition: opacity var(--t-fast) var(--ease);
+}
+
+.admin-table th.is-sortable:hover .th-sort-caret { opacity: 0.6; }
+
+.admin-table th.is-sorted-asc .th-sort-caret {
+  border-top: none;
+  border-bottom: 5px solid var(--accent);
+  opacity: 1;
+}
+
+.admin-table th.is-sorted-desc .th-sort-caret {
+  border-top: 5px solid var(--accent);
+  opacity: 1;
+}
+
+/* Пагинация */
+.table-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.table-pager-info {
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+}
+
+.table-pager-nav {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.table-pager-btn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elev-1);
+  color: var(--text-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.table-pager-btn:hover:not(:disabled):not(.is-active) {
+  background: var(--card-hover);
+  color: var(--text);
+  border-color: var(--muted);
+}
+
+.table-pager-btn.is-active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: rgba(0, 217, 255, 0.35);
+  cursor: default;
+}
+
+.table-pager-btn:disabled { opacity: 0.4; cursor: default; }
+
+.table-pager-btn.is-ellipsis {
+  background: transparent;
+  border-color: transparent;
+  opacity: 0.6;
+  cursor: default;
+}
+
+@media (max-width: 640px) {
+  .table-toolbar-size { margin-left: 0; }
+  .table-toolbar-search { max-width: none; }
+}

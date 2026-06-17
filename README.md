@@ -1,8 +1,8 @@
 # MavixWeb
 
-Веб-приложение проекта Mavix: публичный лендинг и личный кабинет
-пользователя (документация, скачивание ПО, смена пароля). Тонкий
-Express-сервер поверх статических HTML/CSS/JS.
+Веб-часть системы автоматизированной доставки малогабаритных грузов дронами
+**Mavix**: публичный лендинг, кабинет администратора (операторы, дроны, заявки на
+доставку, журнал), страницы скачивания дистрибутивов и документации.
 
 ## Скриншоты
 
@@ -23,100 +23,27 @@ Express-сервер поверх статических HTML/CSS/JS.
 | ![Загрузка ПО](assets/screenshots/08-software.jpg) | ![Руководство](assets/screenshots/09-user-guide.jpg) |
 
 ## Стек
+Node.js (Express) — статика и прокси к API · ванильный JavaScript (модули-IIFE) ·
+HTML/CSS · Leaflet + Nominatim (карта/адрес). Тесты — Jest.
 
-- **Node.js 18+**, Express 4
-- **dotenv** — управление переменными окружения
-- **Vanilla HTML + CSS + JavaScript** в браузере, без фреймворков и сборщиков
-- **Inter + JetBrains Mono** — шрифты с Google Fonts
-- Runtime-конфиг: сервер отдаёт `/config.js`, инжектящий
-  `window.MAVIX_CONFIG.apiBaseUrl` — адрес MavixServer без пересборки клиента
-
-## Установка и запуск локально
-
+## Быстрый старт
 ```bash
-cp .env.example .env
 npm install
-npm start
+npm start        # слушает PORT из .env, проксирует /api на MavixServer
 ```
 
-Откройте `http://localhost:3001`.
-
-## Переменные окружения
-
-| Переменная     | По умолчанию            | Описание                                                                       |
-|----------------|-------------------------|--------------------------------------------------------------------------------|
-| `PORT`         | `3001`                  | Порт веб-сервера                                                               |
-| `API_BASE_URL` | `http://localhost:8000` | Адрес MavixServer. Клиент сам дописывает `/api/v1` к этому значению            |
-
-Адрес из `API_BASE_URL` должен присутствовать в `CORS_ALLOW_ORIGINS`
-сервера MavixServer — иначе браузер заблокирует кросс-доменные запросы.
-
-## Маршруты
-
-| URL                              | Назначение                       |
-|----------------------------------|----------------------------------|
-| `/`                              | Лендинг                          |
-| `/login`                         | Вход                             |
-| `/register`                      | Регистрация                      |
-| `/forgot-password`               | Запрос ссылки для сброса пароля  |
-| `/reset-password?token=…`        | Установка нового пароля          |
-| `/dashboard`                     | Главная личного кабинета         |
-| `/dashboard/settings`            | Настройки (смена пароля)         |
-| `/dashboard/docs/user`           | Пользовательская документация    |
-| `/dashboard/docs/technical`      | Техническая документация         |
-| `/dashboard/software`            | Скачивание клиентского ПО        |
-| `/downloads/mavix-desktop-windows.exe` | Дистрибутив MavixDesktop для Windows |
-| `/downloads/mavix-desktop-linux.deb`   | Дистрибутив MavixDesktop для Linux (.deb)  |
-| `/config.js`                     | Runtime-конфиг для браузера      |
-
-`/downloads/*` — whitelist-маршруты: отдают файлы из `public/downloads/`
-через `res.download()`. Если файл отсутствует — текстовый 404 с понятным
-сообщением. Сами `.exe`/`.deb` в репозиторий не коммитятся
-(`public/downloads/*` в `.gitignore`), кладутся туда после сборки в
-[MavixDesktop-UI](https://github.com/dexstronggg/MavixDesktop-UI) —
-см. `scripts/README.md` в том репо.
-
-## API
-
-MavixWeb — клиент к MavixServer. Использует следующие endpoint-ы
-(`API_BASE_URL` + `/api/v1`):
-
-- `POST /auth/register`
-- `POST /auth/login`
-- `POST /auth/refresh` — автоматически при ответе `401` на защищённом запросе
-- `POST /auth/password-reset/request`
-- `POST /auth/password-reset/confirm`
-- `GET  /health` — проверка доступности (для баннера «сервер не отвечает»)
-
-Полная Swagger-схема — `/docs` запущенного MavixServer.
-
-Access- и refresh-токены хранятся в `localStorage` (`mavix_access`,
-`mavix_refresh`). Очистка хранилища или смена браузера требует повторного
-входа.
+## Переменные окружения (`.env`)
+`PORT` — порт MavixWeb; `SERVER_URL` — базовый URL MavixServer (без хвостового `/`),
+напр. `http://localhost:8000`.
 
 ## Тесты
-
 ```bash
-npm install
-npm test
+npm test         # Jest — полный набор зелёный
 ```
 
-Покрытие:
-
-- `tests/server.test.js` — Express-сервер (supertest): все маршруты
-  из `PAGES` возвращают 200 HTML, несуществующий URL — 404,
-  `/config.js` отдаёт валидный JS с `window.MAVIX_CONFIG.apiBaseUrl`.
-- `tests/video.test.js` — `setupVideoFallback` и `setupVideoPlayer`
-  из `js/app.js` (jsdom): HEAD 200 оставляет плеер, 404/сетевая
-  ошибка показывают placeholder, клики по кнопке и видео корректно
-  играют/паузят.
-- `tests/pw-strength.test.js` — `js/pw-strength.js` (jsdom): уровни
-  weak/medium/strong для эталонных паролей, скрытие блока при пустом
-  значении, обновление подписи.
-
 ## Документация
-
-- [TECHNICAL.md](./TECHNICAL.md) — техническое описание программы
-  (ГОСТ 19.402-78).
-- [USER_GUIDE.md](./USER_GUIDE.md) — руководство оператора
-  (ГОСТ 19.505-79).
+- [TECHNICAL.md](TECHNICAL.md) — техническое описание (ГОСТ 19.402): структура,
+  кабинет, карта/геокодирование, особенности реализации.
+- [USER_GUIDE.md](USER_GUIDE.md) — руководство администратора (ГОСТ 19.505):
+  операторы, дроны, заявки, журнал.
+- Обзор всей системы — корневой [README.md](../README.md).

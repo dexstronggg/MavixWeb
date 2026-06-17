@@ -10,8 +10,8 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
   <link rel="manifest" href="/images/site.webmanifest">
   <meta name="theme-color" content="#07090E">
-  <title>Mavix — управление дронами по WebRTC</title>
-  <meta name="description" content="Mavix — система удалённого управления дронами с прямой передачей видео по WebRTC P2P. Кроссплатформенный десктоп, прошивка для дронов на Raspberry Pi и защищённый сервер сигнализации.">
+  <title>Mavix — автоматизированная доставка грузов дронами</title>
+  <meta name="description" content="Mavix — платформа автоматизированной доставки малогабаритных грузов дронами. Администратор создаёт заявки, оператор принимает их в приложении, дрон везёт груз и выполняет сброс по координатам.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
@@ -67,16 +67,16 @@
   <section class="hero">
     <div class="container hero-inner">
       <span class="eyebrow">
-        WebRTC · MAVLink + CRSF · кроссплатформа
+        Доставка дронами · MAVLink + CRSF · кроссплатформа
       </span>
       <h1 class="hero-title">
-        Дистанционное управление дронами<br>
-        <span class="accent">из любой точки</span>
+        Автоматизированная доставка<br>
+        <span class="accent">малогабаритных грузов</span>
       </h1>
       <p class="hero-sub">
-        Mavix — программная платформа для дистанционного управления беспилотным
-        летательным аппаратом с передачей видеосигнала с борта в режиме
-        реального времени.
+        Mavix — программная платформа для автоматизированной доставки
+        малогабаритных грузов дронами: администратор создаёт заявку, оператор
+        принимает её, дрон везёт груз к точке назначения и выполняет сброс.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-lg" href="/register" data-role="primary-cta" data-cta-guest-href="/register" data-cta-guest-text="Создать аккаунт" data-cta-auth-href="/dashboard" data-cta-auth-text="Перейти в кабинет">
@@ -87,16 +87,16 @@
       </div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="hero-stat-value">&lt;300 мс</div>
-          <div class="hero-stat-label">Задержка видеосигнала</div>
+          <div class="hero-stat-value">Авто</div>
+          <div class="hero-stat-label">Назначение заявок дронам</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">HD</div>
-          <div class="hero-stat-label">Качество видео с борта</div>
+          <div class="hero-stat-value">GPS</div>
+          <div class="hero-stat-label">Сброс груза по координатам</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">∞</div>
-          <div class="hero-stat-label">Дальность управления</div>
+          <div class="hero-stat-label">Дальность доставки</div>
         </div>
       </div>
     </div>
@@ -107,10 +107,10 @@
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">Возможности</span>
-        <h2 class="section-title">Всё, что нужно для удалённого полёта</h2>
+        <h2 class="section-title">Всё, что нужно для доставки грузов дронами</h2>
         <p class="section-sub">
-          От захвата видео на дроне до управления джойстиком за тысячи километров —
-          в одном решении.
+          От создания заявки администратором до сброса груза дроном по
+          координатам — в одном решении.
         </p>
       </div>
 
@@ -118,13 +118,13 @@
 
         <div class="feature">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
           </div>
-          <h3 class="feature-title">Видео в реальном времени</h3>
+          <h3 class="feature-title">Заявки на доставку</h3>
           <p class="feature-desc">
-            Поток с USB-камеры дрона уходит напрямую на ваш ПК через WebRTC peer-to-peer.
-            Кодирование H.264 на Raspberry Pi — минимальная задержка
-            и стабильный битрейт.
+            Администратор создаёт заявку с точкой назначения на карте и описанием
+            груза. Система предлагает её оператору, а после принятия — дрон везёт
+            груз и выполняет сброс по координатам.
           </p>
         </div>
 
@@ -144,23 +144,23 @@
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
           </div>
-          <h3 class="feature-title">Кроссплатформенный десктоп</h3>
+          <h3 class="feature-title">Приложение оператора</h3>
           <p class="feature-desc">
-            Приложение оператора работает на Windows и Linux. Авторизация,
-            выбор дрона из вашего парка, видеопоток, калибровка камеры,
-            переключение битрейта и FPS — всё в одном окне.
+            MavixDesktop работает на Windows и Linux. Оператор входит под
+            выданными администратором учётными данными, принимает заявки и
+            следит за полётом дрона до сброса груза.
           </p>
         </div>
 
         <div class="feature">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="7" x2="12" y2="12"/><line x1="12" y1="12" x2="15" y2="15"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>
           </div>
-          <h3 class="feature-title">Низкая задержка</h3>
+          <h3 class="feature-title">Связь без потерь</h3>
           <p class="feature-desc">
-            STUN/TURN-серверы для обхода NAT, оптимизированный pipeline GStreamer,
-            heartbeat-мониторинг WebSocket. Реальный пинг и статус соединения
-            видны в правом углу окна управления.
+            STUN/TURN-серверы для обхода NAT, heartbeat-мониторинг WebSocket.
+            Статус дрона и доставки обновляется в реальном времени — оператор
+            и администратор всегда видят актуальное состояние заявки.
           </p>
         </div>
 
@@ -197,7 +197,7 @@
     <div class="container">
       <div class="arch-head">
         <h2 class="arch-title">Как это устроено</h2>
-        <p class="arch-sub">три участника: дрон, наш сервер, оператор</p>
+        <p class="arch-sub">три участника: дрон, наш сервер, оператор доставки</p>
       </div>
 
       <div class="arch-diagram">
@@ -240,7 +240,7 @@
           <div class="arch-node-desc">
             одноплатник на борту
             (Raspberry Pi и совместимые) —
-            снимает видео, говорит с FC
+            везёт груз и сбрасывает по координатам
           </div>
         </div>
 
@@ -248,8 +248,8 @@
           <div class="arch-node-title">Оператор</div>
           <div class="arch-node-desc">
             программа на ПК —
-            принимает видео, передаёт
-            команды с джойстика
+            принимает заявки и
+            контролирует доставку груза
           </div>
         </div>
 
@@ -267,14 +267,15 @@
     <div class="container container-narrow">
       <div class="section-head" style="margin-bottom: 32px;">
         <span class="eyebrow">О проекте</span>
-        <h2 class="section-title">Открытая платформа удалённого пилотирования</h2>
+        <h2 class="section-title">Открытая платформа доставки грузов дронами</h2>
       </div>
       <div style="font-size: var(--fs-lg); color: var(--text-soft); line-height: 1.75;">
         <p style="margin-bottom: 18px;">
-          Mavix даёт оператору надёжный канал к дрону независимо от расстояния
-          и сетевых условий: видео идёт без значимой задержки, команды управления —
-          без потерь. Раньше для этого требовалось специализированное оборудование
-          и выделенные радиолинии; Mavix решает ту же задачу через обычный интернет.
+          Mavix автоматизирует доставку малогабаритных грузов дронами:
+          администратор формирует заявку с точкой назначения, система назначает
+          её дрону и оператору, а доставка и сброс груза выполняются по заданным
+          координатам. Связь с дроном работает через обычный интернет, без
+          специализированного оборудования и выделенных радиолиний.
         </p>
         <p style="margin-bottom: 18px;">
           В основе системы — открытые отраслевые стандарты: WebRTC для прямой
@@ -298,10 +299,10 @@
     <div class="container">
       <div class="cta">
         <span class="eyebrow">Готовы попробовать?</span>
-        <h2 class="cta-title">Создайте аккаунт и начните полёт</h2>
+        <h2 class="cta-title">Создайте аккаунт администратора и начните доставку</h2>
         <p class="cta-sub">
-          Регистрация занимает минуту. После входа вы получите доступ к документации
-          и сможете скачать Desktop и прошивку дрона.
+          Регистрация занимает минуту. После входа вы сможете добавить операторов,
+          подключить дроны и создавать заявки на доставку грузов.
         </p>
         <div class="cta-actions">
           <a class="btn btn-primary btn-lg" href="/register" data-role="footer-cta" data-cta-guest-href="/register" data-cta-guest-text="Создать аккаунт" data-cta-auth-href="/dashboard" data-cta-auth-text="Перейти в кабинет">
@@ -369,8 +370,8 @@
           <span>MAVIX</span>
         </a>
         <p class="footer-tagline">
-          Удалённое управление дронами через WebRTC. Прямое соединение,
-          защищённая авторизация, открытые стандарты.
+          Автоматизированная доставка малогабаритных грузов дронами.
+          Заявки, операторы, защищённая авторизация, открытые стандарты.
         </p>
       </div>
 
@@ -379,7 +380,7 @@
         <ul class="footer-links">
           <li><a href="#features">Возможности</a></li>
           <li><a href="#architecture">Как это работает</a></li>
-          <li><a href="/dashboard/software">Скачать</a></li>
+          <li><a href="/download/desktop">Скачать</a></li>
         </ul>
       </div>
 
