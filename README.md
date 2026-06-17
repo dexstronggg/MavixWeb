@@ -4,6 +4,24 @@
 пользователя (документация, скачивание ПО, смена пароля). Тонкий
 Express-сервер поверх статических HTML/CSS/JS.
 
+## Скриншоты
+
+| Главная (лендинг) | Личный кабинет |
+|---|---|
+| ![Главная страница](assets/screenshots/01-landing.jpg) | ![Личный кабинет](assets/screenshots/02-dashboard.jpg) |
+
+| Создание заявки на доставку | Журнал доставок |
+|---|---|
+| ![Создание заявки](assets/screenshots/03-new-delivery.jpg) | ![Журнал доставок](assets/screenshots/04-deliveries.jpg) |
+
+| Операторы | Дроны |
+|---|---|
+| ![Операторы](assets/screenshots/06-operators.jpg) | ![Дроны](assets/screenshots/07-drones.jpg) |
+
+| Загрузка приложений | Руководство пользователя |
+|---|---|
+| ![Загрузка ПО](assets/screenshots/08-software.jpg) | ![Руководство](assets/screenshots/09-user-guide.jpg) |
+
 ## Стек
 
 - **Node.js 18+**, Express 4
