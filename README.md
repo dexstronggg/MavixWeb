@@ -1,19 +1,8 @@
 # MavixWeb
 
-Веб-приложение проекта Mavix: публичный лендинг и личный кабинет
-пользователя (документация, скачивание ПО, смена пароля). Тонкий
-Express-сервер поверх статических HTML/CSS/JS.
+Веб-приложение проекта Mavix: публичный лендинг и личный кабинет (документация, скачивание ПО, смена пароля). Тонкий Express-сервер поверх статических HTML/CSS/JS, без фреймворков и сборщиков.
 
-## Стек
-
-- **Node.js 18+**, Express 4
-- **dotenv** — управление переменными окружения
-- **Vanilla HTML + CSS + JavaScript** в браузере, без фреймворков и сборщиков
-- **Inter + JetBrains Mono** — шрифты с Google Fonts
-- Runtime-конфиг: сервер отдаёт `/config.js`, инжектящий
-  `window.MAVIX_CONFIG.apiBaseUrl` — адрес MavixServer без пересборки клиента
-
-## Установка и запуск локально
+## Запуск
 
 ```bash
 cp .env.example .env
@@ -23,79 +12,7 @@ npm start
 
 Откройте `http://localhost:3001`.
 
-## Переменные окружения
+## Подробнее
 
-| Переменная     | По умолчанию            | Описание                                                                       |
-|----------------|-------------------------|--------------------------------------------------------------------------------|
-| `PORT`         | `3001`                  | Порт веб-сервера                                                               |
-| `API_BASE_URL` | `http://localhost:8000` | Адрес MavixServer. Клиент сам дописывает `/api/v1` к этому значению            |
-
-Адрес из `API_BASE_URL` должен присутствовать в `CORS_ALLOW_ORIGINS`
-сервера MavixServer — иначе браузер заблокирует кросс-доменные запросы.
-
-## Маршруты
-
-| URL                              | Назначение                       |
-|----------------------------------|----------------------------------|
-| `/`                              | Лендинг                          |
-| `/login`                         | Вход                             |
-| `/register`                      | Регистрация                      |
-| `/forgot-password`               | Запрос ссылки для сброса пароля  |
-| `/reset-password?token=…`        | Установка нового пароля          |
-| `/dashboard`                     | Главная личного кабинета         |
-| `/dashboard/settings`            | Настройки (смена пароля)         |
-| `/dashboard/docs/user`           | Пользовательская документация    |
-| `/dashboard/docs/technical`      | Техническая документация         |
-| `/dashboard/software`            | Скачивание клиентского ПО        |
-| `/config.js`                     | Runtime-конфиг для браузера      |
-
-Дистрибутивы MavixDesktop (`.exe` для Windows, `.AppImage` для Linux)
-раздаёт **MavixServer** по `/api/v1/builds/desktop?build_type=exe|deb`
-(см. кнопки на `software.html`). Веб-сервер сам бинарники не отдаёт.
-Сборка и размещение — см. `scripts/README.md` в
-[MavixDesktop-UI](https://github.com/dexstronggg/MavixDesktop-UI).
-
-## API
-
-MavixWeb — клиент к MavixServer. Использует следующие endpoint-ы
-(`API_BASE_URL` + `/api/v1`):
-
-- `POST /auth/register`
-- `POST /auth/login`
-- `POST /auth/refresh` — автоматически при ответе `401` на защищённом запросе
-- `POST /auth/password-reset/request`
-- `POST /auth/password-reset/confirm`
-- `GET  /health` — проверка доступности (для баннера «сервер не отвечает»)
-
-Полная Swagger-схема — `/docs` запущенного MavixServer.
-
-Access- и refresh-токены хранятся в `localStorage` (`mavix_access`,
-`mavix_refresh`). Очистка хранилища или смена браузера требует повторного
-входа.
-
-## Тесты
-
-```bash
-npm install
-npm test
-```
-
-Покрытие:
-
-- `tests/server.test.js` — Express-сервер (supertest): все маршруты
-  из `PAGES` возвращают 200 HTML, несуществующий URL — 404,
-  `/config.js` отдаёт валидный JS с `window.MAVIX_CONFIG.apiBaseUrl`.
-- `tests/video.test.js` — `setupVideoFallback` и `setupVideoPlayer`
-  из `js/app.js` (jsdom): HEAD 200 оставляет плеер, 404/сетевая
-  ошибка показывают placeholder, клики по кнопке и видео корректно
-  играют/паузят.
-- `tests/pw-strength.test.js` — `js/pw-strength.js` (jsdom): уровни
-  weak/medium/strong для эталонных паролей, скрытие блока при пустом
-  значении, обновление подписи.
-
-## Документация
-
-- [TECHNICAL.md](./TECHNICAL.md) — техническое описание программы
-  (ГОСТ 19.402-78).
-- [USER_GUIDE.md](./USER_GUIDE.md) — руководство оператора
-  (ГОСТ 19.505-79).
+- [TECHNICAL.md](./TECHNICAL.md) — техническое описание, маршруты, API MavixServer, переменные окружения.
+- [USER_GUIDE.md](./USER_GUIDE.md) — руководство оператора.
