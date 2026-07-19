@@ -1,13 +1,3 @@
-/* ============================================================
-   Mavix Web — pages/software.js
-
-   Логика страницы «Скачать ПО»:
-     • Desktop (.AppImage / .exe) — публичный эндпойнт без auth,
-       качаем прямым переходом по URL: браузер показывает нативный
-       прогресс в downloads-меню.
-     • Board (.tar.gz) — приватный (per-drone), нужен Bearer-токен,
-       поэтому fetch + streaming-чтение с прогресс-баром в UI.
-   ============================================================ */
 (function () {
   document.addEventListener('DOMContentLoaded', () => {
     initBuildDownloads();
@@ -22,15 +12,12 @@
           const kind = kindAttr.endsWith('desktop') ? 'desktop' : 'board';
           const handler = kind === 'desktop' ? downloadDesktop : downloadBoard;
           handler(link).catch((err) => {
-            // eslint-disable-next-line no-console
             console.error('[software] build download failed', err);
             showNotice('error', err.message || 'Не удалось скачать сборку. Попробуйте позже.');
           });
         });
       });
   }
-
-  /* -------- Desktop: прямой переход (auth не нужен) -------- */
 
   async function downloadDesktop(link) {
     const href = link.getAttribute('href');
@@ -40,17 +27,11 @@
     const apiBase = (window.MAVIX_CONFIG && window.MAVIX_CONFIG.apiBaseUrl) || '';
     const fullUrl = `${apiBase.replace(/\/+$/, '')}/api/v1/builds/desktop?build_type=${encodeURIComponent(buildType)}`;
 
-    // Проверяем, что файл вообще существует — иначе direct-переход
-    // открыл бы голую JSON-страницу с 404 в новой вкладке. Если сервер
-    // не поддерживает HEAD на этом маршруте (405) — пропускаем проверку
-    // и идём напрямую: в худшем случае браузер покажет JSON-ошибку,
-    // что приемлемо для редкого кейса «файл не залит».
     clearNotice();
     setLoading(link, true);
     try {
       const head = await fetch(fullUrl, { method: 'HEAD' });
       if (head.status === 405) {
-        // skip — старый сервер без HEAD-support, идём напрямую
       } else if (!head.ok) {
         if (head.status === 404) {
           const label = buildType === 'exe' ? 'Windows (.exe)' : 'Linux (.AppImage)';
@@ -68,9 +49,6 @@
       setLoading(link, false);
     }
 
-    // Файл есть → пускаем нативное скачивание. Браузер сам покажет
-    // прогресс в downloads-баре. Используем скрытый <a download>,
-    // чтобы навигация на API URL не перехватывалась как переход страницы.
     showNotice(
       'info',
       'Скачивание началось. Прогресс смотрите в downloads-меню браузера.',
@@ -83,8 +61,6 @@
     a.click();
     a.remove();
   }
-
-  /* -------- Board: fetch со streaming-прогрессом (auth нужен) -------- */
 
   async function downloadBoard(link) {
     const apiBase = (window.MAVIX_CONFIG && window.MAVIX_CONFIG.apiBaseUrl) || '';
@@ -133,7 +109,6 @@
   async function readWithProgress(response, total) {
     const reader = response.body && response.body.getReader && response.body.getReader();
     if (!reader) {
-      // Старый браузер без streams — фоллбэк на blob() без прогресса.
       return await response.blob();
     }
     const chunks = [];
@@ -149,8 +124,6 @@
     return new Blob(chunks, { type: response.headers.get('content-type') || 'application/octet-stream' });
   }
 
-  /* -------- Прогресс-бар -------- */
-
   function getProgressContainer() {
     let el = document.querySelector('[data-role="software-progress"]');
     if (el) return el;
@@ -165,8 +138,6 @@
         <div class="software-progress-fill" data-role="fill" style="width:0%"></div>
       </div>
     `;
-    // Минимальный inline-styling — на случай если в css/software.css нет
-    // соответствующих классов. Не ломает дизайн, если правила есть.
     Object.assign(el.style, {
       margin: '0 0 16px', padding: '12px 16px', borderRadius: '10px',
       background: 'rgba(34,211,238,0.06)', border: '1px solid rgba(34,211,238,0.25)',
@@ -197,7 +168,6 @@
       fill.style.width = pct + '%';
       label.textContent = `Скачивание установщика: ${mb(received)} / ${mb(total)} МБ (${pct}%)`;
     } else {
-      // content-length не пришёл — индетерминированный режим
       fill.style.width = '100%';
       fill.style.opacity = '0.4';
       label.textContent = `Скачивание установщика: ${mb(received)} МБ`;
@@ -208,8 +178,6 @@
     const el = document.querySelector('[data-role="software-progress"]');
     if (el) el.style.display = 'none';
   }
-
-  /* -------- Ошибки API → человеческие сообщения -------- */
 
   async function buildErrorFromResponse(res, kind, buildType) {
     const raw = await res.text().catch(() => '');
@@ -257,8 +225,6 @@
     return new Error(`Не удалось скачать сборку (ошибка ${res.status}).`);
   }
 
-  /* -------- UI-хелперы -------- */
-
   function setLoading(link, busy) {
     if (busy) {
       link.classList.add('is-loading');
@@ -291,7 +257,6 @@
   function showNotice(kind, message) {
     const el = getNoticeContainer();
     if (!el) {
-      // eslint-disable-next-line no-alert
       window.alert(message);
       return;
     }

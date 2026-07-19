@@ -31,7 +31,6 @@ describe('Express server', () => {
     });
 
     test('тело — JS-присваивание window.MAVIX_CONFIG валидным объектом', () => {
-      // Формат: window.MAVIX_CONFIG = { "apiBaseUrl": "..." };
       const match = res.text.match(
         /^window\.MAVIX_CONFIG\s*=\s*(\{.*\});$/s
       );

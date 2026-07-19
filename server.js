@@ -34,10 +34,6 @@ for (const [route, file] of Object.entries(PAGES)) {
   });
 }
 
-// Дистрибутивы MavixDesktop (.exe/.AppImage) раздаёт MavixServer по
-// /api/v1/builds/desktop из BUILDS_PREBUILT_DIR — см. software.html. Здесь
-// статической раздачи бинарников нет.
-
 app.use(express.static(path.join(__dirname, 'public'), { etag: false, lastModified: false }));
 
 app.use((_req, res) => {
@@ -46,8 +42,6 @@ app.use((_req, res) => {
   });
 });
 
-// Поднимаем сервер только если файл запущен напрямую — иначе он
-// импортируется тестами, и app.listen() занимал бы порт.
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`[mavix-web] listening on http://localhost:${PORT}`);

@@ -18,14 +18,10 @@
     node.setAttribute('data-visible', message ? 'true' : 'false');
   }
 
-  // Если пришли с /reset-password после успешной смены пароля —
-  // показываем persistent-нотис, чтобы пользователь понимал, что
-  // от него теперь хотят новый пароль (а не повторно тот же).
   (function showPostResetNotice() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('password-reset') === 'success' && formSuccess) {
       setError(formSuccess, 'Пароль успешно изменён. Войдите с новым паролем.');
-      // Чистим query, чтобы при F5 нотис не висел вечно.
       if (window.history && window.history.replaceState) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
@@ -66,9 +62,6 @@
     setLoading(true);
     try {
       await API.login(email, password);
-      // Фоновый refresh-таймер дальше запустит auth-guard на dashboard,
-      // но для надёжности стартуем и здесь — на случай долгой загрузки
-      // следующей страницы.
       if (typeof API.startBackgroundRefresh === 'function') {
         try { API.startBackgroundRefresh(); } catch (_) {}
       }

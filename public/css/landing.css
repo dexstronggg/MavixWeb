@@ -1,13 +1,3 @@
-/* ============================================================
-   Mavix Web — landing.css
-   Стили лендинга: hero, секции, фичи, архитектура, видео, CTA.
-   Также фоновый эффект bg-fx и утилита reveal (используются только на index.html).
-   ============================================================ */
-
-/* ----------------------------------------------------------
-   Фоновый эффект: плавающие cyan/blue-пятна (только index.html)
-   ---------------------------------------------------------- */
-
 .bg-fx {
   position: fixed;
   inset: 0;
@@ -69,10 +59,6 @@
   .bg-fx-blob { animation: none; }
 }
 
-/* ----------------------------------------------------------
-   Появление секций при скролле (включается из reveal.js)
-   ---------------------------------------------------------- */
-
 .reveal {
   opacity: 0;
   transform: translateY(40px);
@@ -89,22 +75,6 @@
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-
-
-/* ----------------------------------------------------------
-   Лендинг: hero
-   ---------------------------------------------------------- */
-
-/* Якоря лендинга: цель скролла — eyebrow раздела (а не верх
-   секции). Хотим, чтобы после якорного перехода eyebrow
-   оказывался на ~20px ниже sticky-шапки.
-
-   eyebrow_y = section_top_y + section_padding_top
-   section_top_y = scroll-margin-top
-   ⇒ scroll-margin-top = (header-height + 20px) − section_padding_top
-
-   Базовая .section имеет padding-top: 96px, у #architecture и
-   #about inline style 32px — соответственно две разные формулы. */
 #features {
   scroll-margin-top: calc(var(--header-height) + 20px - 96px);
 }
@@ -220,10 +190,6 @@
   font-size: var(--fs-xs);
 }
 
-/* ----------------------------------------------------------
-   Секции
-   ---------------------------------------------------------- */
-
 .section-head {
   text-align: center;
   max-width: 720px;
@@ -241,8 +207,6 @@
   font-size: var(--fs-lg);
   line-height: 1.6;
 }
-
-/* Features grid */
 
 .features {
   display: grid;
@@ -297,11 +261,6 @@
   .features { grid-template-columns: 1fr; }
 }
 
-/* ----------------------------------------------------------
-   Архитектура (триангулярная диаграмма: сервер / дрон / оператор)
-   локальный акцент для архитектурной схемы (не выносим в base.css)
-   ---------------------------------------------------------- */
-
 .arch-head {
   margin-bottom: 28px;
 }
@@ -322,9 +281,9 @@
 }
 
 .arch-diagram {
-  --arch-pink: #ec4899;          /* локальный акцент схемы (rose/pink) */
+  --arch-pink: #ec4899;
   --arch-pink-soft: rgba(236, 72, 153, 0.18);
-  --arch-line: rgba(136, 147, 164, 0.45); /* приглушённая серая линия */
+  --arch-line: rgba(136, 147, 164, 0.45);
 
   position: relative;
   display: grid;
@@ -340,7 +299,6 @@
   min-height: 520px;
 }
 
-/* SVG с линиями-связями — слой ниже нод */
 .arch-lines {
   position: absolute;
   inset: 0;
@@ -367,7 +325,6 @@
   filter: drop-shadow(0 0 6px var(--arch-pink-soft));
 }
 
-/* Ноды */
 .arch-node {
   position: relative;
   z-index: 2;
@@ -380,7 +337,6 @@
 }
 
 .arch-node::before {
-  /* цветная акцент-полоска слева */
   content: "";
   position: absolute;
   left: 0;
@@ -433,7 +389,6 @@
   white-space: pre-line;
 }
 
-/* Лейблы линий */
 .arch-edge-label {
   position: absolute;
   z-index: 1;
@@ -492,7 +447,6 @@
   font-size: var(--fs-sm);
 }
 
-/* ---- Адаптив: на узких экранах — вертикальный stacked layout ---- */
 @media (max-width: 720px) {
   .arch-diagram {
     grid-template-columns: 1fr;
@@ -535,10 +489,6 @@
   }
 }
 
-/* ----------------------------------------------------------
-   CTA блок
-   ---------------------------------------------------------- */
-
 .cta {
   display: flex;
   flex-direction: column;
@@ -573,10 +523,6 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-
-/* ----------------------------------------------------------
-   Контакты
-   ---------------------------------------------------------- */
 
 .contacts {
   display: grid;
@@ -674,14 +620,6 @@
   }
 }
 
-
-/* ----------------------------------------------------------
-   Header авторизованного пользователя на лендинге.
-   До решения «гость/авторизован» оба блока скрыты через [hidden].
-   landing.js после синхронной проверки localStorage снимает hidden
-   с нужного блока — это происходит мгновенно, мигания нет.
-   ---------------------------------------------------------- */
-
 .header-actions-group {
   display: inline-flex;
   align-items: center;
@@ -693,6 +631,5 @@
 }
 
 @media (max-width: 600px) {
-  /* На узких экранах email прячем — кнопок «Кабинет» и «Выйти» достаточно. */
   [data-role="header-actions-auth"] .header-user { display: none; }
 }

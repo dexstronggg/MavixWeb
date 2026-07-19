@@ -1,9 +1,3 @@
-/* ============================================================
-   Mavix Web — api.js
-   Клиент к MavixServer (FastAPI, http://localhost:8000).
-   Все запросы идут на API_BASE_URL + '/api/v1/...'.
-   ============================================================ */
-
 (function () {
   const CFG = (typeof window !== 'undefined' && window.MAVIX_CONFIG) || {};
   const BASE = (CFG.apiBaseUrl || 'http://localhost:8000').replace(/\/+$/, '') + '/api/v1';
@@ -20,25 +14,16 @@
     PASSWORD_MAX: 72,
   };
 
-  // Окно, за которое мы считаем access «почти истёкшим» и пытаемся
-  // обновить его проактивно. JWT access живёт 15 минут, поэтому 60 секунд —
-  // комфортный буфер, чтобы запрос не успел уйти со старым токеном.
   const ACCESS_REFRESH_LEEWAY_SEC = 60;
 
-  // Парсим payload JWT без верификации подписи — нам нужен только exp.
-  // Подпись проверяет сервер; задача клиента — просто не тянуть запросы
-  // с заведомо мёртвым токеном.
   function decodeJwtPayload(token) {
     if (!token || typeof token !== 'string') return null;
     const parts = token.split('.');
     if (parts.length < 2) return null;
     try {
-      // base64url -> base64
       const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
       const pad = b64.length % 4 === 0 ? '' : '='.repeat(4 - (b64.length % 4));
       const json = atob(b64 + pad);
-      // atob возвращает binary string; для UTF-8 нужен decodeURIComponent-трюк,
-      // но в нашем access payload только ASCII (email/uuid), поэтому достаточно.
       return JSON.parse(json);
     } catch (_) {
       return null;
@@ -64,15 +49,12 @@
       localStorage.removeItem(STORAGE_KEYS.email);
       localStorage.removeItem(STORAGE_KEYS.userId);
     },
-    // Возвращает сколько секунд осталось у текущего access. null — если
-    // токен невалидный/без exp.
     accessExpiresInSec() {
       return tokenExpiresInSec(this.access);
     },
-    // Истёк ли access прямо сейчас (или истечёт в ближайший leeway).
     isAccessStale(leewaySec = ACCESS_REFRESH_LEEWAY_SEC) {
       const left = this.accessExpiresInSec();
-      if (left === null) return false; // не можем распарсить — не трогаем
+      if (left === null) return false;
       return left <= leewaySec;
     },
   };
@@ -84,20 +66,12 @@
     },
     get email() { return localStorage.getItem(STORAGE_KEYS.email) || ''; },
     get userId() { return localStorage.getItem(STORAGE_KEYS.userId) || ''; },
-    // Авторизованным считаем, если есть хоть какой-то материал для
-    // восстановления сессии: либо живой access, либо refresh — по
-    // refresh мы умеем добыть новый access.
     isAuthenticated() { return Boolean(tokens.access || tokens.refresh); },
   };
-
-  // ---------- HTTP ----------
 
   const REQUEST_TIMEOUT_MS = 10000;
 
   async function request(path, { method = 'GET', body, auth = false, retry = true, timeout = REQUEST_TIMEOUT_MS } = {}) {
-    // Для защищённых запросов сначала пробуем обновить access, если он
-    // уже истёк/почти истёк. Это убирает гарантированный лишний раунд
-    // 401 → refresh → повтор, когда пользователь долго ничего не делал.
     if (auth && tokens.isAccessStale() && tokens.refresh) {
       await tryRefresh();
     }
@@ -150,9 +124,6 @@
     return payload;
   }
 
-  // Singleton-промис: если refresh уже летит, второй параллельный вызов
-  // (например, из auth-guard и фонового таймера одновременно) подождёт тот
-  // же промис, а не дёрнет сервер второй раз с тем же refresh-токеном.
   let refreshInFlight = null;
 
   function tryRefresh() {
@@ -169,8 +140,6 @@
           body: JSON.stringify({ refresh_token: currentRefresh }),
         });
         if (!res.ok) {
-          // 401/403 — refresh-токен мёртв (отозван/истёк). Чистим всё, чтобы
-          // дальше код пошёл по пути «нужно логиниться заново».
           if (res.status === 401 || res.status === 403) {
             tokens.clear();
           }
@@ -178,8 +147,6 @@
         }
         const data = await res.json();
         if (!data || !data.access_token) return false;
-        // Сервер может (и в нашей реализации — будет) ротировать refresh.
-        // Сохраняем оба, если оба пришли; иначе обновляем только access.
         tokens.save(data.access_token, data.refresh_token || null);
         return true;
       } catch (_) {
@@ -192,20 +159,13 @@
     return refreshInFlight;
   }
 
-  // Гарантирует, что access свежий: если до истечения осталось мало или
-  // он уже мёртв — пробует refresh. Возвращает true, если после вызова у
-  // нас есть пригодный access (или мы уверены, что он ещё жив). false —
-  // refresh не получился и пользователю нужен повторный логин.
   async function ensureFreshAccess() {
     const access = tokens.access;
     const refresh = tokens.refresh;
     if (!access && !refresh) return false;
     if (!access && refresh) {
-      // Access потеряли, но refresh есть — пытаемся восстановить.
       return tryRefresh();
     }
-    // Access есть. Если exp непарсимый — считаем, что жив; если истекает
-    // в ближайшую минуту — обновляем заранее.
     if (tokens.isAccessStale()) {
       if (!refresh) return false;
       return tryRefresh();
@@ -213,10 +173,6 @@
     return true;
   }
 
-  // Фоновый таймер. Запускается ровно один раз для всего приложения и
-  // тикает по графику «обновись за минуту до истечения текущего access».
-  // На /login и /landing смысла нет — там нет защищённого UI; вызывает
-  // его явно auth-guard на защищённых страницах.
   let refreshTimerId = null;
   function scheduleNextRefresh() {
     if (refreshTimerId) {
@@ -225,9 +181,6 @@
     }
     if (!tokens.refresh) return;
     const left = tokens.accessExpiresInSec();
-    // Если exp непарсимый или уже истёк — обновим через секунду; иначе —
-    // за ACCESS_REFRESH_LEEWAY_SEC до истечения, но не позже 12 минут
-    // (страховка от очень долгих токенов в будущем).
     let delayMs;
     if (left === null) {
       delayMs = 12 * 60 * 1000;
@@ -238,8 +191,6 @@
     refreshTimerId = setTimeout(async () => {
       refreshTimerId = null;
       const ok = await tryRefresh();
-      // Если refresh жив — планируем следующий тик. Если умер — таймер
-      // остановится сам, дальше следующий 401 или auth-guard вышвырнет.
       if (ok) scheduleNextRefresh();
     }, delayMs);
   }
@@ -247,9 +198,6 @@
   function startBackgroundRefresh() {
     if (typeof window === 'undefined') return;
     scheduleNextRefresh();
-    // Если пользователь свернул вкладку на час и вернулся — access точно
-    // протух. На visibilitychange сразу гарантируем свежий токен и
-    // переинициализируем таймер.
     if (!startBackgroundRefresh._bound) {
       startBackgroundRefresh._bound = true;
       document.addEventListener('visibilitychange', () => {
@@ -307,9 +255,6 @@
     }
   }
 
-  // ---------- Валидация ----------
-
-  // Совместимо с EmailStr из Pydantic (RFC 5322 в упрощённом виде).
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function validateEmail(email) {
@@ -326,14 +271,11 @@
     return null;
   }
 
-  // ---------- API ----------
-
   async function register(email, password) {
     const data = await request('/auth/register', {
       method: 'POST',
       body: { email, password },
     });
-    // Авто-логин после регистрации: сервер не возвращает токены — логинимся отдельно.
     if (data && data.email) {
       session.saveProfile(data.email, data.user_id);
     }
@@ -354,8 +296,6 @@
   }
 
   function logout() {
-    // На сервере нет /auth/logout — просто чистим локальное состояние
-    // и останавливаем фоновый refresh, если он был запущен.
     stopBackgroundRefresh();
     tokens.clear();
   }
@@ -378,8 +318,6 @@
     return request('/health');
   }
 
-  // ---------- Экспорт ----------
-
   window.MavixAPI = {
     BASE,
     LIMITS,
@@ -394,9 +332,6 @@
     passwordResetRequest,
     passwordResetConfirm,
     health,
-    // Session lifecycle helpers (используются auth-guard.js на защищённых
-    // страницах кабинета). Не зови их с публичных страниц — на /login и
-    // /landing фоновый рефреш не нужен.
     ensureFreshAccess,
     tryRefresh,
     startBackgroundRefresh,

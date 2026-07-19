@@ -62,9 +62,6 @@
     setLoading(true);
     try {
       await API.passwordResetConfirm(token, password);
-      // Подчищаем локальную сессию — старые access/refresh теперь
-      // относятся к устаревшему паролю; пользователь всё равно должен
-      // залогиниться заново.
       try { API.logout(); } catch (_) {}
       setFb(formSuccess, 'Пароль успешно обновлён. Сейчас вы будете перенаправлены на страницу входа.');
       submitBtn.disabled = true;

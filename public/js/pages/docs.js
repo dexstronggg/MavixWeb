@@ -1,12 +1,3 @@
-/* ============================================================
-   Mavix Web — docs.js
-   Плавающее оглавление справа на страницах документации.
-   1) Клонирует список из .doc-toc в фиксированную панель справа.
-   2) Показывает её, когда исходный .doc-toc уходит из вьюпорта.
-   3) Подсвечивает активный пункт по мере скролла секций.
-   На экранах < 1280px не активируется.
-   ============================================================ */
-
 (function () {
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
@@ -19,7 +10,6 @@
     const inlineToc = document.querySelector('.doc-toc');
     if (!inlineToc) return;
 
-    // Узкие экраны — не рисуем боковую панель.
     if (window.matchMedia && !window.matchMedia('(min-width: 1280px)').matches) {
       return;
     }
@@ -27,7 +17,6 @@
     const sourceLinks = Array.from(inlineToc.querySelectorAll('a[href^="#"]'));
     if (!sourceLinks.length) return;
 
-    // Боковая панель.
     const aside = document.createElement('aside');
     aside.className = 'floating-toc';
     aside.setAttribute('aria-hidden', 'true');
@@ -53,7 +42,6 @@
     if (!linkById.size) return;
     document.body.appendChild(aside);
 
-    // 1) Видимость inline-оглавления → видимость боковой панели.
     const visibilityObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -64,9 +52,6 @@
     );
     visibilityObserver.observe(inlineToc);
 
-    // 2) Подсветка активного раздела.
-    // Полоса 20% сверху и 70% снизу: активен тот заголовок,
-    // что попал в верхнюю четверть вьюпорта.
     let activeId = null;
     const setActive = (id) => {
       if (id === activeId) return;
@@ -83,7 +68,6 @@
 
     const sectionObserver = new IntersectionObserver(
       (entries) => {
-        // Берём верхний (с минимальным top) из видимых.
         const visible = entries
           .filter((e) => e.isIntersecting)
           .map((e) => ({ id: e.target.id, top: e.boundingClientRect.top }));

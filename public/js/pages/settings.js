@@ -1,10 +1,3 @@
-/* ============================================================
-   Mavix Web — settings.js
-   Страница /dashboard/settings.
-   Сейчас один блок: смена пароля через email-reset
-   (server endpoint /auth/password-reset/request).
-   ============================================================ */
-
 (function () {
   const API = window.MavixAPI;
   if (!API) return;

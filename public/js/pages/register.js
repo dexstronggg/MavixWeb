@@ -55,9 +55,6 @@
     setLoading(true);
     try {
       await API.register(email, password);
-      // register() выполняет авто-логин, токены уже в localStorage.
-      // Запускаем фоновый refresh-таймер заранее (auth-guard продублирует
-      // это на dashboard — повторный вызов безопасен).
       if (typeof API.startBackgroundRefresh === 'function') {
         try { API.startBackgroundRefresh(); } catch (_) {}
       }

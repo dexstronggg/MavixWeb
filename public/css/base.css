@@ -1,10 +1,4 @@
-/* ============================================================
-   Mavix Web — base.css
-   Дизайн-система: переменные, reset, типографика, утилиты.
-   ============================================================ */
-
 :root {
-  /* Палитра — Aviation Dark */
   --bg: #07090E;
   --bg-elev-1: #0D1117;
   --surface: #11151D;
@@ -32,7 +26,6 @@
   --danger: #F87171;
   --danger-soft: rgba(248, 113, 113, 0.12);
 
-  /* Радиусы */
   --r-sm: 6px;
   --r-md: 10px;
   --r-lg: 14px;
@@ -40,18 +33,15 @@
   --r-2xl: 28px;
   --r-full: 999px;
 
-  /* Тени */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
   --shadow-glow: 0 0 0 1px var(--border-focus), 0 0 24px var(--accent-glow);
   --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 1px 2px rgba(0, 0, 0, 0.4);
 
-  /* Шрифты */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  /* Размеры шрифта */
   --fs-xs: 12px;
   --fs-sm: 13px;
   --fs-base: 15px;
@@ -65,28 +55,21 @@
   --fs-6xl: 60px;
   --fs-7xl: 72px;
 
-  /* Layout */
   --container: 1200px;
   --container-narrow: 880px;
   --sidebar-width: 260px;
   --header-height: 68px;
 
-  /* Easing & timings */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --t-fast: 120ms;
   --t-base: 200ms;
   --t-slow: 320ms;
 }
 
-/* ============================================================
-   Reset
-   ============================================================ */
-
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* HTML-атрибут hidden должен побеждать любой display: ... в CSS */
 [hidden] {
   display: none !important;
 }
@@ -101,7 +84,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Якоря и сами секции не должны прятаться под sticky-шапкой */
 [id] {
   scroll-margin-top: calc(var(--header-height) + 12px);
 }
@@ -116,9 +98,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
-  /* clip вместо hidden — не создаёт scroll-container и не ломает
-     position: sticky на дочернем .header (особенно заметно на
-     длинных страницах кабинета: docs, software). */
   overflow-x: clip;
 }
 
@@ -191,7 +170,6 @@ code, kbd, samp, pre {
   border-radius: var(--r-sm);
 }
 
-/* Полоса прокрутки */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -207,10 +185,6 @@ code, kbd, samp, pre {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--muted);
 }
-
-/* ============================================================
-   Layout-утилиты
-   ============================================================ */
 
 .container {
   width: 100%;
@@ -240,10 +214,6 @@ code, kbd, samp, pre {
   .container, .container-narrow { padding: 0 20px; }
 }
 
-/* ============================================================
-   Типографика-утилиты
-   ============================================================ */
-
 .text-mono { font-family: var(--font-mono); }
 .text-muted { color: var(--muted); }
 .text-soft { color: var(--text-soft); }
@@ -271,10 +241,6 @@ code, kbd, samp, pre {
   border-radius: var(--r-full);
 }
 
-/* ============================================================
-   Анимации
-   ============================================================ */
-
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -293,7 +259,6 @@ code, kbd, samp, pre {
   animation: fade-up 600ms var(--ease) both;
 }
 
-/* Скрыть для всех, кроме скринридеров */
 .sr-only {
   position: absolute;
   width: 1px;

@@ -1,22 +1,10 @@
-/* ============================================================
-   Mavix Web — cabinet.js
-   Общая логика для всех страниц личного кабинета:
-   1) Подстановка email/USER_ID/инициала в шапку и сайдбар,
-      снятие скелетонов.
-   2) Health-check сервера при загрузке. Если /api/v1/health не
-      ответил за 5 секунд — показываем мягкий жёлтый баннер.
-   Подключается на dashboard, docs-*, software, settings.
-   ============================================================ */
-
 (function () {
   const API = window.MavixAPI;
   if (!API) return;
 
   const HEALTH_TIMEOUT_MS = 5000;
   const BANNER_DISMISS_KEY = 'mavix_health_banner_dismissed_at';
-  const BANNER_DISMISS_WINDOW_MS = 5 * 60 * 1000; // не показывать 5 минут после дисмисса
-
-  // ---------- Профиль в шапке/сайдбаре ----------
+  const BANNER_DISMISS_WINDOW_MS = 5 * 60 * 1000;
 
   function maskId(id) {
     if (!id) return '';
@@ -41,8 +29,6 @@
     setText('[data-role="email"]', email || '—');
     setText('[data-role="hello-email"]', email || 'оператор');
 
-    // USER_ID: показываем только если действительно есть значение;
-    // иначе скрываем элемент, чтобы под «онлайн» не висело тире.
     const idEl = document.querySelector('[data-role="user-id"]');
     if (idEl) {
       if (userId) {
@@ -53,8 +39,6 @@
       }
     }
   }
-
-  // ---------- Health-баннер ----------
 
   function showHealthBanner() {
     if (document.querySelector('[data-role="health-banner"]')) return;
@@ -102,8 +86,6 @@
         showHealthBanner();
       });
   }
-
-  // ---------- Старт ----------
 
   function ready(fn) {
     if (document.readyState !== 'loading') fn();

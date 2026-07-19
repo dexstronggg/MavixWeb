@@ -1,10 +1,3 @@
-/* ============================================================
-   Mavix Web — pw-strength.js
-   Индикатор силы пароля для register.html и reset-password.html.
-   На input[type=password][data-strength] показывает полоску
-   weak/medium/strong и подпись.
-   ============================================================ */
-
 (function () {
   function score(pw) {
     if (!pw) return 0;
@@ -31,7 +24,6 @@
       '<div class="pw-strength-bar"><div class="pw-strength-fill"></div></div>' +
       '<div class="pw-strength-label"></div>';
 
-    // Вставляем сразу после .input-wrap, если есть; иначе после самого input.
     const anchor = input.closest('.input-wrap') || input;
     anchor.parentNode.insertBefore(wrap, anchor.nextSibling);
 

@@ -1,9 +1,3 @@
-/* ============================================================
-   Mavix Web — reveal.js
-   Плавное появление секций при попадании в viewport.
-   Подключается только на лендинге.
-   ============================================================ */
-
 (function () {
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (typeof IntersectionObserver === 'undefined') return;
@@ -22,7 +16,6 @@
 
     sections.forEach((section) => {
       const rect = section.getBoundingClientRect();
-      // Секции, уже видимые при загрузке (hero, начало второй), показываем сразу
       if (rect.top < viewport * 0.85) return;
       section.classList.add('reveal');
       toReveal.push(section);
