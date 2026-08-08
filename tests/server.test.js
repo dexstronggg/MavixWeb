@@ -16,6 +16,14 @@ describe('Express server', () => {
       expect(res.headers.etag).toBeUndefined();
       expect(res.headers['last-modified']).toBeUndefined();
     });
+
+    test('security-заголовки', async () => {
+      const res = await request(app).get(route);
+      expect(res.headers['x-frame-options']).toBe('DENY');
+      expect(res.headers['x-content-type-options']).toBe('nosniff');
+      expect(res.headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
+      expect(res.headers['content-security-policy']).toContain("default-src 'self'");
+    });
   });
 
   test('несуществующий маршрут возвращает 404', async () => {

@@ -9,6 +9,20 @@ const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000';
 app.disable('x-powered-by');
 app.disable('etag');
 
+app.use((_req, res, next) => {
+  res.set('X-Frame-Options', 'DENY');
+  res.set('X-Content-Type-Options', 'nosniff');
+  res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.set(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'self'; script-src-attr 'unsafe-inline'; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    'font-src https://fonts.gstatic.com; img-src \'self\' data:; ' +
+    "connect-src 'self' https: http:; frame-ancestors 'none'; base-uri 'self'",
+  );
+  next();
+});
+
 app.get('/config.js', (_req, res) => {
   res.type('application/javascript');
   res.set('Cache-Control', 'no-store');
