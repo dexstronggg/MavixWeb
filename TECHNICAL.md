@@ -130,7 +130,6 @@ MavixWeb/
     │       ├── register.js
     │       ├── forgot-password.js
     │       ├── reset-password.js
-    │       ├── dashboard.js
     │       └── settings.js
     ├── images/           — изображения интерфейса, иконки
     │                       приложения (favicon.*, apple-touch-icon,
@@ -235,8 +234,6 @@ MavixWeb/
 - `forgot-password.js` — запрос письма для сброса пароля;
 - `reset-password.js` — установка нового пароля по токену из
   URL-параметра;
-- `dashboard.js` — точка расширения для главной кабинета (общая
-  логика вынесена в `cabinet.js`);
 - `settings.js` — отправка запроса на смену пароля на email
   текущего пользователя.
 
@@ -326,7 +323,7 @@ npm start
 
 ```
 [mavix-web] listening on http://localhost:3001
-[mavix-web] proxying API to http://localhost:8000
+[mavix-web] API_BASE_URL=http://localhost:8000 (браузер получает через /config.js)
 ```
 
 После этого приложение доступно по адресу из первой строки.
