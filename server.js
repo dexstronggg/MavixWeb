@@ -30,22 +30,29 @@ const PAGES = {
 
 for (const [route, file] of Object.entries(PAGES)) {
   app.get(route, (_req, res) => {
-    res.sendFile(path.join(__dirname, 'public', file));
+    res.set('Cache-Control', 'no-cache');
+    res.sendFile(path.join(__dirname, 'public', file), { etag: false, lastModified: false });
   });
 }
 
 app.use(express.static(path.join(__dirname, 'public'), { etag: false, lastModified: false }));
 
 app.use((_req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'), (err) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'), { etag: false, lastModified: false }, (err) => {
     if (err) res.status(404).send('Not found');
   });
+});
+
+app.use((err, _req, res, next) => {
+  console.error('[mavix-web] ошибка:', err);
+  if (res.headersSent) return next(err);
+  res.status(500).send('Внутренняя ошибка сервера');
 });
 
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`[mavix-web] listening on http://localhost:${PORT}`);
-    console.log(`[mavix-web] proxying API to ${API_BASE_URL}`);
+    console.log(`[mavix-web] API_BASE_URL=${API_BASE_URL} (браузер получает через /config.js)`);
   });
 }
 

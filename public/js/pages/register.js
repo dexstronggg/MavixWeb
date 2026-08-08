@@ -19,6 +19,12 @@
     node.setAttribute('data-visible', message ? 'true' : 'false');
   }
 
+  if (!API) {
+    setError(formError, 'Конфигурация приложения не загружена. Обновите страницу или обратитесь к администратору.');
+    submitBtn.disabled = true;
+    return;
+  }
+
   function setFieldError(input, errorNode, message) {
     if (message) {
       input.setAttribute('aria-invalid', 'true');

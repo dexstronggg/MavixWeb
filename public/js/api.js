@@ -1,6 +1,7 @@
 (function () {
   const CFG = (typeof window !== 'undefined' && window.MAVIX_CONFIG) || {};
-  const BASE = (CFG.apiBaseUrl || 'http://localhost:8000').replace(/\/+$/, '') + '/api/v1';
+  const configMissing = !CFG.apiBaseUrl;
+  const BASE = (CFG.apiBaseUrl ? CFG.apiBaseUrl.replace(/\/+$/, '') : '') + '/api/v1';
 
   const STORAGE_KEYS = {
     access: 'mavix_access',
@@ -15,6 +16,15 @@
   };
 
   const ACCESS_REFRESH_LEEWAY_SEC = 60;
+
+  class ApiError extends Error {
+    constructor(message, status, payload) {
+      super(message);
+      this.name = 'ApiError';
+      this.status = status;
+      this.payload = payload;
+    }
+  }
 
   function decodeJwtPayload(token) {
     if (!token || typeof token !== 'string') return null;
@@ -72,6 +82,9 @@
   const REQUEST_TIMEOUT_MS = 10000;
 
   async function request(path, { method = 'GET', body, auth = false, retry = true, timeout = REQUEST_TIMEOUT_MS } = {}) {
+    if (configMissing) {
+      throw new ApiError('Не загружен /config.js: настройте API_BASE_URL на сервере.', 0, null);
+    }
     if (auth && tokens.isAccessStale() && tokens.refresh) {
       await tryRefresh();
     }
@@ -105,7 +118,6 @@
       if (refreshed) {
         return request(path, { method, body, auth, retry: false });
       }
-      tokens.clear();
     }
 
     let payload = null;
@@ -128,16 +140,20 @@
 
   function tryRefresh() {
     if (refreshInFlight) return refreshInFlight;
+    if (configMissing) return Promise.resolve(false);
 
     const currentRefresh = tokens.refresh;
     if (!currentRefresh) return Promise.resolve(false);
 
     refreshInFlight = (async () => {
+      const ctrl = new AbortController();
+      const timeoutId = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
       try {
         const res = await fetch(`${BASE}/auth/refresh`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({ refresh_token: currentRefresh }),
+          signal: ctrl.signal,
         });
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
@@ -152,6 +168,7 @@
       } catch (_) {
         return false;
       } finally {
+        clearTimeout(timeoutId);
         refreshInFlight = null;
       }
     })();
@@ -246,15 +263,6 @@
     }
   }
 
-  class ApiError extends Error {
-    constructor(message, status, payload) {
-      super(message);
-      this.name = 'ApiError';
-      this.status = status;
-      this.payload = payload;
-    }
-  }
-
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function validateEmail(email) {
@@ -290,7 +298,7 @@
     });
     if (data && data.access_token) {
       tokens.save(data.access_token, data.refresh_token);
-      session.saveProfile(email, session.userId);
+      session.saveProfile(data.email || email, data.user_id || session.userId);
     }
     return data;
   }

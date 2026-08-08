@@ -16,9 +16,19 @@
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token');
 
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
   function setFb(node, message) {
     node.textContent = message || '';
     node.setAttribute('data-visible', message ? 'true' : 'false');
+  }
+
+  if (!API) {
+    setFb(formError, 'Конфигурация приложения не загружена. Обновите страницу или обратитесь к администратору.');
+    submitBtn.disabled = true;
+    return;
   }
 
   function setFieldError(input, errorNode, message) {
