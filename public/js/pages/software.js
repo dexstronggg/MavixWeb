@@ -40,6 +40,9 @@
             'Обратитесь к администратору или попробуйте позже.',
           );
         }
+        if (head.status === 429) {
+          throw new Error('Слишком много скачиваний за час (лимит 30). Попробуйте позже.');
+        }
         throw new Error(`Не удалось скачать сборку (ошибка ${head.status}).`);
       }
     } catch (netErr) {
@@ -67,7 +70,12 @@
     const fullUrl = `${apiBase.replace(/\/+$/, '')}/api/v1/builds/board`;
 
     const headers = { 'Accept': 'application/octet-stream' };
-    const access = localStorage.getItem('mavix_access');
+    const fresh = await window.MavixAPI.ensureFreshAccess();
+    if (!fresh) {
+      setTimeout(() => { window.location.href = '/login'; }, 1500);
+      throw new Error('Войдите снова, чтобы скачать сборку.');
+    }
+    const access = window.MavixAPI.tokens.access;
     if (access) headers['Authorization'] = `Bearer ${access}`;
 
     setLoading(link, true);
@@ -213,6 +221,9 @@
         `Сборка ${subject} ещё не загружена на сервер. ` +
         'Обратитесь к администратору или попробуйте позже.',
       );
+    }
+    if (res.status === 429) {
+      return new Error('Слишком много скачиваний за час (лимит 30). Попробуйте позже.');
     }
     if (res.status >= 500) {
       return new Error(
