@@ -69,18 +69,6 @@
   color: var(--text);
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--accent);
-  border-color: rgba(0, 217, 255, 0.35);
-}
-
-.btn-outline:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent-hover);
-}
-
 .btn-sm {
   padding: 7px 14px;
   font-size: var(--fs-sm);
@@ -242,16 +230,6 @@
   transition: border-color var(--t-base) var(--ease), transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease);
 }
 
-.card-interactive {
-  cursor: pointer;
-}
-
-.card-interactive:hover {
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
 .card-title {
   font-size: var(--fs-xl);
   margin-bottom: 8px;
@@ -302,24 +280,6 @@
   border: 1px solid rgba(0, 217, 255, 0.25);
 }
 
-.badge-success {
-  background: var(--success-soft);
-  color: var(--success);
-  border: 1px solid rgba(74, 222, 128, 0.25);
-}
-
-.badge-warning {
-  background: var(--warning-soft);
-  color: var(--warning);
-  border: 1px solid rgba(251, 191, 36, 0.25);
-}
-
-.badge-danger {
-  background: var(--danger-soft);
-  color: var(--danger);
-  border: 1px solid rgba(248, 113, 113, 0.25);
-}
-
 .badge-muted {
   background: var(--card);
   color: var(--muted);
@@ -340,14 +300,6 @@
   animation: pulse-soft 2.4s ease-in-out infinite;
 }
 
-.status-dot.offline {
-  background: var(--muted);
-}
-
-.status-dot.error {
-  background: var(--danger);
-}
-
 .spinner {
   width: 18px;
   height: 18px;
@@ -356,32 +308,6 @@
   border-radius: var(--r-full);
   animation: spin 0.7s linear infinite;
   display: inline-block;
-}
-
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 24px 0;
-  border: none;
-}
-
-.divider-text {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 24px 0;
-  color: var(--muted);
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.divider-text::before,
-.divider-text::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--border);
 }
 
 .is-skeleton {

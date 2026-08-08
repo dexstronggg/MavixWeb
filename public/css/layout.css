@@ -334,15 +334,6 @@
   text-overflow: ellipsis;
 }
 
-.sidebar-user-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-  font-size: var(--fs-xs);
-  color: var(--muted);
-}
-
 .sidebar-user-id {
   font-family: var(--font-mono);
   font-size: var(--fs-xs);
