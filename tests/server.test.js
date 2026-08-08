@@ -1,3 +1,4 @@
+const fs = require('fs');
 const request = require('supertest');
 const { app, PAGES } = require('../server');
 
@@ -8,11 +9,39 @@ describe('Express server', () => {
       expect(res.status).toBe(200);
       expect(res.headers['content-type']).toMatch(/html/);
     });
+
+    test('Cache-Control: no-cache и без ETag/Last-Modified', async () => {
+      const res = await request(app).get(route);
+      expect(res.headers['cache-control']).toContain('no-cache');
+      expect(res.headers.etag).toBeUndefined();
+      expect(res.headers['last-modified']).toBeUndefined();
+    });
   });
 
   test('несуществующий маршрут возвращает 404', async () => {
     const res = await request(app).get('/no-such-page-' + Date.now());
     expect(res.status).toBe(404);
+    expect(res.headers.etag).toBeUndefined();
+    expect(res.headers['last-modified']).toBeUndefined();
+  });
+
+  describe('error-handler', () => {
+    test('ошибка отдачи файла страницы → 500 с русским сообщением', async () => {
+      const statSpy = jest.spyOn(fs, 'stat').mockImplementation((p, cb) => {
+        const err = new Error('EACCES: permission denied');
+        err.code = 'EACCES';
+        cb(err);
+      });
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        const res = await request(app).get('/login');
+        expect(res.status).toBe(500);
+        expect(res.text).toBe('Внутренняя ошибка сервера');
+      } finally {
+        statSpy.mockRestore();
+        consoleSpy.mockRestore();
+      }
+    });
   });
 
   describe('GET /config.js', () => {
