@@ -425,3 +425,34 @@
   opacity: 1;
   background: rgba(251, 191, 36, 0.12);
 }
+/* Требование версии QGroundControl на странице скачивания */
+.qgc-version-note {
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  background: var(--warning-soft);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: var(--r-md);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.qgc-version-note strong {
+  color: var(--warning);
+}
+
+.qgc-version-note p {
+  margin: 6px 0 0;
+  color: var(--text-muted, #9aa4b2);
+}
+
+.qgc-version-note a {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--warning);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.qgc-version-note a:hover {
+  text-decoration: underline;
+}

@@ -286,6 +286,25 @@ sudo journalctl -u mavixboard -f</code></pre>
           загрузке RPi.
         </p>
 
+        <h3 id="update-board">Обновление MavixBoard</h3>
+        <p>
+          Когда выходит новая версия, достаточно скачать свежий установщик
+          <code>.tar.gz</code> со страницы «Скачать» и повторно запустить
+          <code>install.sh</code>. Переустановка идёт поверх старой версии:
+          код обновляется, а идентичность дрона
+          (<code>DRONE_ID</code>/<code>DRONE_TOKEN</code>) сохраняется — он
+          <strong>не</strong> зарегистрируется как новый.
+        </p>
+        <pre><code>tar xzf mavixboard-XXXXXXXX.tar.gz
+cd mavixboard-XXXXXXXX
+sudo ./install.sh
+sudo systemctl restart mavixboard</code></pre>
+        <blockquote>
+          Перезапуск службы обязателен: борт читает настройки и токены один раз
+          при старте, поэтому после установки нужно перезапустить
+          <code>mavixboard</code>, чтобы новый код заработал.
+        </blockquote>
+
         <h3>4. Настройте полётный контроллер</h3>
         <p>
           <strong>Betaflight / iNav (CRSF).</strong> Подключите три провода между

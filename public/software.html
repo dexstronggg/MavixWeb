@@ -137,12 +137,25 @@
 
         <p class="software-card-hint" style="margin: 12px 0 0; font-size: 13px; color: var(--text-muted, #9aa4b2);">
           Если ваш полётный контроллер на <strong>PX4</strong> или <strong>ArduPilot</strong>,
-          для расширенной настройки и planning'а миссий рекомендуем установить
-          <a href="https://docs.qgroundcontrol.com/master/en/qgc-user-guide/getting_started/download_and_install.html"
-             target="_blank" rel="noopener noreferrer"
-             style="color: var(--accent, #22d3ee);">QGroundControl</a>
-          — MavixDesktop автоматически проксирует ему MAVLink-трафик с дрона.
+          для расширенной настройки и planning'а миссий понадобится
+          QGroundControl — MavixDesktop автоматически проксирует ему
+          MAVLink-трафик с дрона и сам передаёт настройки джойстика.
         </p>
+
+        <div class="qgc-version-note">
+          <strong>Обязательно качайте QGroundControl 5.0.8 (stable)</strong>
+          <p>
+            Мы не ручаемся за работу MavixDesktop с другими версиями
+            QGroundControl: ежедневные сборки (Daily) и версии 4.x хранят
+            настройки джойстика в другом формате — MavixDesktop не сможет
+            передать в них раскладку осей, и джойстик придётся настраивать
+            вручную.
+          </p>
+          <a href="https://github.com/mavlink/qgroundcontrol/releases/tag/v5.0.8"
+             target="_blank" rel="noopener noreferrer">
+            Скачать QGroundControl 5.0.8 (stable) →
+          </a>
+        </div>
       </article>
 
       <article class="software-card">
