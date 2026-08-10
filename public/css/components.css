@@ -427,15 +427,13 @@
 }
 /* Требование версии QGroundControl на странице скачивания */
 .qgc-version-note {
-  max-width: 680px;
-  margin: 0 auto 32px;
+  margin: 12px 0 0;
   padding: 12px 14px;
   background: var(--warning-soft);
   border: 1px solid rgba(251, 191, 36, 0.35);
   border-radius: var(--r-md);
   font-size: var(--fs-sm);
   line-height: 1.5;
-  text-align: center;
 }
 
 .qgc-version-note strong {
